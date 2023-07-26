@@ -1,5 +1,5 @@
 # DepenMock
-A C#, NUnit framework that can automatically mock your SUT (system under test) dependencies.
+A C#, testing library that can automatically mock your SUT (system under test) dependencies.
 
 ## Setting Up the Test Container
 
