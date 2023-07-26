@@ -1,7 +1,7 @@
 # DepenMock
 A C#, NUnit framework that can automatically mock your SUT (system under test) dependencies.
 
-## Setting Up the Test Fixture
+## Setting Up the Test Container
 
 There are a couple base classes your unit tests should inherit from.
 
@@ -45,22 +45,22 @@ var sut = ResolveSut();
 
 ```c#
 // Creates a random string in the format of a guid i.e "fe06998d-aec1-4808-8968-d8f37024a294"
-var name = Fixture.Create<string>();
+var name = Container.Create<string>();
 
 // Creates a random integer greater than 0
-var id = Fixture.Create<int>();
+var id = Container.Create<int>();
 
 // Creates a boolean value set to true
-var isEnabled = Fixture.Create<bool>();
+var isEnabled = Container.Create<bool>();
 
 // Creates a random date set in the future
-var startDate = Fixture.Create<DateTime>();
+var startDate = Container.Create<DateTime>();
 
 // Creates an instance of the class MyObj
-var myObjInstance = Fixture.Create<MyObj>();
+var myObjInstance = Container.Create<MyObj>();
 
 // Creates a list of strings. NOTE: Use CreateMany for generating lists.
-var randomStrings = Fixture.Create<List<string>>();
+var randomStrings = Container.Create<List<string>>();
 ```
 
 **CreateMany\<T>(int? numberOfInstances)**
@@ -69,19 +69,19 @@ var randomStrings = Fixture.Create<List<string>>();
 
 ```c#
 // Creates a list of strings
-var randomStrings = Fixture.CreateMany<string>();
+var randomStrings = Container.CreateMany<string>();
 
 // Creates a list of random integers
-var randomNumbers = Fixtures.CreateMany<int>();
+var randomNumbers = Containers.CreateMany<int>();
 
 // Creates a list of boolean values. All values will be set to true.
-var allTrueValues = Fixture.CreateMany<bool>();
+var allTrueValues = Container.CreateMany<bool>();
 
 // Creates a list of random dates. This example creates a list of 5 random dates.
-var randomDates = Fixture.CreateMany<DateTime>(5);
+var randomDates = Container.CreateMany<DateTime>(5);
 
 // Creates a list of addresses set to random values
-var addressList = Fixture.CreateMany<Address>();
+var addressList = Container.CreateMany<Address>();
 ```
 
 **Build\<T>()**
@@ -89,7 +89,7 @@ var addressList = Fixture.CreateMany<Address>();
 ```Build<T>``` provides a builder pattern for creating objects with specified data instead of all generated data.
 
 ```c#
-var deskBookingResult = Fixture
+var deskBookingResult = Container
     .Build<DeskBookingResult>()
     .Without(x => x.DeskBookingId) // DeskBookingId will be set to null
     .With(x => x.Code, DeskBookingResultCode.Success)
@@ -109,16 +109,16 @@ The testing framework will automatically create mock dependencies for you. But y
 **Creating a stub**
 
 ```c#
-Fixture
+Container
     .ResolveMock<IDeskRepository>()
     .Setup(x => x.GetAvailableDesks(It.IsAny<DateTime>()))
-    .Returns(Fixture.CreateMany<Desk>());
+    .Returns(Container.CreateMany<Desk>());
 ```
 
 **Creating a spy**
 
 ```c#
-var mockRepo = Fixture.ResolveMock<IDeskBookingRepository>();
+var mockRepo = Container.ResolveMock<IDeskBookingRepository>();
 
 mockRepo.Verify(x => x.Save(It.IsAny<DeskBooking>()), Times.Once);
 ```
