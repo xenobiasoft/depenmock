@@ -1,10 +1,10 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.Dsl;
-using DepenMock.Customizations;
 using Moq;
 using System.Collections.Generic;
 using System.Linq;
+using DepenMock.Http;
 
 namespace DepenMock
 {
@@ -26,7 +26,7 @@ namespace DepenMock
 				.ToList()
 				.ForEach(x => _fixture.Behaviors.Remove(x));
 			_fixture
-				.Customize(new ControllerBaseCustomization())
+				.Customize(new ControllerCustomization())
 				.Behaviors.Add(new OmitOnRecursionBehavior());
 		}
 

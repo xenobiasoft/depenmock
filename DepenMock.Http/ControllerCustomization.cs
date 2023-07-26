@@ -2,11 +2,10 @@
 using AutoFixture.Kernel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
-namespace DepenMock.Customizations
+namespace DepenMock.Http
 {
-	internal class ControllerBaseCustomization : ICustomization
+	public class ControllerCustomization : ICustomization
 	{
 		public void Customize(IFixture fixture)
 		{
