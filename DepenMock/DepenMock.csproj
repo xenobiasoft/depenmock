@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>false</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>XenobiaSoft</Authors>
+    <Company>$(Authors)</Company>
+    <Description>A C#, NUnit framework that can automatically mock your SUT (System Under Test) dependencies</Description>
+    <PackageTags>NUnit, Moq</PackageTags>
+    <RepositoryUrl>https://github.com/xenobiasoft/depenmock</RepositoryUrl>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>D:\GitProjects\auto-mocking-unit-test-framework\AutoMockingTestFixture.xml</DocumentationFile>
+    <Title>Auto-mocking unit test framework fixture</Title>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoFixture" Version="4.17.0" />
+    <PackageReference Include="AutoFixture.AutoMoq" Version="4.17.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Moq" Version="4.18.2" />
+  </ItemGroup>
+
+</Project>

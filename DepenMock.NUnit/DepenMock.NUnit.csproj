@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<AssemblyName>$(MSBuildProjectName)</AssemblyName>
+		<RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<Title>NUnit Auto-mocking unit test framework</Title>
+		<Authors>XenobiaSoft</Authors>
+		<Company>$(Authors)</Company>
+		<RepositoryUrl>https://github.com/xenobiasoft/depenmock</RepositoryUrl>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="NUnit" Version="3.13.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\DepenMock\DepenMock.csproj" />
+	</ItemGroup>
+
+</Project>
