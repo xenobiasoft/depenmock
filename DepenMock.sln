@@ -22,8 +22,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DepenMock.NUnit", "DepenMoc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DepenMock.XUnit", "DepenMock.XUnit\DepenMock.XUnit.csproj", "{EF07A42D-DB0A-4F74-B819-115586BCEBC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DepenMock.Http", "DepenMock.Http\DepenMock.Http.csproj", "{3C663C60-5020-4BDD-A07E-C5D6AAA4220C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,10 +52,6 @@ Global
 		{EF07A42D-DB0A-4F74-B819-115586BCEBC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF07A42D-DB0A-4F74-B819-115586BCEBC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF07A42D-DB0A-4F74-B819-115586BCEBC6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3C663C60-5020-4BDD-A07E-C5D6AAA4220C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C663C60-5020-4BDD-A07E-C5D6AAA4220C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3C663C60-5020-4BDD-A07E-C5D6AAA4220C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3C663C60-5020-4BDD-A07E-C5D6AAA4220C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
