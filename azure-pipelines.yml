@@ -1,0 +1,66 @@
+trigger:
+  branches:
+    include:
+      - refs/tags/*
+
+pr: none
+
+pool:
+  vmImage: "windows-latest"
+
+stages:
+  - stage: Publish_Release
+    displayName: "Build, Pack, Publish Release"
+    jobs:
+      - job: build_pack_publish_release
+        displayName: "Build, Pack, Publish Release"
+
+        steps:
+          - task: Bash@3
+            displayName: "Get Latest Git Tag"
+            inputs:
+              targetType: "inline"
+              script: |
+                tag=$(git describe --tags)
+                echo $tag
+                echo "##vso[task.setvariable variable=GITTAG]$tag"
+
+          - task: UseDotNet@2
+            displayName: "Set sdk to .NET 6.0.x"
+            inputs:
+              packageType: sdk
+              version: "6.0.x"
+
+          - task: DotNetCoreCLI@2
+            displayName: "Restore Nuget Packages"
+            inputs:
+              command: restore
+              feedsToUse: "select"
+              includeNuGetOrg: true
+              nugetConfigPath: "./NuGet.config"
+              projects: "**/*.csproj"
+              vstsFeed: $(vstsFeed)
+
+          - task: DotNetCoreCLI@2
+            displayName: "Build Nuget Package"
+            inputs:
+              command: build
+              arguments: "--configuration Release"
+              projects: "**/*.csproj"
+
+          - task: DotNetCoreCLI@2
+            displayName: "Nuget Pack"
+            inputs:
+              command: pack
+              configuration: "Release"
+              nobuild: true
+              outputDir: "$(Build.ArtifactStagingDirectory)/Release"
+              packagesToPack: "**/*.csproj"
+              versionEnvVar: GITTAG
+              versioningScheme: byEnvVar
+
+          - task: NuGetCommand@2
+            displayName: "Nuget Push"
+            inputs:
+              command: push
+              packagesToPush: "$(Build.ArtifactStagingDirectory)/Release/**/*.nupkg"
