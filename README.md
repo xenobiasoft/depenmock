@@ -1,47 +1,48 @@
-# DepenMock
-A C# testing library that will automatically mock your SUT (system under test) dependencies.
+# DepenMock - C# Testing Library
+
+## Introduction
+
+DepenMock is a robust C# testing library designed to streamline the mocking process for your System Under Test (SUT) dependencies. By automating the mock creation process, DepenMock simplifies unit testing and encourages adherence to established software design principles.
 
 ## Setting Up the Test Container
 
-There are a couple base classes your unit tests should inherit from.
+To effectively utilize DepenMock in your unit tests, consider the following base classes that your test classes should inherit from:
 
 **BaseTestByAbstraction**
 
-This base class will test your sut using the implemented interface. You should use this base class if your sut implements an interface. Testing by an interface allows you to better ensure your classes conform to Liskov's Substitution Principle.
+This base class is suitable for testing your SUT when it implements an interface. Testing through interfaces helps ensure adherence to the Liskov Substitution Principle (LSP).
 
 ```c#
 public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookingRequestProcessor, IDeskBookingRequestProcessor>
 {
-    ...
+    // Your test methods here
 }
 ```
 
 **BaseTestByType**
 
-You should use this base class when you're sut does not implement an interface, e.g. testing an API controller.
+Use this base class when your SUT does not implement an interface, such as when testing an API controller.
 
 ```c#
 public class AccountControllerTests : BaseTestByType<AccountController>
 {
-    ...
+    // Your test methods here
 }
 ```
 
-## Creating the **sut**
+## Creating the System Under Test (SUT)
 
-Use the method ```ResolveSut``` to create an instance of your sut.
-
-NOTE: Any dependencies you need to mock needs to be set up before creating the sut. Using ```ResolveSut``` should be the **last** thing in your test before executing the Action.
+To create an instance of your SUT, use the ```ResolveSut``` method. It is essential to set up any dependencies that need to be mocked before creating the SUT. Place the ResolveSut call as the final step before executing your test action.
 
 ```c#
 var sut = ResolveSut();
 ```
 
-## Creating mock data
+## Creating Mock Data
 
 **Create\<T>()**
 
-```Create<T>``` creates a single instance of the type you want to create.
+The ```Create<T>``` method generates a single instance of the specified type.
 
 ```c#
 // Creates a random string in the format of a guid i.e "fe06998d-aec1-4808-8968-d8f37024a294"
@@ -65,7 +66,7 @@ var randomStrings = Container.Create<List<string>>();
 
 **CreateMany\<T>(int? numberOfInstances)**
 
-```CreateMany<T>``` creates a list of the instance type specified. By default, creates a list of 3 items. You can change the number of instances created by setting ```numberOfInstances```.
+The ```CreateMany<T>``` method generates a list of instances of the specified type. By default, it creates a list of three items, but you can customize the number of instances by setting by setting the ```numberOfInstances``` parameter.
 
 ```c#
 // Creates a list of strings
@@ -86,12 +87,12 @@ var addressList = Container.CreateMany<Address>();
 
 **Build\<T>()**
 
-```Build<T>``` provides a builder pattern for creating objects with specified data instead of all generated data.
+The ```Build<T>``` method provides a builder pattern for creating objects with specified data rather than using all generated data.
 
 ```c#
 var deskBookingResult = Container
     .Build<DeskBookingResult>()
-    .Without(x => x.DeskBookingId) // DeskBookingId will be set to null
+    .Without(x => x.DeskBookingId) // Here, DeskBookingId will be set to null
     .With(x => x.Code, DeskBookingResultCode.Success)
     .With(x => x.FirstName, request.FirstName)
     .With(x => x.LastName, request.LastName)
@@ -104,7 +105,7 @@ var deskBookingResult = Container
 
 ### Registering Mocked Dependencies
 
-The testing framework will automatically create mock dependencies for you. But you can get a reference to a mock dependency so you can set up methods to return canned data (a stub), or if you need to verify interactions with the dependency (a spy).
+DepenMock's testing framework automatically creates mock dependencies, but you can obtain a reference to a mock dependency to set up methods to return predefined data (stub) or to verify interactions with the dependency (spy).
 
 **Creating a stub**
 
@@ -125,7 +126,7 @@ mockRepo.Verify(x => x.Save(It.IsAny<DeskBooking>()), Times.Once);
 
 ## Testing Logging
 
-The framework provides a logger object and automatically injects it as a dependency.
+DepenMock provides a logger object and automatically injects it as a dependency for your tests.
 
 ```c#
 Assert.That(Logger.Logs[LogLevel.Error].TrueForAll(x => x.Contains($"Correlation Id: {correlationId}")));
@@ -146,4 +147,4 @@ Logger.Logs[LogLevel.Information]
 
 ## Sample Project
 
-There is a sample project, DeskBooker.Core, that has example unit tests for NUnit and XUnit.
+Explore the sample project, DeskBooker.Core, which includes example unit tests for both NUnit and XUnit to help you get started with DepenMock.
