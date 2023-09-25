@@ -56,6 +56,10 @@ stages:
               versionEnvVar: GITTAG
               versioningScheme: byEnvVar
 
+          - task: NuGetAuthenticate@0
+            input:
+              nuGetServiceConnections: 'XenobiaSoft-Artifacts'
+
           - task: NuGetCommand@2
             displayName: "Nuget Push"
             inputs:
