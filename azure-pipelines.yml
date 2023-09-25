@@ -4,7 +4,7 @@ trigger:
       - refs/tags/*
 
 variables:
-  - template: ./variables.yml
+  - template: ./devops/variables.yml
 
 pool:
   vmImage: "ubuntu-latest"
