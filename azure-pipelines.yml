@@ -3,8 +3,6 @@ trigger:
     include:
       - refs/tags/*
 
-pr: none
-
 pool:
   vmImage: "windows-latest"
 
@@ -37,12 +35,11 @@ stages:
               command: restore
               feedsToUse: "select"
               includeNuGetOrg: true
-              nugetConfigPath: "./NuGet.config"
+              nugetConfigPath: "./nuget.config"
               projects: "**/*.csproj"
-              vstsFeed: $(vstsFeed)
 
           - task: DotNetCoreCLI@2
-            displayName: "Build Nuget Package"
+            displayName: "dotnet build $(buildConfiguration)"
             inputs:
               command: build
               arguments: "--configuration Release"
@@ -63,4 +60,8 @@ stages:
             displayName: "Nuget Push"
             inputs:
               command: push
+              nuGetFeedType: internal
               packagesToPush: "$(Build.ArtifactStagingDirectory)/Release/**/*.nupkg"
+              publishFeedCredentials: XenobiaSoft-Artifacts
+              versioningSchema: byEnvVar
+              versionEnvVar: version
