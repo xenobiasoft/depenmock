@@ -58,7 +58,7 @@ stages:
 
           - task: NuGetAuthenticate@0
             input:
-              nuGetServiceConnections: 'XenobiaSoft-Artifacts'
+              nuGetServiceConnections: XenobiaSoft-Artifacts
 
           - task: NuGetCommand@2
             displayName: "Nuget Push"
