@@ -1,6 +1,7 @@
 trigger:
-  tags:
-    include: v*
+  branches:
+    include:
+      - refs/tags/*
 
 variables:
   - template: variables.yml
