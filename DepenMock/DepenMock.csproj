@@ -8,8 +8,8 @@
     <RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>XenobiaSoft</Authors>
-    <Company>$(Authors)</Company>
-    <Description>A C#, NUnit framework that can automatically mock your SUT (System Under Test) dependencies</Description>
+    <Company>XenobiaSoft</Company>
+    <Description>A C#, unit testing library that can automatically mock your SUT (System Under Test) dependencies. This package only contains the fixture. You can add DepenMock.NUnit, or DepenMock.Xunit to enable easier integration with your preferred testing library.</Description>
     <PackageTags>NUnit, Moq</PackageTags>
     <RepositoryUrl>https://github.com/xenobiasoft/depenmock</RepositoryUrl>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>

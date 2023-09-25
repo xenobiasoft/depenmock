@@ -3,8 +3,11 @@ trigger:
     include:
       - refs/tags/*
 
+variables:
+  - template: ./variables.yml
+
 pool:
-  vmImage: "windows-latest"
+  vmImage: "ubuntu-latest"
 
 stages:
   - stage: Publish_Release
@@ -34,9 +37,9 @@ stages:
             inputs:
               command: restore
               feedsToUse: "select"
-              includeNuGetOrg: true
               nugetConfigPath: "./nuget.config"
               projects: "**/*.csproj"
+              vstsFeed: $(vstsFeed)
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet build $(buildConfiguration)"
@@ -56,16 +59,10 @@ stages:
               versionEnvVar: GITTAG
               versioningScheme: byEnvVar
 
-          - task: NuGetAuthenticate@0
-            input:
-              nuGetServiceConnections: XenobiaSoft-Artifacts
-
           - task: NuGetCommand@2
             displayName: "Nuget Push"
             inputs:
               command: push
               nuGetFeedType: internal
               packagesToPush: "$(Build.ArtifactStagingDirectory)/Release/**/*.nupkg"
-              publishFeedCredentials: XenobiaSoft-Artifacts
-              versioningSchema: byEnvVar
-              versionEnvVar: version
+              publishVstsFeed: $(vstsFeed)

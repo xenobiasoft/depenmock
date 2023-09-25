@@ -8,8 +8,9 @@
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<Title>NUnit Auto-mocking unit test framework</Title>
 		<Authors>XenobiaSoft</Authors>
-		<Company>$(Authors)</Company>
+		<Company>XenobiaSoft</Company>
 		<RepositoryUrl>https://github.com/xenobiasoft/depenmock</RepositoryUrl>
+		<Description>NUnit testing library that can automatically mock your SUT (System Under Test) dependencies</Description>
 	</PropertyGroup>
 
 	<ItemGroup>
