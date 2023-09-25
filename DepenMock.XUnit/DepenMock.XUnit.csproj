@@ -11,6 +11,7 @@
 		<Company>XenobiaSoft</Company>
 		<RepositoryUrl>https://github.com/xenobiasoft/depenmock</RepositoryUrl>
 		<Description>Xunit testing library that can automatically mock your SUT (System Under Test) dependencies</Description>
+		<Copyright>2023 XenobiaSoft</Copyright>
 	</PropertyGroup>
 
 	<ItemGroup>
