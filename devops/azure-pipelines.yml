@@ -53,6 +53,8 @@ jobs:
       inputs:
         command: 'pack'
         packagesToPack: '**/*.csproj'
+        nobuild: true
+        outputDir: "$(Build.ArtifactStagingDirectory)/Release"
         versioningScheme: byTag
         arguments: '--configuration Release'
 
