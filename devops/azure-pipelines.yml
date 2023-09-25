@@ -2,7 +2,7 @@ trigger:
   - main
 
 variables:
-  - template: devops/variables.yml
+  - template: variables.yml
 
 pool:
   vmImage: "ubuntu-latest"
