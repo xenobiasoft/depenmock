@@ -10,11 +10,20 @@ pool:
   vmImage: "ubuntu-latest"
 
 jobs:
-  - job: Build
-    displayName: Build and Test
+  - job: BuildPackPublish
+    displayName: build, pack, and publish nuget package
     steps:
+      - task: Bash@3
+        displayName: get latest git tags
+        inputs:
+          targetType: "inline"
+          script: |
+            tag=$(git describe --tags)
+            echo $tag
+            echo "##vso[task.setvariable variable=GITTAG]$tag"
+          
       - task: UseDotNet@2
-        displayName: "Set sdk to .NET 6.0.x"
+        displayName: set sdk to .NET 6
         inputs:
           packageType: sdk
           version: "6.0.x"
@@ -24,6 +33,7 @@ jobs:
         inputs:
           command: restore
           projects: "**/*.csproj"
+          includeNuGetOrg: true
           feedsToUse: "select"
           vstsFeed: $(vstsFeed)
 
@@ -33,35 +43,21 @@ jobs:
           command: build
           arguments: "--configuration Release"
           projects: "**/*.csproj"
-          
-  - job: CreateNuGetPackage
-    displayName: Create NuGet Package
-    dependsOn: Build
-    condition: succeeded()
-    steps:
-    - task: Bash@3
-      displayName: "Get Latest Git Tag"
-      inputs:
-        targetType: "inline"
-        script: |
-          tag=$(git describe --tags)
-          echo $tag
-          echo "##vso[task.setvariable variable=GITTAG]$tag"
 
-    - task: DotNetCoreCLI@2
-      displayName: dotnet pack
-      inputs:
-        command: 'pack'
-        packagesToPack: '**/*.csproj'
-        nobuild: true
-        outputDir: "$(Build.ArtifactStagingDirectory)/Release"
-        versioningScheme: byTag
-        arguments: '--configuration Release'
+      - task: DotNetCoreCLI@2
+        displayName: dotnet pack
+        inputs:
+          command: 'pack'
+          configuration: 'Release'
+          nobuild: true
+          outputDir: "$(Build.ArtifactStagingDirectory)/Release"
+          packagesToPack: '**/*.csproj'
+          versioningScheme: byTag
 
-    - task: DotNetCoreCLI@2
-      displayName: dotnet push
-      inputs:
-        command: 'push'
-        packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-        nuGetFeedType: 'internal'
-        publishVstsFeed: $(vstsFeed)
+      - task: DotNetCoreCLI@2
+        displayName: dotnet push
+        inputs:
+          command: 'push'
+          nuGetFeedType: 'internal'
+          packagesToPush: '$(Build.ArtifactStagingDirectory)/Release/**/*.nupkg'
+          publishVstsFeed: $(vstsFeed)
