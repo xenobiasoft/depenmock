@@ -57,7 +57,6 @@ jobs:
       - task: DotNetCoreCLI@2
         displayName: dotnet push
         inputs:
-          command: 'push --skip-duplicate'
-          nuGetFeedType: 'internal'
-          packagesToPush: '$(Build.ArtifactStagingDirectory)/Release/**/*.nupkg'
-          publishVstsFeed: $(vstsFeed)
+          command: 'custom'
+          custom: 'nuget'
+          arguments: 'push $(Build.ArtifactStagingDirectory)/Release/*.nupkg --source $(vstsFeed) --api-key $(vstsFeedApiKey) --skip-duplicate'
