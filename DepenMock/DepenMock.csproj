@@ -15,7 +15,7 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <DocumentationFile>D:\GitProjects\auto-mocking-unit-test-framework\AutoMockingTestFixture.xml</DocumentationFile>
     <Title>Auto-mocking unit test framework fixture</Title>
-    <Copyright>2023 XenobiaSoft</Copyright>
+    <Copyright>2025 XenobiaSoft</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
