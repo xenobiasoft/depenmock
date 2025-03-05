@@ -13,6 +13,12 @@ jobs:
   - job: BuildPackPublish
     displayName: build, pack, and publish nuget package
     steps:
+      - powershell: |
+          $tag = "$(Build.SourceBranch)"
+          $tag = $tag -replace "refs/tags/", ""
+          echo "##vso[task.setvariable variable=tag;isOutput=true]$tag"
+        name: createTagVariableStep
+
       - task: Bash@3
         displayName: get latest git tags
         inputs:
