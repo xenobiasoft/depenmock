@@ -23,7 +23,7 @@ jobs:
         displayName: 'Checkout Code'
         fetchDepth: 0
 
-      - script: echo "##vso[task.setvariable variable=VERSION]$(echo $(Build.SourceBranchName) | sed 's/^v//')"
+      - script: echo "##vso[task.setvariable variable=VERSION]$(Build.SourceBranch | sed 's|refs/tags/v||')"
         displayName: 'Extract Version from Tag'
   
       - script: |
