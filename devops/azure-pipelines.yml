@@ -61,3 +61,4 @@ jobs:
           nuGetFeedType: 'internal'
           packagesToPush: '$(Build.ArtifactStagingDirectory)/Release/**/*.nupkg'
           publishVstsFeed: $(vstsFeed)
+          allowPackageConflicts: true
