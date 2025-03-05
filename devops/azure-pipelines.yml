@@ -58,5 +58,5 @@ jobs:
         displayName: dotnet push
         inputs:
           command: custom
-          command: 'nuget'
+          custom: nuget
           arguments: 'push $(Build.ArtifactStagingDirectory)/Release/**/*.nupkg --source $(artifactsFeed) --api-key az'
