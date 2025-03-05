@@ -52,7 +52,8 @@ jobs:
           nobuild: true
           outputDir: "$(Build.ArtifactStagingDirectory)/Release"
           packagesToPack: '**/*.csproj'
-          versioningScheme: byTag
+          versioningScheme: byEnvVar
+          versionEnvVar: GITTAG
 
       - task: DotNetCoreCLI@2
         displayName: dotnet push
@@ -61,4 +62,3 @@ jobs:
           nuGetFeedType: 'internal'
           packagesToPush: '$(Build.ArtifactStagingDirectory)/Release/**/*.nupkg'
           publishVstsFeed: $(vstsFeed)
-          allowPackageConflicts: true
