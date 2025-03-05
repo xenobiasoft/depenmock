@@ -57,6 +57,7 @@ jobs:
       - task: DotNetCoreCLI@2
         displayName: dotnet push
         inputs:
-          command: custom
-          custom: nuget
-          arguments: 'push $(Build.ArtifactStagingDirectory)/Release/**/*.nupkg --source $(artifactsFeed) --api-key az'
+          command: 'push'
+          nuGetFeedType: 'internal'
+          packagesToPush: '$(Build.ArtifactStagingDirectory)/Release/**/*$(GITTAG).nupkg'
+          publishVstsFeed: $(vstsFeed)
