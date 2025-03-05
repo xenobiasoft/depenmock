@@ -33,7 +33,7 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
 		var actualResult = sut.BookDesk(request);
 
 		// Assert
-		Assert.AreEqual(expectedResult, actualResult);
+		Assert.That(expectedResult, Is.EqualTo(actualResult));
 	}
 
 	[Test]
@@ -101,7 +101,7 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
 		var result = sut.BookDesk(Container.Create<DeskBookingRequest>());
 
 		// Assert
-		Assert.AreEqual(DeskBookingResultCode.NoDeskAvailable, result.Code);
+		Assert.That(DeskBookingResultCode.NoDeskAvailable, Is.EqualTo(result.Code));
 	}
 
 	[Test]
@@ -114,7 +114,7 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
 		var result = sut.BookDesk(Container.Create<DeskBookingRequest>());
 
 		// Assert
-		Assert.AreEqual(DeskBookingResultCode.Success, result.Code);
+		Assert.That(DeskBookingResultCode.Success, Is.EqualTo(result.Code));
 	}
 
 	[Test]
@@ -132,7 +132,7 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
 		var result = sut.BookDesk(Container.Create<DeskBookingRequest>());
 
 		// Assert
-		Assert.AreEqual(null, result.DeskBookingId);
+		Assert.That(null, Is.EqualTo(result.DeskBookingId));
 	}
 
 	[Test]
@@ -145,6 +145,6 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
 		var result = sut.BookDesk(Container.Create<DeskBookingRequest>());
 
 		// Assert
-		Assert.AreEqual(0, result.DeskBookingId);
+		Assert.That(0, Is.EqualTo(result.DeskBookingId));
 	}
 }
