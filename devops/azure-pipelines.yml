@@ -1,7 +1,7 @@
 trigger:
-  tags:
+  branches:
     include:
-      - 'v*'
+      - refs/tags/*
 
 variables:
   - template: variables.yml
@@ -13,25 +13,23 @@ jobs:
   - job: BuildPackPublish
     displayName: build, pack, and publish nuget package
     steps:
-      - task: UseDotNet@2
-        displayName: 'Install .NET SDK'
+      - task: Bash@3
+        displayName: get latest git tags
         inputs:
-            packageType: 'sdk'
-            version: '8.0.x'
+          targetType: "inline"
+          script: |
+            tag=$(git describe --tags)
+            echo $tag
+            echo "##vso[task.setvariable variable=GITTAG]$tag"
+          
+      - task: UseDotNet@2
+        displayName: set sdk .NET version
+        inputs:
+          packageType: sdk
+          version: "8.0.x"
 
-      - checkout: self
-        displayName: 'Checkout Code'
-        fetchDepth: 0
-
-      - script: echo "##vso[task.setvariable variable=VERSION]$(Build.SourceBranch | sed 's|refs/tags/v||')"
-        displayName: 'Extract Version from Tag'
-  
-      - script: |
-          echo "Extracted version: $(VERSION)"
-        displayName: 'Debug Version Output'
-
-      - task: NuGetCommand@2
-        displayName: 'Restore Dependencies'
+      - task: DotNetCoreCLI@2
+        displayName: dotnet restore
         inputs:
           command: restore
           projects: "**/*.csproj"
@@ -39,38 +37,28 @@ jobs:
           feedsToUse: "select"
           vstsFeed: $(vstsFeed)
 
-      - task: VSBuild@1
-        displayName: 'Build Solution'
+      - task: DotNetCoreCLI@2
+        displayName: dotnet build
         inputs:
           command: build
           arguments: "--configuration Release"
           projects: "**/*.csproj"
 
-      - task: NuGetCommand@2
-        displayName: 'Pack NuGet Package'
+      - task: DotNetCoreCLI@2
+        displayName: dotnet pack
         inputs:
           command: 'pack'
-          packagesToPack: '**/*.csproj'
           configuration: 'Release'
-          versioningScheme: byEnvVar
-          versionEnvVar: VERSION
-          outputDirectory: '$(Build.ArtifactStagingDirectory)/Release'
+          nobuild: true
+          outputDir: "$(Build.ArtifactStagingDirectory)/Release"
+          packagesToPack: '**/*.csproj'
+          versioningScheme: byTag
 
-      - script: |
-          PACKAGE_ID=$(grep -oP '(?<=<PackageId>).*(?=</PackageId>)' **/*.csproj)
-          EXISTS=$(curl -sL "https://api.nuget.org/v3-flatcontainer/$PACKAGE_ID/index.json" | grep -o "$(VERSION)" || true)
-          if [ -z "$EXISTS" ]; then
-            echo "##vso[task.setvariable variable=PUBLISH;]true"
-          else
-            echo "##vso[task.setvariable variable=PUBLISH;]false"
-          fi
-        displayName: 'Check if Package Already Exists on NuGet'
-
-      - task: NuGetCommand@2
-        displayName: 'Push NuGet Package'
-        condition: eq(variables['PUBLISH'], 'true')
+      - task: DotNetCoreCLI@2
+        displayName: dotnet push
         inputs:
           command: 'push'
           nuGetFeedType: 'internal'
-          packagesToPush: '$(Build.ArtifactStagingDirectory)/Release/**/*$(GITTAG).nupkg'
+          packagesToPush: '$(Build.ArtifactStagingDirectory)/Release/**/*.nupkg'
           publishVstsFeed: $(vstsFeed)
+          allowPackageConflicts: true
