@@ -16,7 +16,7 @@ jobs:
       - powershell: |
           $tag = "$(Build.SourceBranch)"
           $tag = $tag -replace "refs/tags/", ""
-          echo $tag
+          echo 'Tags found' + $tag
           echo "##vso[task.setvariable variable=tag;isOutput=true]$tag"
         name: createTagVariableStep
 
