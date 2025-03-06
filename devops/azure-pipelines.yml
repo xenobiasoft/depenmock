@@ -13,22 +13,6 @@ jobs:
   - job: BuildPackPublish
     displayName: build, pack, and publish nuget package
     steps:
-      - powershell: |
-          $tag = "$(Build.SourceBranch)"
-          $tag = $tag -replace "refs/tags/", ""
-          echo 'Tags found' + $tag
-          echo "##vso[task.setvariable variable=tag;isOutput=true]$tag"
-        name: createTagVariableStep
-
-      - task: Bash@3
-        displayName: get latest git tags
-        inputs:
-          targetType: "inline"
-          script: |
-            tag=git describe --tags
-            echo $tag
-            echo "##vso[task.setvariable variable=GITTAG]$tag"
-          
       - task: UseDotNet@2
         displayName: set sdk .NET version
         inputs:
@@ -60,7 +44,7 @@ jobs:
           outputDir: "$(Build.ArtifactStagingDirectory)/Release"
           packagesToPack: '**/*.csproj'
           versioningScheme: byEnvVar
-          versionEnvVar: GITTAG
+          versionEnvVar: 'versionNumber'
 
       - task: DotNetCoreCLI@2
         displayName: dotnet push
