@@ -3,9 +3,6 @@ trigger:
     include:
       - refs/tags/*
 
-variables:
-  - template: variables.yml
-
 pool:
   vmImage: "ubuntu-latest"
 
