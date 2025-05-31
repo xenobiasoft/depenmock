@@ -1,0 +1,43 @@
+name: Publish NuGet Packages
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Pack Core Package
+        run: dotnet pack DepenMock/DepenMock.csproj --configuration Release --no-build --output ./nupkgs
+        env:
+          VERSION: ${{ github.ref_name }}
+
+      - name: Pack NUnit Package
+        run: dotnet pack DepenMock.NUnit/DepenMock.NUnit.csproj --configuration Release --no-build --output ./nupkgs
+        env:
+          VERSION: ${{ github.ref_name }}
+
+      - name: Pack XUnit Package
+        run: dotnet pack DepenMock.XUnit/DepenMock.XUnit.csproj --configuration Release --no-build --output ./nupkgs
+        env:
+          VERSION: ${{ github.ref_name }}
+
+      - name: Publish to NuGet
+        run: dotnet nuget push ./nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
