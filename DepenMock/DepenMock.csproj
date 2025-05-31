@@ -24,7 +24,7 @@
     <Title>Auto-mocking unit test framework fixture</Title>
     <Copyright>2025 XenobiaSoft</Copyright>
     <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
-    <PackageIcon>X logo.png</PackageIcon>
+    <PackageIcon>X-logo.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Assets\X logo.png">
+    <None Include="Assets\X-logo.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
