@@ -7,15 +7,23 @@
     <AssemblyName>$(MSBuildProjectName)</AssemblyName>
     <RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Version>1.0.0</Version>
+    <PackageId>DepenMock</PackageId>
     <Authors>XenobiaSoft</Authors>
     <Company>XenobiaSoft</Company>
     <Description>A C#, unit testing library that can automatically mock your SUT (System Under Test) dependencies. This package only contains the fixture. You can add DepenMock.NUnit, or DepenMock.Xunit to enable easier integration with your preferred testing library.</Description>
-    <PackageTags>NUnit, Moq</PackageTags>
+    <PackageTags>NUnit, Moq, Testing, Unit Testing, Auto Mocking, Dependency Injection</PackageTags>
     <RepositoryUrl>https://github.com/xenobiasoft/depenmock</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/xenobiasoft/depenmock</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>Initial release</PackageReleaseNotes>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <DocumentationFile>D:\GitProjects\auto-mocking-unit-test-framework\AutoMockingTestFixture.xml</DocumentationFile>
+    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <Title>Auto-mocking unit test framework fixture</Title>
     <Copyright>2025 XenobiaSoft</Copyright>
+    <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
+    <PackageIcon>X logo.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,6 +31,13 @@
     <PackageReference Include="AutoFixture.AutoMoq" Version="4.18.1" />
     <PackageReference Include="Moq" Version="4.20.72" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Users\shann\OneDrive\Pictures\X logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

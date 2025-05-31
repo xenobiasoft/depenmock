@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DepenMock</name>
+    </assembly>
+    <members>
+        <member name="T:DepenMock.Container">
+            <summary>
+            Provides object creation functionality, as well as acting as a pseudo dependency injection container
+            </summary>
+        </member>
+        <member name="M:DepenMock.Container.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:DepenMock.Container"/>
+            </summary>
+        </member>
+        <member name="M:DepenMock.Container.Create``1">
+            <summary>
+            Creates a new instance of the specified type. This acts as a data generator for
+            primitive types and strings. For object types, it will generate a new instance
+            of the class with all properties set with generated data.
+            </summary>
+            <typeparam name="TType">Any primitive type, string, or object</typeparam>
+            <returns>A new instance of the requested type.</returns>
+        </member>
+        <member name="M:DepenMock.Container.CreateMany``1(System.Nullable{System.Int32})">
+            <summary>
+            Creates a list of specified type. This acts as a data generator for
+            primitive types and strings. For object types, it will generate a list of instances
+            of the specified type with all properties set with generated data.
+            </summary>
+            <typeparam name="TType">Any primitive type, string, or object</typeparam>
+            <param name="count">The number of instances to create</param>
+            <returns>A list of instances of the requested type.</returns>
+        </member>
+        <member name="M:DepenMock.Container.Build``1">
+            <summary>
+            Customizes the creation process for a single object.
+            </summary>
+            <typeparam name="TType">Any object type</typeparam>
+            <returns>
+            A <see cref="T:AutoFixture.Dsl.ICustomizationComposer`1" /> that can be used to customize the creation
+            algorithm before creating the object.
+            </returns>
+        </member>
+        <member name="M:DepenMock.Container.Resolve``1">
+            <summary>
+            Creates a new instance of the requested type and registers it in the Fixture.
+            The fixture always returns the same instance whenever the instance of the type is requested
+            either directly, or indirectly as a nested value of other types.
+            </summary>
+            <typeparam name="TType">Any object type</typeparam>
+            <returns>A new instance of the requested type.</returns>
+        </member>
+        <member name="M:DepenMock.Container.ResolveMock``1">
+            <summary>
+            Creates a mock of the requested type and registers it in the Fixture. As a default, all properties and methods
+            are automatically mocked, but can be overridden using a setup on the returned mocked object.
+            The fixture always returns the same instance of the mock whenever the instance of the type is requested
+            either directly, or indirectly as a nested value of other types.
+            </summary>
+            <typeparam name="TType">Any object type</typeparam>
+            <returns>A mock instance of the requested type</returns>
+        </member>
+        <member name="M:DepenMock.Container.Register``1(``0)">
+            <summary>
+            Registers an instance of TInstanceType in the Fixture. The fixture always returns this same instance when the instance
+            of the type is requested either directly, or indirectly as a nested value of other types.
+            </summary>
+            <typeparam name="TInstanceType">The interface type</typeparam>
+            <param name="instance">The instance of the type that will be registered with the Fixture</param>
+        </member>
+        <member name="T:DepenMock.Loggers.ListLogger">
+            <summary>
+            Custom Logging class used for testing logging
+            </summary>
+        </member>
+        <member name="M:DepenMock.Loggers.ListLogger.#ctor">
+            <summary>
+            Creates an instance of <see cref="T:DepenMock.Loggers.ListLogger"/>
+            </summary>
+        </member>
+        <member name="M:DepenMock.Loggers.ListLogger.Log``1(Microsoft.Extensions.Logging.LogLevel,Microsoft.Extensions.Logging.EventId,``0,System.Exception,System.Func{``0,System.Exception,System.String})">
+            <inheritdoc />
+        </member>
+        <member name="M:DepenMock.Loggers.ListLogger.BeginScope``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:DepenMock.Loggers.ListLogger.IsEnabled(Microsoft.Extensions.Logging.LogLevel)">
+            <inheritdoc />
+        </member>
+        <member name="P:DepenMock.Loggers.ListLogger.Logs">
+            <summary>
+            Returns the <see cref="T:System.Collections.Generic.IDictionary`2"/> of messages that have been logged
+            </summary>
+        </member>
+        <member name="T:DepenMock.Loggers.NullScope">
+            <summary>
+            Provides a Nullable pattern for testing logging
+            </summary>
+        </member>
+        <member name="P:DepenMock.Loggers.NullScope.Instance">
+            <summary>
+            Singleton Instance property to get a reference to <see cref="T:DepenMock.Loggers.NullScope"/>
+            </summary>
+        </member>
+        <member name="M:DepenMock.Loggers.NullScope.Dispose">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>
