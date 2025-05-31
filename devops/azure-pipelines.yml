@@ -22,8 +22,6 @@ jobs:
           command: restore
           projects: "**/*.csproj"
           includeNuGetOrg: true
-          feedsToUse: "select"
-          vstsFeed: $(vstsFeed)
 
       - task: DotNetCoreCLI@2
         displayName: dotnet build
@@ -35,18 +33,18 @@ jobs:
       - task: DotNetCoreCLI@2
         displayName: dotnet pack
         inputs:
-          command: 'pack'
-          configuration: 'Release'
+          command: "pack"
+          configuration: "Release"
           nobuild: true
           outputDir: "$(Build.ArtifactStagingDirectory)/Release"
-          packagesToPack: '**/*.csproj'
+          packagesToPack: "**/*.csproj"
           versioningScheme: byEnvVar
-          versionEnvVar: 'versionNumber'
+          versionEnvVar: "versionNumber"
 
       - task: DotNetCoreCLI@2
         displayName: dotnet push
         inputs:
-          command: 'push'
-          nuGetFeedType: 'internal'
-          packagesToPush: '$(Build.ArtifactStagingDirectory)/Release/**/*.nupkg'
-          publishVstsFeed: $(vstsFeed)
+          command: "push"
+          nuGetFeedType: "external"
+          packagesToPush: "$(Build.ArtifactStagingDirectory)/Release/**/*.nupkg"
+          publishFeedCredentials: "nuget.org"
