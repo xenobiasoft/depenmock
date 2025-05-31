@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
@@ -22,8 +22,15 @@
 		<Title>NUnit Auto-mocking unit test framework</Title>
 		<Copyright>2024 XenobiaSoft</Copyright>
 		<RequireLicenseAcceptance>true</RequireLicenseAcceptance>
-		<PackageIcon>X-logo.png</PackageIcon>
+		<PackageIcon>x-logo.png</PackageIcon>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Include="..\Assets\x-logo.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="NUnit" Version="4.3.2" />
@@ -34,10 +41,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="Assets\X-logo.png">
-			<Pack>True</Pack>
-			<PackagePath>\</PackagePath>
-		</None>
 		<None Update="README.md">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<Pack>True</Pack>
