@@ -22,11 +22,11 @@
 		<Title>NUnit Auto-mocking unit test framework</Title>
 		<Copyright>2024 XenobiaSoft</Copyright>
 		<RequireLicenseAcceptance>true</RequireLicenseAcceptance>
-		<PackageIcon>X logo.png</PackageIcon>
+		<PackageIcon>../DepenMock/Assets/X-logo.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Include="C:\Users\shann\OneDrive\Pictures\X logo.png">
+	  <None Include="..\Assets\X-logo.png">
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>
