@@ -24,20 +24,23 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
 
+      - name: Set version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
       - name: Pack Core Package
         run: dotnet pack DepenMock/DepenMock.csproj --configuration Release --no-build --output ./nupkgs
         env:
-          VERSION: ${{ github.ref_name }}
+          VERSION: ${{ env.VERSION }}
 
       - name: Pack NUnit Package
         run: dotnet pack DepenMock.NUnit/DepenMock.NUnit.csproj --configuration Release --no-build --output ./nupkgs
         env:
-          VERSION: ${{ github.ref_name }}
+          VERSION: ${{ env.VERSION }}
 
       - name: Pack XUnit Package
         run: dotnet pack DepenMock.XUnit/DepenMock.XUnit.csproj --configuration Release --no-build --output ./nupkgs
         env:
-          VERSION: ${{ github.ref_name }}
+          VERSION: ${{ env.VERSION }}
 
       - name: Publish to NuGet
         run: dotnet nuget push ./nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
