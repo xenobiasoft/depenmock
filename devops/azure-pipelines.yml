@@ -31,6 +31,14 @@ jobs:
           projects: "**/*.csproj"
 
       - task: DotNetCoreCLI@2
+        displayName: dotnet test
+        inputs:
+          command: test
+          projects: "**/Tests.*/*.csproj"
+          arguments: "--configuration Release --no-build"
+          publishTestResults: true
+
+      - task: DotNetCoreCLI@2
         displayName: dotnet pack
         inputs:
           command: "pack"

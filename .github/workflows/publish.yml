@@ -24,6 +24,9 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
 
+      - name: Test
+        run: dotnet test --configuration Release --no-build
+
       - name: Set version
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
 
@@ -39,6 +42,11 @@ jobs:
 
       - name: Pack XUnit Package
         run: dotnet pack DepenMock.XUnit/DepenMock.XUnit.csproj --configuration Release --no-build --output ./nupkgs
+        env:
+          VERSION: ${{ env.VERSION }}
+
+      - name: Pack MSTest Package
+        run: dotnet pack DepenMock.MSTest/DepenMock.MSTest.csproj --configuration Release --no-build --output ./nupkgs
         env:
           VERSION: ${{ env.VERSION }}
 
