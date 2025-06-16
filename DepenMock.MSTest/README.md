@@ -73,7 +73,7 @@ The `CreateMany<T>` method generates a list of instances of the specified type. 
 var randomStrings = Container.CreateMany<string>();
 
 // Creates a list of random integers
-var randomNumbers = Containers.CreateMany<int>();
+var randomNumbers = Container.CreateMany<int>();
 
 // Creates a list of boolean values. All values will be set to true.
 var allTrueValues = Container.CreateMany<bool>();
