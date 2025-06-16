@@ -32,7 +32,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{02EA68
 		Assets\x-logo.png = Assets\x-logo.png
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Github", "Github", "{9689CE9A-B44E-484F-9D30-4F9DC2AE0D99}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub", "GitHub", "{9689CE9A-B44E-484F-9D30-4F9DC2AE0D99}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\publish.yml = .github\workflows\publish.yml
 	EndProjectSection
