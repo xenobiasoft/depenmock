@@ -1,0 +1,47 @@
+﻿name: Create GitHub Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set version and date
+        run: |
+          echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+          echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+      - name: Detect changed packages
+        id: detect
+        run: |
+          git fetch origin main
+          PACKAGES=("DepenMock" "DepenMock.XUnit" "DepenMock.NUnit" "DepenMock.MSTest")
+          CHANGED=""
+          for pkg in "${PACKAGES[@]}"; do
+            if git diff --quiet origin/main -- $pkg; then
+              CHANGED+="- [ ] $pkg – unchanged\n"
+            else
+              CHANGED+="- [x] $pkg – updated\n"
+            fi
+          done
+          echo -e "PACKAGE_STATUS<<EOF\n$CHANGED\nEOF" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref }}
+          name: "Release ${{ env.VERSION }}"
+          body: |
+            ## 🚀 DepenMock v${{ env.VERSION }} – ${{ env.DATE }}
+
+            ### 🧱 Packages Published
+            ${{ env.PACKAGE_STATUS }}
+
+            _This release was automatically generated._
