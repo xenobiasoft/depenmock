@@ -5,7 +5,6 @@ VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9D2563E9-00E4-47FB-A811-C5514C0F0895}"
 	ProjectSection(SolutionItems) = preProject
-		devops\azure-pipelines.yml = devops\azure-pipelines.yml
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -35,6 +34,13 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub", "GitHub", "{9689CE9A-B44E-484F-9D30-4F9DC2AE0D99}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\publish.yml = .github\workflows\publish.yml
+		.github\release-note.md = .github\release-note.md
+		.github\workflows\release.yml = .github\workflows\release.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{034CFA8C-4C7A-4367-BCBF-18197EEB2770}"
+	ProjectSection(SolutionItems) = preProject
+		detect-changed-packages.sh = detect-changed-packages.sh
 	EndProjectSection
 EndProject
 Global
