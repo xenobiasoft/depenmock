@@ -70,26 +70,136 @@
             <typeparam name="TInstanceType">The interface type</typeparam>
             <param name="instance">The instance of the type that will be registered with the Fixture</param>
         </member>
-        <member name="T:DepenMock.Loggers.ListLogger">
+        <member name="M:DepenMock.Container.Register``2(``1)">
             <summary>
-            Custom Logging class used for testing logging
+            Registers an instance of a specified type for use in dependency injection or testing scenarios.
+            </summary>
+            <remarks>This method associates the provided instance with the specified interface or base type, allowing
+            it to be resolved in contexts where <typeparamref name="TInterfaceType"/> is required.</remarks>
+            <typeparam name="TInterfaceType">The interface or base type that the instance implements or inherits.</typeparam>
+            <typeparam name="TInstanceType">The concrete type of the instance being registered. Must be a class that implements or inherits <typeparamref
+            name="TInterfaceType"/>.</typeparam>
+            <param name="instance">The instance to register. Cannot be <see langword="null"/>.</param>
+        </member>
+        <member name="T:DepenMock.ListLoggerAssertionExtensions">
+            <summary>
+            Provides extension methods for <see cref="T:DepenMock.Loggers.ListLogger`1"/> to facilitate log assertions in testing scenarios.
             </summary>
         </member>
-        <member name="M:DepenMock.Loggers.ListLogger.#ctor">
+        <member name="M:DepenMock.ListLoggerAssertionExtensions.CriticalLogs``1(DepenMock.Loggers.ListLogger{``0})">
             <summary>
-            Creates an instance of <see cref="T:DepenMock.Loggers.ListLogger"/>
+            Gets all critical level log messages from the logger.
             </summary>
+            <typeparam name="T">The type associated with the logger.</typeparam>
+            <param name="logger">The logger instance to extract messages from.</param>
+            <returns>A list of critical log messages.</returns>
         </member>
-        <member name="M:DepenMock.Loggers.ListLogger.Log``1(Microsoft.Extensions.Logging.LogLevel,Microsoft.Extensions.Logging.EventId,``0,System.Exception,System.Func{``0,System.Exception,System.String})">
-            <inheritdoc />
+        <member name="M:DepenMock.ListLoggerAssertionExtensions.DebugLogs``1(DepenMock.Loggers.ListLogger{``0})">
+            <summary>
+            Gets all debug level log messages from the logger.
+            </summary>
+            <typeparam name="T">The type associated with the logger.</typeparam>
+            <param name="logger">The logger instance to extract messages from.</param>
+            <returns>A list of debug log messages.</returns>
         </member>
-        <member name="M:DepenMock.Loggers.ListLogger.BeginScope``1(``0)">
-            <inheritdoc />
+        <member name="M:DepenMock.ListLoggerAssertionExtensions.ErrorLogs``1(DepenMock.Loggers.ListLogger{``0})">
+            <summary>
+            Gets all error level log messages from the logger.
+            </summary>
+            <typeparam name="T">The type associated with the logger.</typeparam>
+            <param name="logger">The logger instance to extract messages from.</param>
+            <returns>A list of error log messages.</returns>
         </member>
-        <member name="M:DepenMock.Loggers.ListLogger.IsEnabled(Microsoft.Extensions.Logging.LogLevel)">
-            <inheritdoc />
+        <member name="M:DepenMock.ListLoggerAssertionExtensions.InformationLogs``1(DepenMock.Loggers.ListLogger{``0})">
+            <summary>
+            Gets all information level log messages from the logger.
+            </summary>
+            <typeparam name="T">The type associated with the logger.</typeparam>
+            <param name="logger">The logger instance to extract messages from.</param>
+            <returns>A list of information log messages.</returns>
         </member>
-        <member name="P:DepenMock.Loggers.ListLogger.Logs">
+        <member name="M:DepenMock.ListLoggerAssertionExtensions.TraceLogs``1(DepenMock.Loggers.ListLogger{``0})">
+            <summary>
+            Gets all trace level log messages from the logger.
+            </summary>
+            <typeparam name="T">The type associated with the logger.</typeparam>
+            <param name="logger">The logger instance to extract messages from.</param>
+            <returns>A list of trace log messages.</returns>
+        </member>
+        <member name="M:DepenMock.ListLoggerAssertionExtensions.WarningLogs``1(DepenMock.Loggers.ListLogger{``0})">
+            <summary>
+            Gets all warning level log messages from the logger.
+            </summary>
+            <typeparam name="T">The type associated with the logger.</typeparam>
+            <param name="logger">The logger instance to extract messages from.</param>
+            <returns>A list of warning log messages.</returns>
+        </member>
+        <member name="M:DepenMock.ListLoggerAssertionExtensions.ContainsMessage(System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            Asserts that at least one log message contains the specified text fragment.
+            </summary>
+            <param name="logMessages">The list of log messages to check.</param>
+            <param name="messageFragment">The text fragment to search for in the log messages.</param>
+            <exception cref="T:System.Exception">Thrown when no log message contains the specified fragment.</exception>
+        </member>
+        <member name="M:DepenMock.ListLoggerAssertionExtensions.ErrorLogs``1(DepenMock.Loggers.ListLogger{``0},Microsoft.Extensions.Logging.LogLevel)">
+            <summary>
+            Helper method to extract log messages of a specific level from the logger.
+            </summary>
+            <typeparam name="T">The type associated with the logger.</typeparam>
+            <param name="logger">The logger instance to extract messages from.</param>
+            <param name="logLevel">The log level to filter by.</param>
+            <returns>A list of log messages for the specified log level.</returns>
+        </member>
+        <member name="T:DepenMock.Loggers.ListLogger`1">
+            <summary>
+            Provides a logger implementation that stores log messages categorized by <see cref="T:Microsoft.Extensions.Logging.LogLevel"/>.
+            </summary>
+            <remarks>This logger stores log messages in memory, organized by <see cref="T:Microsoft.Extensions.Logging.LogLevel"/>. Each log level is
+            associated with a list of messages. It is primarily intended for scenarios where logs need to be captured and
+            analyzed during runtime, such as testing or debugging.</remarks>
+            <typeparam name="TLoggerType">The type associated with the logger, typically representing the category or context of the logs.</typeparam>
+        </member>
+        <member name="M:DepenMock.Loggers.ListLogger`1.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="!:ListLogger"/> class.
+            </summary>
+            <remarks>The logger stores log messages categorized by <see cref="T:Microsoft.Extensions.Logging.LogLevel"/> in a dictionary. Each log
+            level is associated with a list of messages.</remarks>
+        </member>
+        <member name="M:DepenMock.Loggers.ListLogger`1.Log``1(Microsoft.Extensions.Logging.LogLevel,Microsoft.Extensions.Logging.EventId,``0,System.Exception,System.Func{``0,System.Exception,System.String})">
+            <summary>
+            Logs a message at the specified log level.
+            </summary>
+            <remarks>The <paramref name="formatter"/> function is used to generate the log message from the provided
+            state and exception. Ensure that the <paramref name="formatter"/> is not <see langword="null"/> and produces a
+            meaningful string representation.</remarks>
+            <typeparam name="TState">The type of the state object to be logged.</typeparam>
+            <param name="logLevel">The severity level of the log message.</param>
+            <param name="eventId">The identifier for the event being logged.</param>
+            <param name="state">The state object containing information to be logged.</param>
+            <param name="exception">The exception associated with the log entry, if any. Can be <see langword="null"/>.</param>
+            <param name="formatter">A function that formats the <paramref name="state"/> and <paramref name="exception"/> into a log message.</param>
+        </member>
+        <member name="M:DepenMock.Loggers.ListLogger`1.BeginScope``1(``0)">
+            <summary>
+            Begins a logical operation scope.
+            </summary>
+            <remarks>This method is typically used to group log messages or operations within a specific context. The
+            returned scope is a no-op implementation, meaning it does not perform any actual scoping behavior.</remarks>
+            <typeparam name="TState">The type of the state to associate with the scope.</typeparam>
+            <param name="state">The state object to associate with the scope. This can be used to provide contextual information.</param>
+            <returns>An <see cref="T:System.IDisposable"/> that ends the scope when disposed.</returns>
+        </member>
+        <member name="M:DepenMock.Loggers.ListLogger`1.IsEnabled(Microsoft.Extensions.Logging.LogLevel)">
+            <summary>
+            Determines whether logging is enabled for the specified <see cref="T:Microsoft.Extensions.Logging.LogLevel"/>.
+            </summary>
+            <param name="logLevel">The log level to check for enabled logging.</param>
+            <returns><see langword="true"/> if logging is enabled for the specified <paramref name="logLevel"/>;  otherwise, <see
+            langword="false"/>.</returns>
+        </member>
+        <member name="P:DepenMock.Loggers.ListLogger`1.Logs">
             <summary>
             Returns the <see cref="T:System.Collections.Generic.IDictionary`2"/> of messages that have been logged
             </summary>

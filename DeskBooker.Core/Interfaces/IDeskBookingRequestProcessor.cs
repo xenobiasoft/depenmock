@@ -4,5 +4,5 @@ namespace DeskBooker.Core.Interfaces;
 
 public interface IDeskBookingRequestProcessor
 {
-	DeskBookingResult BookDesk(DeskBookingRequest request);
+	DeskBookingResult BookDesk(DeskBookingRequest request, string correlationId);
 }

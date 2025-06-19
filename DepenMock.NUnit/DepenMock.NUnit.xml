@@ -4,5 +4,89 @@
         <name>DepenMock.NUnit</name>
     </assembly>
     <members>
+        <member name="T:DepenMock.NUnit.BaseTest">
+            <summary>
+            Represents the base class for test fixtures that require a dependency injection container.
+            </summary>
+            <remarks>This class provides a common setup mechanism for initializing a <see cref="P:DepenMock.NUnit.BaseTest.Container"/> instance
+            before each test execution. Derived classes can use the <see cref="P:DepenMock.NUnit.BaseTest.Container"/> property to register and resolve
+            dependencies.</remarks>
+        </member>
+        <member name="M:DepenMock.NUnit.BaseTest.BaseSetup">
+            <summary>
+            Sets up the test environment by initializing the dependency injection container.
+            </summary>
+            <remarks>This method is executed before each test to ensure a fresh instance of the container. It is
+            marked with the <see cref="T:NUnit.Framework.SetUpAttribute"/> to indicate that it should run prior to each test in
+            NUnit.</remarks>
+        </member>
+        <member name="P:DepenMock.NUnit.BaseTest.Container">
+            <summary>
+            Gets the container instance associated with the current object.
+            </summary>
+        </member>
+        <member name="T:DepenMock.NUnit.BaseTestByAbstraction`2">
+            <summary>
+            Serves as a base class for tests that rely on abstraction, providing functionality to resolve the system under test
+            (SUT).
+            </summary>
+            <remarks>This class is designed to facilitate testing scenarios where the system under test is resolved from a
+            dependency container. Derived classes can use the <see cref="M:DepenMock.NUnit.BaseTestByAbstraction`2.ResolveSut"/> method to retrieve an instance of
+            <typeparamref name="TTestType"/>.</remarks>
+            <typeparam name="TTestType">The concrete type of the system under test. Must be a class that implements <typeparamref name="TInterfaceType"/>.</typeparam>
+            <typeparam name="TInterfaceType">The interface or base type that <typeparamref name="TTestType"/> implements or inherits.</typeparam>
+        </member>
+        <member name="M:DepenMock.NUnit.BaseTestByAbstraction`2.ResolveSut">
+            <summary>
+            Resolves an instance of the system under test (SUT) from the container.
+            </summary>
+            <remarks>This method attempts to resolve an instance of the specified type from the container.  If the
+            container is null or the type cannot be resolved, the method returns <see langword="null"/>.</remarks>
+            <returns>An instance of <typeparamref name="TInterfaceType"/> if successfully resolved; otherwise, <see
+            langword="null"/>.</returns>
+        </member>
+        <member name="P:DepenMock.NUnit.BaseTestByAbstraction`2.Logger">
+            <summary>
+            Gets the logger instance used for logging messages related to the current test type.
+            </summary>
+        </member>
+        <member name="M:DepenMock.NUnit.BaseTestByAbstraction`2.Setup">
+            <summary>
+            Sets up the test environment by registering the logger implementation in the dependency container.
+            </summary>
+            <remarks>This method is intended to be used as a setup step in unit tests, ensuring that the specified
+            logger  implementation is available for dependency injection during the test execution.</remarks>
+        </member>
+        <member name="T:DepenMock.NUnit.BaseTestByType`1">
+            <summary>
+            Represents a base class for tests that are specific to a given type.
+            </summary>
+            <remarks>This class provides functionality to resolve the subject under test (SUT) from a dependency injection
+            container. Derived classes can use this functionality to access the SUT.</remarks>
+            <typeparam name="TTestType">The type of the subject under test (SUT). Must be a reference type.</typeparam>
+        </member>
+        <member name="M:DepenMock.NUnit.BaseTestByType`1.ResolveSut">
+            <summary>
+            Resolves an instance of the specified type from the container.
+            </summary>
+            <remarks>This method retrieves an instance of <typeparamref name="TTestType"/> from the container, if
+            available. Ensure that the container is properly initialized and contains a registration for <typeparamref
+            name="TTestType"/>.</remarks>
+            <returns>An instance of <typeparamref name="TTestType"/> if the container is not null and the type is registered;
+            otherwise, <see langword="null"/>.</returns>
+        </member>
+        <member name="P:DepenMock.NUnit.BaseTestByType`1.Logger">
+            <summary>
+            Gets the logger instance used for logging operations specific to the <typeparamref name="TTestType"/> type.
+            </summary>
+        </member>
+        <member name="M:DepenMock.NUnit.BaseTestByType`1.Setup">
+            <summary>
+            Sets up the test environment by registering required dependencies in the container.
+            </summary>
+            <remarks>This method is executed before each test to ensure the necessary dependencies, such as  the
+            logger, are properly configured in the container. It is marked with the <see cref="T:NUnit.Framework.SetUpAttribute"/>  to
+            indicate that it should run prior to each test in NUnit.</remarks>
+        </member>
     </members>
 </doc>

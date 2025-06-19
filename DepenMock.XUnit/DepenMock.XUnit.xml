@@ -4,5 +4,96 @@
         <name>DepenMock.XUnit</name>
     </assembly>
     <members>
+        <member name="T:DepenMock.XUnit.BaseTest">
+            <summary>
+            Serves as a base class for test implementations, providing shared functionality and a dependency injection
+            container.
+            </summary>
+            <remarks>The <see cref="T:DepenMock.XUnit.BaseTest"/> class is designed to be inherited by test classes that require a common
+            setup or shared resources. It initializes a <see cref="P:DepenMock.XUnit.BaseTest.Container"/> instance, which can be used for dependency
+            injection or other purposes. Derived classes can access the <see cref="P:DepenMock.XUnit.BaseTest.Container"/> property to manage dependencies
+            within the test context.</remarks>
+        </member>
+        <member name="M:DepenMock.XUnit.BaseTest.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:DepenMock.XUnit.BaseTest"/> class.
+            </summary>
+            <remarks>This constructor sets up the <see cref="P:DepenMock.XUnit.BaseTest.Container"/> property with a new instance of the <see
+            cref="P:DepenMock.XUnit.BaseTest.Container"/> class. Derived classes can use this container for dependency injection or other
+            purposes.</remarks>
+        </member>
+        <member name="P:DepenMock.XUnit.BaseTest.Container">
+            <summary>
+            Gets the container instance associated with the current context.
+            </summary>
+        </member>
+        <member name="T:DepenMock.XUnit.BaseTestByAbstraction`2">
+            <summary>
+            Provides a base class for test implementations that rely on abstraction, enabling the resolution  of a system under
+            test (SUT) and logging functionality.
+            </summary>
+            <remarks>This class is designed to facilitate testing scenarios where the system under test is resolved  from
+            a dependency injection container and logging is required. Ensure that the dependency injection  container is
+            properly configured with the necessary registrations for <typeparamref name="TTestType"/>  before using this
+            class.</remarks>
+            <typeparam name="TTestType">The concrete type of the system under test, which must implement <typeparamref name="TInterfaceType"/>.</typeparam>
+            <typeparam name="TInterfaceType">The interface type that the system under test implements.</typeparam>
+        </member>
+        <member name="M:DepenMock.XUnit.BaseTestByAbstraction`2.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="!:BaseTestByAbstraction"/> class.
+            </summary>
+            <remarks>This constructor registers a logger implementation for the specified interface type in the
+            dependency injection container. The logger is registered as a <see cref="T:DepenMock.Loggers.ListLogger`1"/> instance
+            associated with the provided <see cref="T:Microsoft.Extensions.Logging.ILogger`1"/>.</remarks>
+        </member>
+        <member name="M:DepenMock.XUnit.BaseTestByAbstraction`2.ResolveSut">
+            <summary>
+            Resolves an instance of the system under test (SUT) from the dependency injection container.
+            </summary>
+            <remarks>Ensure that the dependency injection container is properly configured and contains  a
+            registration for <typeparamref name="TTestType"/> before calling this method.</remarks>
+            <returns>An instance of <typeparamref name="TInterfaceType"/> resolved from the container,  or <see langword="null"/> if
+            the container is not available.</returns>
+        </member>
+        <member name="P:DepenMock.XUnit.BaseTestByAbstraction`2.Logger">
+            <summary>
+            Gets a logger instance for the specified interface type.
+            </summary>
+        </member>
+        <member name="T:DepenMock.XUnit.BaseTestByType`1">
+            <summary>
+            Provides a base class for tests that are specific to a given type.
+            </summary>
+            <remarks>This abstract class serves as a foundation for creating tests that are tied to a specific type. It
+            includes functionality for resolving instances of the type from a container and managing logging specific to the
+            type.</remarks>
+            <typeparam name="TTestType">The type associated with the test. This type must be a reference type.</typeparam>
+        </member>
+        <member name="M:DepenMock.XUnit.BaseTestByType`1.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="!:BaseTestByType"/> class and registers a logger for the specified
+            test type.
+            </summary>
+            <remarks>This constructor ensures that a logger of type <see cref="T:Microsoft.Extensions.Logging.ILogger`1"/> is registered
+            in the container for the test type. Derived classes can rely on this registration for logging
+            purposes.</remarks>
+        </member>
+        <member name="M:DepenMock.XUnit.BaseTestByType`1.ResolveSut">
+            <summary>
+            Resolves an instance of the specified type from the container.
+            </summary>
+            <remarks>This method retrieves an instance of <typeparamref name="TTestType"/> from the container, if
+            available. Ensure that the container is properly initialized and contains a registration for <typeparamref
+            name="TTestType"/>.</remarks>
+            <returns>An instance of <typeparamref name="TTestType"/> if the container is not null and the type is registered;
+            otherwise, <see langword="null"/>.</returns>
+        </member>
+        <member name="P:DepenMock.XUnit.BaseTestByType`1.Logger">
+            <summary>
+            Gets a logger instance for recording and managing log entries specific to the type <typeparamref
+            name="TTestType"/>.
+            </summary>
+        </member>
     </members>
 </doc>
