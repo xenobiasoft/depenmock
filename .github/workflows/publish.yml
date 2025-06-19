@@ -28,17 +28,13 @@ jobs:
 
       - name: Set version from tag
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
-
-      - name: Check for changes in ${{ matrix.project }}
+        
+      - name: Check for changes in ${{ matrix.project }} or its dependencies
         id: detect-changes
         run: |
-          git fetch origin main
-          if git diff --quiet origin/main -- src/${{ matrix.project }}; then
-            echo "changed=false" >> $GITHUB_OUTPUT
-          else
-            echo "changed=true" >> $GITHUB_OUTPUT
-          fi
-
+          CHANGED=$(./scripts/detect-changes.sh ${{ matrix.project }})
+          echo "$CHANGED" >> $GITHUB_OUTPUT
+          
       - name: Restore & Build ${{ matrix.project }}
         if: steps.detect-changes.outputs.changed == 'true'
         run: |

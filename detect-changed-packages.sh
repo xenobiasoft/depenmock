@@ -1,15 +1,31 @@
 ﻿#!/bin/bash
-# Compares package folders to determine which have changed
 
-PACKAGES=("DepenMock" "DepenMock.XUnit" "DepenMock.NUnit" "DepenMock.MSTest")
-BASE_BRANCH=${1:-origin/main}
+# Usage:
+#   ./scripts/detect-changed-packages.sh <PROJECT_NAME>
+# Outputs:
+#   "changed=true" or "changed=false"
 
-echo "Comparing to $BASE_BRANCH..."
-echo ""
-for pkg in "${PACKAGES[@]}"; do
-  if git diff --quiet $BASE_BRANCH -- "$pkg"; then
-    echo "❌ $pkg – no changes"
-  else
-    echo "✅ $pkg – changed"
-  fi
-done
+set -e
+
+PROJECT=$1
+
+if [ -z "$PROJECT" ]; then
+  echo "Error: Missing PROJECT argument."
+  echo "Usage: ./scripts/detect-changes.sh <PROJECT_NAME>"
+  exit 1
+fi
+git fetch origin main
+
+if [ "$PROJECT" = "DepenMock" ]; then
+  TARGET_PATH="src/DepenMock"
+else
+  TARGET_PATH="src/DepenMock src/$PROJECT"
+fi
+
+echo "Checking for changes in: $TARGET_PATH"
+
+if git diff --quiet origin/main -- $TARGET_PATH; then
+  echo "changed=false"
+else
+  echo "changed=true"
+fi

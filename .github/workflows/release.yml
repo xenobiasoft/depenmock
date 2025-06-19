@@ -20,21 +20,12 @@ jobs:
         run: |
           echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
           echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
-
-      - name: Detect changed packages
-        id: detect
+        
+      - name: Check for changes in ${{ matrix.project }} or its dependencies
+        id: detect-changes
         run: |
-          git fetch origin main
-          PACKAGES=("DepenMock" "DepenMock.XUnit" "DepenMock.NUnit" "DepenMock.MSTest")
-          CHANGED=""
-          for pkg in "${PACKAGES[@]}"; do
-            if git diff --quiet origin/main -- $pkg; then
-              CHANGED+="- [ ] $pkg – unchanged\n"
-            else
-              CHANGED+="- [x] $pkg – updated\n"
-            fi
-          done
-          echo -e "PACKAGE_STATUS<<EOF\n$CHANGED\nEOF" >> $GITHUB_ENV
+          CHANGED=$(./scripts/detect-changes.sh ${{ matrix.project }})
+          echo "$CHANGED" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
