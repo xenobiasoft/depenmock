@@ -2,30 +2,27 @@
 using System;
 using System.Linq;
 using DeskBooker.Core.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace DeskBooker.Core.Processor;
 
-public class DeskBookingRequestProcessor : IDeskBookingRequestProcessor
+public class DeskBookingRequestProcessor(
+    IDeskBookingRepository deskBookingRepository,
+    IDeskRepository deskRepository,
+    ILogger<DeskBookingRequestProcessor> logger)
+    : IDeskBookingRequestProcessor
 {
-	private readonly IDeskBookingRepository _deskBookingRepository;
-	private readonly IDeskRepository _deskRepository;
-
-	public DeskBookingRequestProcessor(IDeskBookingRepository deskBookingRepository, IDeskRepository deskRepository)
-	{
-		_deskBookingRepository = deskBookingRepository;
-		_deskRepository = deskRepository;
-	}
-
-	public DeskBookingResult BookDesk(DeskBookingRequest request)
+    public DeskBookingResult BookDesk(DeskBookingRequest request, string correlationId)
 	{
 		if (request == null)
 		{
-			throw new ArgumentNullException(nameof(request));
+			logger.LogError("Desk booking request is null. Correlation Id: {CorrelationId}", correlationId);
+            throw new ArgumentNullException(nameof(request));
 		}
 
 		var result = request.Create<DeskBookingResult>();
 
-		var availableDesks = _deskRepository.GetAvailableDesks(request.Date);
+		var availableDesks = deskRepository.GetAvailableDesks(request.Date);
 
 		if (availableDesks.Any())
 		{
@@ -33,7 +30,7 @@ public class DeskBookingRequestProcessor : IDeskBookingRequestProcessor
 			var deskBooking = request.Create<DeskBooking>();
 			deskBooking.DeskId = availableDesk.Id;
 
-			_deskBookingRepository.Save(deskBooking);
+			deskBookingRepository.Save(deskBooking);
 
 			result.DeskBookingId = deskBooking.Id;
 			result.Code = DeskBookingResultCode.Success;
@@ -43,6 +40,8 @@ public class DeskBookingRequestProcessor : IDeskBookingRequestProcessor
 			result.Code = DeskBookingResultCode.NoDeskAvailable;
 		}
 
-		return result;
+		logger.LogInformation("Desk booking result: {ResultCode} for request on {RequestDate}.", result.Code, request.Date);
+
+        return result;
 	}
 }

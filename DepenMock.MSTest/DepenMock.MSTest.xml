@@ -4,5 +4,91 @@
         <name>DepenMock.MSTest</name>
     </assembly>
     <members>
+        <member name="T:DepenMock.MSTest.BaseTest">
+            <summary>
+            Represents the base class for test scenarios, providing common functionality and shared resources.
+            </summary>
+            <remarks>The <see cref="T:DepenMock.MSTest.BaseTest"/> class serves as a foundation for creating test cases. It
+            initializes  a <see cref="P:DepenMock.MSTest.BaseTest.Container"/> instance to manage core services and dependencies, which can be used  by
+            derived classes to set up and execute testing scenarios.</remarks>
+        </member>
+        <member name="M:DepenMock.MSTest.BaseTest.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:DepenMock.MSTest.BaseTest"/> class.
+            </summary>
+            <remarks>This constructor initializes the <see cref="P:DepenMock.MSTest.BaseTest.Container"/> property with a new instance
+            of the <see cref="P:DepenMock.MSTest.BaseTest.Container"/> class. Derived classes can use this constructor to set up the base state for
+            testing scenarios.</remarks>
+        </member>
+        <member name="P:DepenMock.MSTest.BaseTest.Container">
+            <summary>
+            Gets the container that holds the application's core services and dependencies.
+            </summary>
+        </member>
+        <member name="T:DepenMock.MSTest.BaseTestByAbstraction`2">
+            <summary>
+            Provides a base class for test implementations that utilize abstraction, enabling dependency injection and logging
+            functionality for the system under test (SUT).
+            </summary>
+            <remarks>This class serves as a foundation for tests that require resolving the SUT from a dependency
+            injection container and logging operations. It ensures that the SUT is properly constructed with its dependencies
+            and provides a logger instance for test-related logging.</remarks>
+            <typeparam name="TTestType">The concrete type of the system under test (SUT).</typeparam>
+            <typeparam name="TInterfaceType">The interface type implemented by <typeparamref name="TTestType"/>.</typeparam>
+        </member>
+        <member name="M:DepenMock.MSTest.BaseTestByAbstraction`2.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="!:BaseTestByAbstraction"/> class.
+            </summary>
+            <remarks>This constructor registers a logger implementation for the specified interface type in the
+            dependency injection container. The logger is configured using the provided <see cref="P:DepenMock.MSTest.BaseTestByAbstraction`2.Logger"/>
+            instance.</remarks>
+        </member>
+        <member name="M:DepenMock.MSTest.BaseTestByAbstraction`2.ResolveSut">
+            <summary>
+            Resolves an instance of the system under test (SUT) from the dependency injection container.
+            </summary>
+            <remarks>This method retrieves an instance of the specified type <typeparamref
+            name="TTestType"/> from the container,  ensuring that the SUT is properly constructed with its dependencies.
+            If the container is null, the method  returns null.</remarks>
+            <returns>An instance of <typeparamref name="TTestType"/> if the container is available; otherwise, null.</returns>
+        </member>
+        <member name="P:DepenMock.MSTest.BaseTestByAbstraction`2.Logger">
+            <summary>
+            Gets the logger instance used for logging operations.
+            </summary>
+        </member>
+        <member name="T:DepenMock.MSTest.BaseTestByType`1">
+            <summary>
+            Represents a base class for tests that are specific to a given type.
+            </summary>
+            <remarks>This class provides functionality to resolve the subject under test (SUT) from a dependency injection
+            container. Derived classes can use this functionality to access the SUT.</remarks>
+            <typeparam name="TTestType">The type of the subject under test (SUT). Must be a reference type.</typeparam>
+        </member>
+        <member name="M:DepenMock.MSTest.BaseTestByType`1.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="!:BaseTestByType"/> class and registers a logger for the specified
+            test type.
+            </summary>
+            <remarks>This constructor ensures that a logger of type <see cref="T:Microsoft.Extensions.Logging.ILogger`1"/> is registered
+            in the container for the test type. Derived classes can rely on this registration for logging
+            purposes.</remarks>
+        </member>
+        <member name="M:DepenMock.MSTest.BaseTestByType`1.ResolveSut">
+            <summary>
+            Resolves an instance of the specified type from the container.
+            </summary>
+            <remarks>This method retrieves an instance of <typeparamref name="TTestType"/> from the container, if
+            available. Ensure that the container is properly initialized and contains a registration for <typeparamref
+            name="TTestType"/>.</remarks>
+            <returns>An instance of <typeparamref name="TTestType"/> if the container is not null and the type is registered;
+            otherwise, <see langword="null"/>.</returns>
+        </member>
+        <member name="P:DepenMock.MSTest.BaseTestByType`1.Logger">
+            <summary>
+            Gets the logger instance used for logging operations.
+            </summary>
+        </member>
     </members>
 </doc>

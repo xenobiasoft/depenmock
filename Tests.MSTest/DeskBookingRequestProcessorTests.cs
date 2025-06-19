@@ -1,10 +1,11 @@
+using AutoFixture;
+using DepenMock;
+using DepenMock.MSTest;
 using DeskBooker.Core.Domain;
 using DeskBooker.Core.Interfaces;
 using DeskBooker.Core.Processor;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using DepenMock.MSTest;
-using AutoFixture;
 
 namespace Tests.MSTest;
 
@@ -15,6 +16,7 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
     public void BookDesk_WhenDeskAvailable_ReturnsBookedDeskResult()
     {
         // Assemble
+        var correlationId = Container.Create<string>();
         var request = Container.Create<DeskBookingRequest>();
         var expectedResult = Container
             .Build<DeskBookingResult>()
@@ -28,7 +30,7 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
         var sut = ResolveSut();
 
         // Act
-        var actualResult = sut.BookDesk(request);
+        var actualResult = sut.BookDesk(request, correlationId);
 
         // Assert
         Assert.AreEqual(expectedResult, actualResult);
@@ -39,16 +41,37 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
     public void BookDesk_WhenDeskIsNull_ThrowsException()
     {
         // Assemble
+        var correlationId = Container.Create<string>();
         var sut = ResolveSut();
 
         // Act
-        sut.BookDesk(null);
+        sut.BookDesk(null, correlationId);
+    }
+
+    [TestMethod]
+    public void BookDesk_WhenDeskIsNull_LogsError()
+    {
+        // Assemble
+        var correlationId = Container.Create<string>();
+        var sut = ResolveSut();
+
+        try
+        {
+            // Act
+            sut.BookDesk(null, correlationId);
+        }
+        catch
+        {
+            // Assert
+            Logger.ErrorLogs().ContainsMessage($"Correlation Id: {correlationId}");
+        }
     }
 
     [TestMethod]
     public void BookDesk_WhenDeskAvailable_BooksDesk()
     {
         // Assemble
+        var correlationId = Container.Create<string>();
         var mockRepo = Container.ResolveMock<IDeskBookingRepository>();
         Container
             .ResolveMock<IDeskRepository>()
@@ -58,7 +81,7 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
         var sut = ResolveSut();
 
         // Act
-        sut.BookDesk(Container.Create<DeskBookingRequest>());
+        sut.BookDesk(Container.Create<DeskBookingRequest>(), correlationId);
 
         // Assert
         mockRepo.Verify(x => x.Save(It.IsAny<DeskBooking>()), Times.Once);
@@ -68,6 +91,7 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
     public void BookDesk_WhenNoDeskAvailable_DoesNotBookDesk()
     {
         // Assemble
+        var correlationId = Container.Create<string>();
         Container
             .ResolveMock<IDeskRepository>()
             .Setup(x => x.GetAvailableDesks(It.IsAny<DateTime>()))
@@ -76,7 +100,7 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
         var sut = ResolveSut();
 
         // Act
-        sut.BookDesk(Container.Create<DeskBookingRequest>());
+        sut.BookDesk(Container.Create<DeskBookingRequest>(), correlationId);
 
         // Assert
         mockRepo.Verify(x => x.Save(It.IsAny<DeskBooking>()), Times.Never);
@@ -86,6 +110,7 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
     public void BookDesk_WhenNoAvailableDesks_ReturnStatusNoDeskAvailable()
     {
         // Assemble
+        var correlationId = Container.Create<string>();
         Container
             .ResolveMock<IDeskRepository>()
             .Setup(x => x.GetAvailableDesks(It.IsAny<DateTime>()))
@@ -94,7 +119,7 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
         var sut = ResolveSut();
 
         // Act
-        var result = sut.BookDesk(Container.Create<DeskBookingRequest>());
+        var result = sut.BookDesk(Container.Create<DeskBookingRequest>(), correlationId);
 
         // Assert
         Assert.AreEqual(DeskBookingResultCode.NoDeskAvailable, result.Code);
@@ -104,10 +129,11 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
     public void BookDesk_WhenDeskAvailable_ReturnStatusAvailableDesks()
     {
         // Assemble
+        var correlationId = Container.Create<string>();
         var sut = ResolveSut();
 
         // Act
-        var result = sut.BookDesk(Container.Create<DeskBookingRequest>());
+        var result = sut.BookDesk(Container.Create<DeskBookingRequest>(), correlationId);
 
         // Assert
         Assert.AreEqual(DeskBookingResultCode.Success, result.Code);
@@ -117,6 +143,7 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
     public void BookDesk_WhenNoDeskAvailable_ReturnsEmptyDeskBookingId()
     {
         // Assemble
+        var correlationId = Container.Create<string>();
         Container
             .ResolveMock<IDeskRepository>()
             .Setup(x => x.GetAvailableDesks(It.IsAny<DateTime>()))
@@ -125,7 +152,7 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
         var sut = ResolveSut();
 
         // Act
-        var result = sut.BookDesk(Container.Create<DeskBookingRequest>());
+        var result = sut.BookDesk(Container.Create<DeskBookingRequest>(), correlationId);
 
         // Assert
         Assert.IsNull(result.DeskBookingId);
@@ -135,10 +162,11 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
     public void BookDesk_WhenDeskAvailable_ReturnsDeskBookingId()
     {
         // Assemble
+        var correlationId = Container.Create<string>();
         var sut = ResolveSut();
 
         // Act
-        var result = sut.BookDesk(Container.Create<DeskBookingRequest>());
+        var result = sut.BookDesk(Container.Create<DeskBookingRequest>(), correlationId);
 
         // Assert
         Assert.AreEqual(0, result.DeskBookingId);
