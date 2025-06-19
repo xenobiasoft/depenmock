@@ -1,7 +1,7 @@
 ﻿#!/bin/bash
 
 # Usage:
-#   ./scripts/detect-changes.sh <PROJECT_NAME>
+#   ./scripts/detect-changed-packages.sh <PROJECT_NAME>
 # Outputs:
 #   "changed=true" or "changed=false"
 
