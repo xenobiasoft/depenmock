@@ -147,4 +147,4 @@ Logger.Logs[LogLevel.Information]
 
 ## Sample Project
 
-Explore the sample project, DeskBooker.Core, which includes example unit tests for both NUnit and XUnit to help you get started with DepenMock.
+Explore the sample project, DeskBooker.Core, which includes example unit tests for NUnit, XUnit, and MSTest to help you get started with DepenMock.
