@@ -9,6 +9,11 @@ set -e
 
 PROJECT=$1
 
+if [ -z "$PROJECT" ]; then
+  echo "Error: Missing PROJECT argument."
+  echo "Usage: ./scripts/detect-changes.sh <PROJECT_NAME>"
+  exit 1
+fi
 git fetch origin main
 
 if [ "$PROJECT" = "DepenMock" ]; then
