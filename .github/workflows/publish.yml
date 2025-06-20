@@ -32,7 +32,7 @@ jobs:
       - name: Check for changes in ${{ matrix.project }} or its dependencies
         id: detect-changes
         run: |
-          CHANGED=$(./scripts/detect-changes.sh ${{ matrix.project }})
+          CHANGED=$(./detect-changes.sh ${{ matrix.project }})
           echo "$CHANGED" >> $GITHUB_OUTPUT
           
       - name: Restore & Build ${{ matrix.project }}
