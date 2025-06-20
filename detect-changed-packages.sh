@@ -1,7 +1,7 @@
 ﻿#!/bin/bash
 
 # Usage:
-#   ./scripts/detect-changed-packages.sh <PROJECT_NAME>
+#   ./detect-changed-packages.sh <PROJECT_NAME>
 # Outputs:
 #   "changed=true" or "changed=false"
 
@@ -11,15 +11,15 @@ PROJECT=$1
 
 if [ -z "$PROJECT" ]; then
   echo "Error: Missing PROJECT argument."
-  echo "Usage: ./scripts/detect-changes.sh <PROJECT_NAME>"
+  echo "Usage: ./detect-changes.sh <PROJECT_NAME>"
   exit 1
 fi
 git fetch origin main
 
 if [ "$PROJECT" = "DepenMock" ]; then
-  TARGET_PATH="src/DepenMock"
+  TARGET_PATH="DepenMock"
 else
-  TARGET_PATH="src/DepenMock src/$PROJECT"
+  TARGET_PATH="DepenMock $PROJECT"
 fi
 
 echo "Checking for changes in: $TARGET_PATH"
