@@ -8,14 +8,6 @@ on:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        project:
-          - DepenMock
-          - DepenMock.XUnit
-          - DepenMock.NUnit
-          - DepenMock.MSTest
-
     steps:
       - uses: actions/checkout@v4
         with:
@@ -26,33 +18,37 @@ jobs:
         with:
           dotnet-version: "8.0.x"
 
-      - name: Set version from tag
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test --configuration Release --no-build
+
+      - name: Set version
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
 
-      - name: Make script executable
-        run: chmod +x ./detect-changed-packages.sh
-        
-      - name: Check for changes in ${{ matrix.project }} or its dependencies
-        id: detect-changes
-        run: |
-          CHANGED=$(./detect-changed-packages.sh ${{ matrix.project }})
-          echo "$CHANGED" >> $GITHUB_OUTPUT
-          
-      - name: Restore & Build ${{ matrix.project }}
-        if: steps.detect-changes.outputs.changed == 'true'
-        run: |
-          dotnet restore ${{ matrix.project }}
-          dotnet build ${{ matrix.project }} --configuration Release --no-restore
+      - name: Pack Core Package
+        run: dotnet pack DepenMock/DepenMock.csproj --configuration Release --no-build --output ./nupkgs
+        env:
+          VERSION: ${{ env.VERSION }}
 
-      - name: Test ${{ matrix.project }}
-        if: steps.detect-changes.outputs.changed == 'true'
-        run: dotnet test ${{ matrix.project }} --configuration Release --no-build
+      - name: Pack NUnit Package
+        run: dotnet pack DepenMock.NUnit/DepenMock.NUnit.csproj --configuration Release --no-build --output ./nupkgs
+        env:
+          VERSION: ${{ env.VERSION }}
 
-      - name: Pack ${{ matrix.project }}
-        if: steps.detect-changes.outputs.changed == 'true'
-        run: |
-          dotnet pack ${{ matrix.project }} --configuration Release --no-build --output ./nupkgs -p:Version=${VERSION}
+      - name: Pack XUnit Package
+        run: dotnet pack DepenMock.XUnit/DepenMock.XUnit.csproj --configuration Release --no-build --output ./nupkgs
+        env:
+          VERSION: ${{ env.VERSION }}
 
-      - name: Publish ${{ matrix.project }} to NuGet
-        if: steps.detect-changes.outputs.changed == 'true'
+      - name: Pack MSTest Package
+        run: dotnet pack DepenMock.MSTest/DepenMock.MSTest.csproj --configuration Release --no-build --output ./nupkgs
+        env:
+          VERSION: ${{ env.VERSION }}
+
+      - name: Publish to NuGet
         run: dotnet nuget push ./nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
