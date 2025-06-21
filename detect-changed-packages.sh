@@ -25,7 +25,7 @@ fi
 echo "Checking for changes in: $TARGET_PATH"
 
 if git diff --quiet origin/main -- $TARGET_PATH; then
-  echo "changed=false"
+  echo "changed=true" # temp change to force a publish/release
 else
   echo "changed=true"
 fi
