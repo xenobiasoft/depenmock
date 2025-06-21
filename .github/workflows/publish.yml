@@ -28,6 +28,9 @@ jobs:
 
       - name: Set version from tag
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
+      - name: Make script executable
+        run: chmod +x ./detect-changed-packages.sh
         
       - name: Check for changes in ${{ matrix.project }} or its dependencies
         id: detect-changes
