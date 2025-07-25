@@ -25,7 +25,7 @@ public abstract class BaseTestByType<TTestType> : BaseTest where TTestType : cla
     /// <summary>
     /// Gets the logger instance used for logging operations specific to the <typeparamref name="TTestType"/> type.
     /// </summary>
-    public ListLogger<TTestType> Logger => new ();
+    public ListLogger<TTestType> Logger => new();
 
     /// <summary>
     /// Sets up the test environment by registering required dependencies in the container.
@@ -37,5 +37,12 @@ public abstract class BaseTestByType<TTestType> : BaseTest where TTestType : cla
     public void Setup()
     {
         Container.Register<ILogger<TTestType>>(Logger);
+        AddContainerCustomizations(Container);
     }
+
+    /// <summary>
+    /// Allows derived classes to add custom ISpecimenBuilder instances to the container's fixture.
+    /// </summary>
+    /// <param name="container">The test's dependency injection container.</param>
+    protected virtual void AddContainerCustomizations(Container container) { }
 }

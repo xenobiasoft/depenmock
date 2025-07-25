@@ -22,7 +22,14 @@ public abstract class BaseTestByType<TTestType> : BaseTest where TTestType : cla
     protected BaseTestByType()
     {
         Container.Register<ILogger<TTestType>>(Logger);
+        AddContainerCustomizations(Container);
     }
+
+    /// <summary>
+    /// Allows derived classes to add custom ISpecimenBuilder instances to the container's fixture.
+    /// </summary>
+    /// <param name="container">The test's dependency injection container.</param>
+    protected virtual void AddContainerCustomizations(Container container) { }
 
     /// <summary>
     /// Resolves an instance of the specified type from the container.

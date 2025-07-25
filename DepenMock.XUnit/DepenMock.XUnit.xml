@@ -47,6 +47,12 @@
             dependency injection container. The logger is registered as a <see cref="T:DepenMock.Loggers.ListLogger`1"/> instance
             associated with the provided <see cref="T:Microsoft.Extensions.Logging.ILogger`1"/>.</remarks>
         </member>
+        <member name="M:DepenMock.XUnit.BaseTestByAbstraction`2.AddContainerCustomizations(DepenMock.Container)">
+            <summary>
+            Allows derived classes to add custom ISpecimenBuilder instances to the container's fixture.
+            </summary>
+            <param name="container">The test's dependency injection container.</param>
+        </member>
         <member name="M:DepenMock.XUnit.BaseTestByAbstraction`2.ResolveSut">
             <summary>
             Resolves an instance of the system under test (SUT) from the dependency injection container.
@@ -78,6 +84,12 @@
             <remarks>This constructor ensures that a logger of type <see cref="T:Microsoft.Extensions.Logging.ILogger`1"/> is registered
             in the container for the test type. Derived classes can rely on this registration for logging
             purposes.</remarks>
+        </member>
+        <member name="M:DepenMock.XUnit.BaseTestByType`1.AddContainerCustomizations(DepenMock.Container)">
+            <summary>
+            Allows derived classes to add custom ISpecimenBuilder instances to the container's fixture.
+            </summary>
+            <param name="container">The test's dependency injection container.</param>
         </member>
         <member name="M:DepenMock.XUnit.BaseTestByType`1.ResolveSut">
             <summary>
