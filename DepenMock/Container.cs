@@ -1,4 +1,5 @@
-﻿using AutoFixture;
+﻿using System;
+using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.Dsl;
 using AutoFixture.Kernel;
