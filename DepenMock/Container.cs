@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.Dsl;
+using AutoFixture.Kernel;
 using Moq;
 using System.Collections.Generic;
 using System.Linq;
@@ -116,5 +117,26 @@ public class Container
     public void Register<TInterfaceType, TInstanceType>(TInstanceType instance) where TInstanceType : class, TInterfaceType
     {
         _fixture.Register<TInterfaceType>(() => instance);
+    }
+
+    /// <summary>
+    /// Adds custom ISpecimenBuilder instances to the fixture's Customizations collection.
+    /// </summary>
+    /// <param name="builders">One or more ISpecimenBuilder instances to add.</param>
+    public void AddCustomizations(params ISpecimenBuilder[] builders)
+    {
+        if (builders == null)
+        {
+            throw new ArgumentNullException(nameof(builders), "The builders parameter cannot be null.");
+        }
+
+        if (builders.Any(builder => builder == null))
+        {
+            throw new ArgumentNullException(nameof(builders), "None of the builders can be null.");
+        }
+        foreach (var builder in builders)
+        {
+            _fixture.Customizations.Add(builder);
+        }
     }
 }

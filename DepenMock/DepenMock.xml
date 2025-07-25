@@ -81,6 +81,12 @@
             name="TInterfaceType"/>.</typeparam>
             <param name="instance">The instance to register. Cannot be <see langword="null"/>.</param>
         </member>
+        <member name="M:DepenMock.Container.AddCustomizations(AutoFixture.Kernel.ISpecimenBuilder[])">
+            <summary>
+            Adds custom ISpecimenBuilder instances to the fixture's Customizations collection.
+            </summary>
+            <param name="builders">One or more ISpecimenBuilder instances to add.</param>
+        </member>
         <member name="T:DepenMock.ListLoggerAssertionExtensions">
             <summary>
             Provides extension methods for <see cref="T:DepenMock.Loggers.ListLogger`1"/> to facilitate log assertions in testing scenarios.

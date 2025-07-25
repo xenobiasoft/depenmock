@@ -27,7 +27,7 @@ public abstract class BaseTestByAbstraction<TTestType, TInterfaceType> : BaseTes
     /// <summary>
     /// Gets the logger instance used for logging messages related to the current test type.
     /// </summary>
-    public ListLogger<TTestType> Logger { get; } = new ();
+    public ListLogger<TTestType> Logger { get; } = new();
 
     /// <summary>
     /// Sets up the test environment by registering the logger implementation in the dependency container.
@@ -39,5 +39,12 @@ public abstract class BaseTestByAbstraction<TTestType, TInterfaceType> : BaseTes
     {
         Container.Register<ILogger<TTestType>, ListLogger<TTestType>>(Logger);
         Container.Register<ILogger, ListLogger<TTestType>>(Logger);
+        AddContainerCustomizations(Container);
     }
+
+    /// <summary>
+    /// Allows derived classes to add custom ISpecimenBuilder instances to the container's fixture.
+    /// </summary>
+    /// <param name="container">The test's dependency injection container.</param>
+    protected virtual void AddContainerCustomizations(Container container) { }
 }

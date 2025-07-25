@@ -32,7 +32,7 @@ public class AccountControllerTests : BaseTestByType<AccountController>
 
 ## Creating the System Under Test (SUT)
 
-To create an instance of your SUT, use the ```ResolveSut``` method. It is essential to set up any dependencies that need to be mocked before creating the SUT. Place the ResolveSut call as the final step before executing your test action.
+To create an instance of your SUT, use the `ResolveSut` method. It is essential to set up any dependencies that need to be mocked before creating the SUT. Place the ResolveSut call as the final step before executing your test action.
 
 ```c#
 var sut = ResolveSut();
@@ -42,7 +42,7 @@ var sut = ResolveSut();
 
 **Create\<T>()**
 
-The ```Create<T>``` method generates a single instance of the specified type.
+The `Create<T>` method generates a single instance of the specified type.
 
 ```c#
 // Creates a random string in the format of a guid i.e "fe06998d-aec1-4808-8968-d8f37024a294"
@@ -66,7 +66,7 @@ var randomStrings = Container.Create<List<string>>();
 
 **CreateMany\<T>(int? numberOfInstances)**
 
-The ```CreateMany<T>``` method generates a list of instances of the specified type. By default, it creates a list of three items, but you can customize the number of instances by setting by setting the ```numberOfInstances``` parameter.
+The `CreateMany<T>` method generates a list of instances of the specified type. By default, it creates a list of three items, but you can customize the number of instances by setting by setting the `numberOfInstances` parameter.
 
 ```c#
 // Creates a list of strings
@@ -87,7 +87,7 @@ var addressList = Container.CreateMany<Address>();
 
 **Build\<T>()**
 
-The ```Build<T>``` method provides a builder pattern for creating objects with specified data rather than using all generated data.
+The `Build<T>` method provides a builder pattern for creating objects with specified data rather than using all generated data.
 
 ```c#
 var deskBookingResult = Container
@@ -144,6 +144,34 @@ Logger.Logs[LogLevel.Warning]
 // Information
 Logger.Logs[LogLevel.Information]
 ```
+
+## Extending Fixture Customization
+
+DepenMock allows you to add your own customizations to the underlying AutoFixture fixture by overriding a virtual method in your test class. This is useful if you want to add custom `ISpecimenBuilder` instances or otherwise control how objects are created.
+
+### How to Add Custom ISpecimenBuilder Instances
+
+Override the `AddContainerCustomizations` method in your test class and use the `Container.AddCustomizations` method to add your custom builders:
+
+```c#
+public class MyTests : BaseTestByType<MyType>
+{
+    protected override void AddContainerCustomizations(Container container)
+    {
+        container.AddCustomizations(new MyCustomSpecimenBuilder());
+    }
+}
+```
+
+This works for all base test types (`BaseTestByType`, `BaseTestByAbstraction`, and their NUnit/XUnit/MSTest variants). The method is called automatically during test setup.
+
+You can add as many custom builders as you need:
+
+```c#
+container.AddCustomizations(new MyBuilder1(), new MyBuilder2());
+```
+
+See the API docs for more details on `ISpecimenBuilder` and advanced customization scenarios.
 
 ## Sample Project
 

@@ -57,6 +57,12 @@
             <remarks>This method is intended to be used as a setup step in unit tests, ensuring that the specified
             logger  implementation is available for dependency injection during the test execution.</remarks>
         </member>
+        <member name="M:DepenMock.NUnit.BaseTestByAbstraction`2.AddContainerCustomizations(DepenMock.Container)">
+            <summary>
+            Allows derived classes to add custom ISpecimenBuilder instances to the container's fixture.
+            </summary>
+            <param name="container">The test's dependency injection container.</param>
+        </member>
         <member name="T:DepenMock.NUnit.BaseTestByType`1">
             <summary>
             Represents a base class for tests that are specific to a given type.
@@ -87,6 +93,12 @@
             <remarks>This method is executed before each test to ensure the necessary dependencies, such as  the
             logger, are properly configured in the container. It is marked with the <see cref="T:NUnit.Framework.SetUpAttribute"/>  to
             indicate that it should run prior to each test in NUnit.</remarks>
+        </member>
+        <member name="M:DepenMock.NUnit.BaseTestByType`1.AddContainerCustomizations(DepenMock.Container)">
+            <summary>
+            Allows derived classes to add custom ISpecimenBuilder instances to the container's fixture.
+            </summary>
+            <param name="container">The test's dependency injection container.</param>
         </member>
     </members>
 </doc>

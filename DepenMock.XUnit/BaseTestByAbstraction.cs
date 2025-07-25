@@ -25,7 +25,14 @@ public abstract class BaseTestByAbstraction<TTestType, TInterfaceType> : BaseTes
     {
         Container.Register<ILogger<TTestType>, ListLogger<TTestType>>(Logger);
         Container.Register<ILogger, ListLogger<TTestType>>(Logger);
+        AddContainerCustomizations(Container);
     }
+
+    /// <summary>
+    /// Allows derived classes to add custom ISpecimenBuilder instances to the container's fixture.
+    /// </summary>
+    /// <param name="container">The test's dependency injection container.</param>
+    protected virtual void AddContainerCustomizations(Container container) { }
 
     /// <summary>
     /// Resolves an instance of the system under test (SUT) from the dependency injection container.
