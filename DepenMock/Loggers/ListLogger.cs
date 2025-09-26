@@ -20,7 +20,16 @@ public class ListLogger<TLoggerType> : ILogger<TLoggerType>, ILogger
     /// level is associated with a list of messages.</remarks>
     public ListLogger()
     {
-        Logs = new Dictionary<LogLevel, List<string>>();
+        Logs = new Dictionary<LogLevel, List<string>>
+        {
+            { LogLevel.Trace, new List<string>() },
+            { LogLevel.Debug, new List<string>() },
+            { LogLevel.Information, new List<string>() },
+            { LogLevel.Warning, new List<string>() },
+            { LogLevel.Error, new List<string>() },
+            { LogLevel.Critical, new List<string>() },
+            { LogLevel.None, new List<string>() }
+        };
     }
 
     /// <summary>
