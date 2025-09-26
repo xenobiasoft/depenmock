@@ -19,7 +19,7 @@ public static class ListLoggerAssertionExtensions
     /// <returns>A list of critical log messages.</returns>
     public static List<string> CriticalLogs<T>(this ListLogger<T> logger)
     {
-        return logger.ErrorLogs(LogLevel.Critical);
+        return logger.LogMessages(LogLevel.Critical);
     }
 
     /// <summary>
@@ -30,7 +30,7 @@ public static class ListLoggerAssertionExtensions
     /// <returns>A list of debug log messages.</returns>
     public static List<string> DebugLogs<T>(this ListLogger<T> logger)
     {
-        return logger.ErrorLogs(LogLevel.Debug);
+        return logger.LogMessages(LogLevel.Debug);
     }
 
     /// <summary>
@@ -41,7 +41,7 @@ public static class ListLoggerAssertionExtensions
     /// <returns>A list of error log messages.</returns>
     public static List<string> ErrorLogs<T>(this ListLogger<T> logger)
     {
-        return logger.ErrorLogs(LogLevel.Error);
+        return logger.LogMessages(LogLevel.Error);
     }
 
     /// <summary>
@@ -52,7 +52,7 @@ public static class ListLoggerAssertionExtensions
     /// <returns>A list of information log messages.</returns>
     public static List<string> InformationLogs<T>(this ListLogger<T> logger)
     {
-        return logger.ErrorLogs(LogLevel.Information);
+        return logger.LogMessages(LogLevel.Information);
     }
 
     /// <summary>
@@ -63,7 +63,7 @@ public static class ListLoggerAssertionExtensions
     /// <returns>A list of trace log messages.</returns>
     public static List<string> TraceLogs<T>(this ListLogger<T> logger)
     {
-        return logger.ErrorLogs(LogLevel.Trace);
+        return logger.LogMessages(LogLevel.Trace);
     }
 
     /// <summary>
@@ -74,7 +74,7 @@ public static class ListLoggerAssertionExtensions
     /// <returns>A list of warning log messages.</returns>
     public static List<string> WarningLogs<T>(this ListLogger<T> logger)
     {
-        return logger.ErrorLogs(LogLevel.Warning);
+        return logger.LogMessages(LogLevel.Warning);
     }
 
     /// <summary>
@@ -98,7 +98,7 @@ public static class ListLoggerAssertionExtensions
     /// <param name="logger">The logger instance to extract messages from.</param>
     /// <param name="logLevel">The log level to filter by.</param>
     /// <returns>A list of log messages for the specified log level.</returns>
-    private static List<string> ErrorLogs<T>(this ListLogger<T> logger, LogLevel logLevel)
+    private static List<string> LogMessages<T>(this ListLogger<T> logger, LogLevel logLevel)
     {
         return logger.Logs[logLevel].ToList();
     }

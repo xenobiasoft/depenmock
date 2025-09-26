@@ -148,7 +148,7 @@
             <param name="messageFragment">The text fragment to search for in the log messages.</param>
             <exception cref="T:System.Exception">Thrown when no log message contains the specified fragment.</exception>
         </member>
-        <member name="M:DepenMock.ListLoggerAssertionExtensions.ErrorLogs``1(DepenMock.Loggers.ListLogger{``0},Microsoft.Extensions.Logging.LogLevel)">
+        <member name="M:DepenMock.ListLoggerAssertionExtensions.LogMessages``1(DepenMock.Loggers.ListLogger{``0},Microsoft.Extensions.Logging.LogLevel)">
             <summary>
             Helper method to extract log messages of a specific level from the logger.
             </summary>
