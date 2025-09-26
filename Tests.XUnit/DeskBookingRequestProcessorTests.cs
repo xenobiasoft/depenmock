@@ -172,4 +172,34 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
 		// Assert
 		Assert.Equal(0, result.DeskBookingId);
 	}
+
+    [Fact]
+    public void ErrorLogs_WhenNoLogsExist_ShouldReturnEmptyList()
+    {
+        // Arrange & Act & Assert - This should not throw an exception
+        var errorLogs = Logger.ErrorLogs();
+        
+        // Assert
+        Assert.Empty(errorLogs);
+    }
+
+    [Fact]
+    public void InformationLogs_WhenNoLogsExist_ShouldReturnEmptyList()
+    {
+        // Arrange & Act & Assert - This should not throw an exception
+        var infoLogs = Logger.InformationLogs();
+        
+        // Assert
+        Assert.Empty(infoLogs);
+    }
+
+    [Fact]
+    public void WarningLogs_WhenNoLogsExist_ShouldReturnEmptyList()
+    {
+        // Arrange & Act & Assert - This should not throw an exception
+        var warningLogs = Logger.WarningLogs();
+        
+        // Assert
+        Assert.Empty(warningLogs);
+    }
 }

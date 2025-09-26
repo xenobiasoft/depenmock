@@ -100,6 +100,6 @@ public static class ListLoggerAssertionExtensions
     /// <returns>A list of log messages for the specified log level.</returns>
     private static List<string> ErrorLogs<T>(this ListLogger<T> logger, LogLevel logLevel)
     {
-        return logger.Logs[logLevel].ToList();
+        return logger.Logs.TryGetValue(logLevel, out var logs) ? logs.ToList() : new List<string>();
     }
 }
