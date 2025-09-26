@@ -202,4 +202,31 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
         // Assert
         Assert.Empty(warningLogs);
     }
+
+    [Fact]
+    public void LogExtensions_ShouldWorkWithActualLogMessages()
+    {
+        // Arrange & Act - Create SUT and trigger some logging
+        var correlationId = Container.Create<string>();
+        var sut = ResolveSut();
+        
+        try
+        {
+            sut.BookDesk(null, correlationId); // This will log an error
+        }
+        catch
+        {
+            // Expected exception, we're testing the logging
+        }
+
+        // Assert - Now we should have error logs
+        var errorLogs = Logger.ErrorLogs();
+        Assert.NotEmpty(errorLogs);
+        
+        // And we should still get empty lists for log types that haven't been used
+        var warningLogs = Logger.WarningLogs();
+        var infoLogs = Logger.InformationLogs();
+        Assert.Empty(warningLogs);
+        Assert.Empty(infoLogs);
+    }
 }
