@@ -80,7 +80,10 @@ public abstract class BaseTestByAbstraction<TTestType, TInterfaceType> : BaseTes
             var testMethod = GetType().GetMethod(testContext.Test.MethodName);
             var testClass = GetType();
 
-            if (testMethod == null) return;
+            if (testMethod == null)
+            {
+                return;
+            }
 
             var testPassed = testContext.Result.Outcome.Status == TestStatus.Passed;
             
