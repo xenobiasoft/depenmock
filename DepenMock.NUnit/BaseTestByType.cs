@@ -17,6 +17,39 @@ namespace DepenMock.NUnit;
 public abstract class BaseTestByType<TTestType> : BaseTest where TTestType : class
 {
     /// <summary>
+    /// Initializes a new instance of the <see cref="BaseTestByType"/> class and registers a logger for the specified
+    /// test type.
+    /// </summary>
+    /// <remarks>This constructor ensures that a logger of type <see cref="ILogger{TTestType}"/> is registered
+    /// in the container for the test type. Derived classes can rely on this registration for logging
+    /// purposes.</remarks>
+    protected BaseTestByType()
+    {
+        PerformSetup();
+    }
+
+    /// <summary>
+    /// Sets up the test environment by registering required dependencies in the container.
+    /// </summary>
+    /// <remarks>This method is executed before each test to ensure the necessary dependencies, such as  the
+    /// logger, are properly configured in the container. It is marked with the <see cref="SetUpAttribute"/>  to
+    /// indicate that it should run prior to each test in NUnit.</remarks>
+    [SetUp]
+    public void Setup()
+    {
+        PerformSetup();
+    }
+
+    /// <summary>
+    /// Performs the setup logic, ensuring it only runs once per test instance.
+    /// </summary>
+    private void PerformSetup()
+    {
+        Container.Register<ILogger<TTestType>>(Logger);
+        AddContainerCustomizations(Container);
+    }
+
+    /// <summary>
     /// Resolves an instance of the specified type from the container.
     /// </summary>
     /// <remarks>This method retrieves an instance of <typeparamref name="TTestType"/> from the container, if
@@ -30,19 +63,6 @@ public abstract class BaseTestByType<TTestType> : BaseTest where TTestType : cla
     /// Gets the logger instance used for logging operations specific to the <typeparamref name="TTestType"/> type.
     /// </summary>
     public ListLogger<TTestType> Logger { get; } = new();
-
-    /// <summary>
-    /// Sets up the test environment by registering required dependencies in the container.
-    /// </summary>
-    /// <remarks>This method is executed before each test to ensure the necessary dependencies, such as  the
-    /// logger, are properly configured in the container. It is marked with the <see cref="SetUpAttribute"/>  to
-    /// indicate that it should run prior to each test in NUnit.</remarks>
-    [SetUp]
-    public void Setup()
-    {
-        Container.Register<ILogger<TTestType>>(Logger);
-        AddContainerCustomizations(Container);
-    }
 
     /// <summary>
     /// Tears down the test environment and outputs log messages if configured.

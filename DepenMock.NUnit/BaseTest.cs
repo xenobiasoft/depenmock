@@ -6,10 +6,22 @@ namespace DepenMock.NUnit;
 /// Represents the base class for test fixtures that require a dependency injection container.
 /// </summary>
 /// <remarks>This class provides a common setup mechanism for initializing a <see cref="Container"/> instance
-/// before each test execution. Derived classes can use the <see cref="Container"/> property to register and resolve
+/// for each test fixture. Derived classes can use the <see cref="Container"/> property to register and resolve
 /// dependencies.</remarks>
 public abstract class BaseTest
 {
+    private bool _isInitialized;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BaseTest"/> class.
+    /// </summary>
+    /// <remarks>This constructor initializes the <see cref="Container"/> property and performs initial setup.
+    /// The setup is also performed in the SetUp method to maintain NUnit lifecycle compatibility.</remarks>
+    protected BaseTest()
+    {
+        InitializeContainer();
+    }
+
     /// <summary>
     /// Sets up the test environment by initializing the dependency injection container.
     /// </summary>
@@ -19,7 +31,31 @@ public abstract class BaseTest
     [SetUp]
     public void BaseSetup()
     {
-        Container = new Container();
+        InitializeContainer();
+    }
+
+    /// <summary>
+    /// Performs cleanup operations after each test execution.
+    /// </summary>
+    /// <remarks>This method resets the test container and marks the test as uninitialized.  It is executed
+    /// automatically after each test due to the <see cref="TearDownAttribute"/>.</remarks>
+    [TearDown]
+    public void BaseTearDown()
+    {
+        Container = null;
+        _isInitialized = false;
+    }
+
+    /// <summary>
+    /// Initializes the container
+    /// </summary>
+    private void InitializeContainer()
+    {
+        if (!_isInitialized)
+        {
+            Container = new Container();
+            _isInitialized = true;
+        }
     }
 
     /// <summary>

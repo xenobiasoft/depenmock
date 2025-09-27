@@ -8,10 +8,12 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using DepenMock;
+using DepenMock.Attributes;
 
 namespace Tests.NUnit;
 
 [TestFixture]
+[LogOutput(LogOutputTiming.OnFailure)]
 public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookingRequestProcessor, IDeskBookingRequestProcessor>
 {
 	[Test]
