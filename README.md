@@ -145,6 +145,10 @@ Logger.Logs[LogLevel.Warning]
 Logger.Logs[LogLevel.Information]
 ```
 
+## LogOutput Attribute
+
+Check out the [LogOutput Attribute Usage](LogOutput-Usage.md) documentation for details on how to use the `LogOutput` attribute to control when logged messages are displayed in your test runner's output window.
+
 ## Sample Project
 
 Explore the sample project, DeskBooker.Core, which includes example unit tests for both NUnit and XUnit to help you get started with DepenMock.
