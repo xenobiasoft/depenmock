@@ -63,7 +63,7 @@ public abstract class BaseTestByType<TTestType> : BaseTest, IDisposable where TT
     /// Gets a logger instance for recording and managing log entries specific to the type <typeparamref
     /// name="TTestType"/>.
     /// </summary>
-    public ListLogger<TTestType> Logger => new();
+    public ListLogger<TTestType> Logger { get; } = new();
 
     /// <summary>
     /// Outputs log messages if configured and disposes resources.

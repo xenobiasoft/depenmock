@@ -29,7 +29,7 @@ public abstract class BaseTestByType<TTestType> : BaseTest where TTestType : cla
     /// <summary>
     /// Gets the logger instance used for logging operations specific to the <typeparamref name="TTestType"/> type.
     /// </summary>
-    public ListLogger<TTestType> Logger => new();
+    public ListLogger<TTestType> Logger { get; } = new();
 
     /// <summary>
     /// Sets up the test environment by registering required dependencies in the container.

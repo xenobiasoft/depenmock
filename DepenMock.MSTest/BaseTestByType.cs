@@ -47,7 +47,7 @@ public abstract class BaseTestByType<TTestType> : BaseTest where TTestType : cla
     /// <summary>
     /// Gets the logger instance used for logging operations.
     /// </summary>
-    public ListLogger<TTestType> Logger => new();
+    public ListLogger<TTestType> Logger { get; } = new();
 
     /// <summary>
     /// Gets or sets the test context which provides information about and functionality for the current test run.
