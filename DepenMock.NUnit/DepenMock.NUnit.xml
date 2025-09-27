@@ -34,8 +34,15 @@
             Represents the base class for test fixtures that require a dependency injection container.
             </summary>
             <remarks>This class provides a common setup mechanism for initializing a <see cref="P:DepenMock.NUnit.BaseTest.Container"/> instance
-            before each test execution. Derived classes can use the <see cref="P:DepenMock.NUnit.BaseTest.Container"/> property to register and resolve
+            for each test fixture. Derived classes can use the <see cref="P:DepenMock.NUnit.BaseTest.Container"/> property to register and resolve
             dependencies.</remarks>
+        </member>
+        <member name="M:DepenMock.NUnit.BaseTest.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:DepenMock.NUnit.BaseTest"/> class.
+            </summary>
+            <remarks>This constructor initializes the <see cref="P:DepenMock.NUnit.BaseTest.Container"/> property and performs initial setup.
+            The setup is also performed in the SetUp method to maintain NUnit lifecycle compatibility.</remarks>
         </member>
         <member name="M:DepenMock.NUnit.BaseTest.BaseSetup">
             <summary>
@@ -44,6 +51,18 @@
             <remarks>This method is executed before each test to ensure a fresh instance of the container. It is
             marked with the <see cref="T:NUnit.Framework.SetUpAttribute"/> to indicate that it should run prior to each test in
             NUnit.</remarks>
+        </member>
+        <member name="M:DepenMock.NUnit.BaseTest.BaseTearDown">
+            <summary>
+            Performs cleanup operations after each test execution.
+            </summary>
+            <remarks>This method resets the test container and marks the test as uninitialized.  It is executed
+            automatically after each test due to the <see cref="T:NUnit.Framework.TearDownAttribute"/>.</remarks>
+        </member>
+        <member name="M:DepenMock.NUnit.BaseTest.InitializeContainer">
+            <summary>
+            Initializes the container
+            </summary>
         </member>
         <member name="P:DepenMock.NUnit.BaseTest.Container">
             <summary>
@@ -61,6 +80,26 @@
             <typeparam name="TTestType">The concrete type of the system under test. Must be a class that implements <typeparamref name="TInterfaceType"/>.</typeparam>
             <typeparam name="TInterfaceType">The interface or base type that <typeparamref name="TTestType"/> implements or inherits.</typeparam>
         </member>
+        <member name="M:DepenMock.NUnit.BaseTestByAbstraction`2.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="!:BaseTestByAbstraction"/> class and registers logger implementations 
+            in the dependency container.
+            </summary>
+            <remarks>This constructor ensures that logger implementations are available for dependency injection 
+            during the test execution.</remarks>
+        </member>
+        <member name="M:DepenMock.NUnit.BaseTestByAbstraction`2.Setup">
+            <summary>
+            Sets up the test environment by registering the logger implementation in the dependency container.
+            </summary>
+            <remarks>This method is intended to be used as a setup step in unit tests, ensuring that the specified
+            logger  implementation is available for dependency injection during the test execution.</remarks>
+        </member>
+        <member name="M:DepenMock.NUnit.BaseTestByAbstraction`2.PerformSetup">
+            <summary>
+            Performs the setup logic, ensuring it only runs once per test instance.
+            </summary>
+        </member>
         <member name="M:DepenMock.NUnit.BaseTestByAbstraction`2.ResolveSut">
             <summary>
             Resolves an instance of the system under test (SUT) from the container.
@@ -74,13 +113,6 @@
             <summary>
             Gets the logger instance used for logging messages related to the current test type.
             </summary>
-        </member>
-        <member name="M:DepenMock.NUnit.BaseTestByAbstraction`2.Setup">
-            <summary>
-            Sets up the test environment by registering the logger implementation in the dependency container.
-            </summary>
-            <remarks>This method is intended to be used as a setup step in unit tests, ensuring that the specified
-            logger  implementation is available for dependency injection during the test execution.</remarks>
         </member>
         <member name="M:DepenMock.NUnit.BaseTestByAbstraction`2.TearDown">
             <summary>
@@ -104,6 +136,28 @@
             container. Derived classes can use this functionality to access the SUT.</remarks>
             <typeparam name="TTestType">The type of the subject under test (SUT). Must be a reference type.</typeparam>
         </member>
+        <member name="M:DepenMock.NUnit.BaseTestByType`1.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="!:BaseTestByType"/> class and registers a logger for the specified
+            test type.
+            </summary>
+            <remarks>This constructor ensures that a logger of type <see cref="T:Microsoft.Extensions.Logging.ILogger`1"/> is registered
+            in the container for the test type. Derived classes can rely on this registration for logging
+            purposes.</remarks>
+        </member>
+        <member name="M:DepenMock.NUnit.BaseTestByType`1.Setup">
+            <summary>
+            Sets up the test environment by registering required dependencies in the container.
+            </summary>
+            <remarks>This method is executed before each test to ensure the necessary dependencies, such as  the
+            logger, are properly configured in the container. It is marked with the <see cref="T:NUnit.Framework.SetUpAttribute"/>  to
+            indicate that it should run prior to each test in NUnit.</remarks>
+        </member>
+        <member name="M:DepenMock.NUnit.BaseTestByType`1.PerformSetup">
+            <summary>
+            Performs the setup logic, ensuring it only runs once per test instance.
+            </summary>
+        </member>
         <member name="M:DepenMock.NUnit.BaseTestByType`1.ResolveSut">
             <summary>
             Resolves an instance of the specified type from the container.
@@ -118,14 +172,6 @@
             <summary>
             Gets the logger instance used for logging operations specific to the <typeparamref name="TTestType"/> type.
             </summary>
-        </member>
-        <member name="M:DepenMock.NUnit.BaseTestByType`1.Setup">
-            <summary>
-            Sets up the test environment by registering required dependencies in the container.
-            </summary>
-            <remarks>This method is executed before each test to ensure the necessary dependencies, such as  the
-            logger, are properly configured in the container. It is marked with the <see cref="T:NUnit.Framework.SetUpAttribute"/>  to
-            indicate that it should run prior to each test in NUnit.</remarks>
         </member>
         <member name="M:DepenMock.NUnit.BaseTestByType`1.TearDown">
             <summary>

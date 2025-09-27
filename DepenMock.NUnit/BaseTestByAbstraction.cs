@@ -20,6 +20,38 @@ namespace DepenMock.NUnit;
 public abstract class BaseTestByAbstraction<TTestType, TInterfaceType> : BaseTest where TTestType : class, TInterfaceType
 {
     /// <summary>
+    /// Initializes a new instance of the <see cref="BaseTestByAbstraction"/> class and registers logger implementations 
+    /// in the dependency container.
+    /// </summary>
+    /// <remarks>This constructor ensures that logger implementations are available for dependency injection 
+    /// during the test execution.</remarks>
+    protected BaseTestByAbstraction()
+    {
+        PerformSetup();
+    }
+
+    /// <summary>
+    /// Sets up the test environment by registering the logger implementation in the dependency container.
+    /// </summary>
+    /// <remarks>This method is intended to be used as a setup step in unit tests, ensuring that the specified
+    /// logger  implementation is available for dependency injection during the test execution.</remarks>
+    [SetUp]
+    public void Setup()
+    {
+        PerformSetup();
+    }
+
+    /// <summary>
+    /// Performs the setup logic, ensuring it only runs once per test instance.
+    /// </summary>
+    private void PerformSetup()
+    {
+        Container.Register<ILogger<TTestType>, ListLogger<TTestType>>(Logger);
+        Container.Register<ILogger, ListLogger<TTestType>>(Logger);
+        AddContainerCustomizations(Container);
+    }
+
+    /// <summary>
     /// Resolves an instance of the system under test (SUT) from the container.
     /// </summary>
     /// <remarks>This method attempts to resolve an instance of the specified type from the container.  If the
@@ -32,19 +64,6 @@ public abstract class BaseTestByAbstraction<TTestType, TInterfaceType> : BaseTes
     /// Gets the logger instance used for logging messages related to the current test type.
     /// </summary>
     public ListLogger<TTestType> Logger { get; } = new();
-
-    /// <summary>
-    /// Sets up the test environment by registering the logger implementation in the dependency container.
-    /// </summary>
-    /// <remarks>This method is intended to be used as a setup step in unit tests, ensuring that the specified
-    /// logger  implementation is available for dependency injection during the test execution.</remarks>
-    [SetUp]
-    public void Setup()
-    {
-        Container.Register<ILogger<TTestType>, ListLogger<TTestType>>(Logger);
-        Container.Register<ILogger, ListLogger<TTestType>>(Logger);
-        AddContainerCustomizations(Container);
-    }
 
     /// <summary>
     /// Tears down the test environment and outputs log messages if configured.
@@ -61,8 +80,7 @@ public abstract class BaseTestByAbstraction<TTestType, TInterfaceType> : BaseTes
             var testMethod = GetType().GetMethod(testContext.Test.MethodName);
             var testClass = GetType();
 
-            if (testMethod == null)
-                return;
+            if (testMethod == null) return;
 
             var testPassed = testContext.Result.Outcome.Status == TestStatus.Passed;
             
