@@ -64,6 +64,19 @@
             Gets the logger instance used for logging operations.
             </summary>
         </member>
+        <member name="P:DepenMock.MSTest.BaseTestByAbstraction`2.TestContext">
+            <summary>
+            Gets or sets the test context which provides information about and functionality for the current test run.
+            </summary>
+        </member>
+        <member name="M:DepenMock.MSTest.BaseTestByAbstraction`2.CleanUp">
+            <summary>
+            Cleans up after each test and outputs log messages if configured.
+            </summary>
+            <remarks>This method is executed after each test to output log messages when the <see cref="T:DepenMock.Attributes.LogOutputAttribute"/>
+            is present on the test method or class. It uses MSTest's TestContext to determine test results and output
+            log messages accordingly.</remarks>
+        </member>
         <member name="T:DepenMock.MSTest.BaseTestByType`1">
             <summary>
             Represents a base class for tests that are specific to a given type.
@@ -101,6 +114,19 @@
             <summary>
             Gets the logger instance used for logging operations.
             </summary>
+        </member>
+        <member name="P:DepenMock.MSTest.BaseTestByType`1.TestContext">
+            <summary>
+            Gets or sets the test context which provides information about and functionality for the current test run.
+            </summary>
+        </member>
+        <member name="M:DepenMock.MSTest.BaseTestByType`1.CleanUp">
+            <summary>
+            Cleans up after each test and outputs log messages if configured.
+            </summary>
+            <remarks>This method is executed after each test to output log messages when the <see cref="T:DepenMock.Attributes.LogOutputAttribute"/>
+            is present on the test method or class. It uses MSTest's TestContext to determine test results and output
+            log messages accordingly.</remarks>
         </member>
     </members>
 </doc>

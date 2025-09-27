@@ -1,5 +1,11 @@
-﻿using DepenMock.Loggers;
+﻿using System;
+using System.Reflection;
+using DepenMock.Attributes;
+using DepenMock.Helpers;
+using DepenMock.Loggers;
 using Microsoft.Extensions.Logging;
+using Xunit;
+using Xunit.Abstractions;
 
 namespace DepenMock.XUnit;
 
@@ -13,16 +19,28 @@ namespace DepenMock.XUnit;
 /// class.</remarks>
 /// <typeparam name="TTestType">The concrete type of the system under test, which must implement <typeparamref name="TInterfaceType"/>.</typeparam>
 /// <typeparam name="TInterfaceType">The interface type that the system under test implements.</typeparam>
-public abstract class BaseTestByAbstraction<TTestType, TInterfaceType> : BaseTest where TTestType : class, TInterfaceType
+public abstract class BaseTestByAbstraction<TTestType, TInterfaceType> : BaseTest, IDisposable where TTestType : class, TInterfaceType
 {
+    private readonly ITestOutputHelper? _outputHelper;
+    private bool _disposed;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseTestByAbstraction"/> class.
     /// </summary>
     /// <remarks>This constructor registers a logger implementation for the specified interface type in the
     /// dependency injection container. The logger is registered as a <see cref="ListLogger{TInterfaceType}"/> instance
     /// associated with the provided <see cref="ILogger{TInterfaceType}"/>.</remarks>
-    protected BaseTestByAbstraction()
+    protected BaseTestByAbstraction() : this(null)
     {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BaseTestByAbstraction"/> class with test output helper support.
+    /// </summary>
+    /// <param name="outputHelper">The XUnit test output helper for writing test output.</param>
+    protected BaseTestByAbstraction(ITestOutputHelper? outputHelper)
+    {
+        _outputHelper = outputHelper;
         Container.Register<ILogger<TTestType>, ListLogger<TTestType>>(Logger);
         Container.Register<ILogger, ListLogger<TTestType>>(Logger);
         AddContainerCustomizations(Container);
@@ -47,4 +65,85 @@ public abstract class BaseTestByAbstraction<TTestType, TInterfaceType> : BaseTes
     /// Gets a logger instance for the specified interface type.
     /// </summary>
     public ListLogger<TTestType> Logger { get; } = new();
+
+    /// <summary>
+    /// Outputs log messages if configured and disposes resources.
+    /// </summary>
+    /// <remarks>This method is called when the test is complete to output log messages when the <see cref="LogOutputAttribute"/>
+    /// is present on the test method or class. Since XUnit doesn't provide direct access to test results, it assumes
+    /// the test passed if no exception was thrown.</remarks>
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    /// Disposes the instance and optionally outputs log messages.
+    /// </summary>
+    /// <param name="disposing">True if disposing managed resources.</param>
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed)
+            return;
+
+        if (disposing)
+        {
+            try
+            {
+                // XUnit doesn't provide direct access to test results in dispose, so we assume test passed
+                // if we reach disposal without exception
+                var testPassed = true;
+                var testMethod = GetCurrentTestMethod();
+                var testClass = GetType();
+
+                if (testMethod != null && LogOutputHelper.ShouldOutputLogs(testMethod, testClass, testPassed))
+                {
+                    var logOutput = LogOutputHelper.FormatLogMessages(Logger);
+                    if (!string.IsNullOrWhiteSpace(logOutput) && _outputHelper != null)
+                    {
+                        _outputHelper.WriteLine(logOutput);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Don't let log output failures break the test
+                _outputHelper?.WriteLine($"Warning: Failed to output log messages - {ex.Message}");
+            }
+        }
+
+        _disposed = true;
+    }
+
+    /// <summary>
+    /// Gets the current test method using reflection and stack trace analysis.
+    /// </summary>
+    /// <returns>The current test method or null if not found.</returns>
+    private MethodInfo? GetCurrentTestMethod()
+    {
+        try
+        {
+            var stackTrace = new System.Diagnostics.StackTrace();
+            var frames = stackTrace.GetFrames();
+
+            foreach (var frame in frames)
+            {
+                var method = frame.GetMethod();
+                if (method != null && 
+                    method.DeclaringType != null && 
+                    method.DeclaringType.IsAssignableFrom(GetType()) &&
+                    method.GetCustomAttribute<FactAttribute>() != null)
+                {
+                    return method as MethodInfo;
+                }
+            }
+
+            return null;
+        }
+        catch
+        {
+            return null;
+        }
+    }
 }
