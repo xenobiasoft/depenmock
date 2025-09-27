@@ -1,5 +1,9 @@
+using System;
+using DepenMock.Attributes;
+using DepenMock.Helpers;
 using DepenMock.Loggers;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DepenMock.MSTest;
 
@@ -46,4 +50,47 @@ public abstract class BaseTestByAbstraction<TTestType, TInterfaceType> : BaseTes
     /// Gets the logger instance used for logging operations.
     /// </summary>
     public ListLogger<TTestType> Logger { get; } = new();
+
+    /// <summary>
+    /// Gets or sets the test context which provides information about and functionality for the current test run.
+    /// </summary>
+    public TestContext? TestContext { get; set; }
+
+    /// <summary>
+    /// Cleans up after each test and outputs log messages if configured.
+    /// </summary>
+    /// <remarks>This method is executed after each test to output log messages when the <see cref="LogOutputAttribute"/>
+    /// is present on the test method or class. It uses MSTest's TestContext to determine test results and output
+    /// log messages accordingly.</remarks>
+    [TestCleanup]
+    public void CleanUp()
+    {
+        try
+        {
+            if (TestContext == null)
+                return;
+
+            var testMethod = GetType().GetMethod(TestContext.TestName);
+            var testClass = GetType();
+
+            if (testMethod == null)
+                return;
+
+            var testPassed = TestContext.CurrentTestOutcome == UnitTestOutcome.Passed;
+            
+            if (LogOutputHelper.ShouldOutputLogs(testMethod, testClass, testPassed))
+            {
+                var logOutput = LogOutputHelper.FormatLogMessages(Logger);
+                if (!string.IsNullOrWhiteSpace(logOutput))
+                {
+                    TestContext.WriteLine(logOutput);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // Don't let log output failures break the test
+            TestContext?.WriteLine($"Warning: Failed to output log messages - {ex.Message}");
+        }
+    }
 }

@@ -47,6 +47,12 @@
             dependency injection container. The logger is registered as a <see cref="T:DepenMock.Loggers.ListLogger`1"/> instance
             associated with the provided <see cref="T:Microsoft.Extensions.Logging.ILogger`1"/>.</remarks>
         </member>
+        <member name="M:DepenMock.XUnit.BaseTestByAbstraction`2.#ctor(Xunit.Abstractions.ITestOutputHelper)">
+            <summary>
+            Initializes a new instance of the <see cref="!:BaseTestByAbstraction"/> class with test output helper support.
+            </summary>
+            <param name="outputHelper">The XUnit test output helper for writing test output.</param>
+        </member>
         <member name="M:DepenMock.XUnit.BaseTestByAbstraction`2.AddContainerCustomizations(DepenMock.Container)">
             <summary>
             Allows derived classes to add custom ISpecimenBuilder instances to the container's fixture.
@@ -67,6 +73,26 @@
             Gets a logger instance for the specified interface type.
             </summary>
         </member>
+        <member name="M:DepenMock.XUnit.BaseTestByAbstraction`2.Dispose">
+            <summary>
+            Outputs log messages if configured and disposes resources.
+            </summary>
+            <remarks>This method is called when the test is complete to output log messages when the <see cref="T:DepenMock.Attributes.LogOutputAttribute"/>
+            is present on the test method or class. Since XUnit doesn't provide direct access to test results, it assumes
+            the test passed if no exception was thrown.</remarks>
+        </member>
+        <member name="M:DepenMock.XUnit.BaseTestByAbstraction`2.Dispose(System.Boolean)">
+            <summary>
+            Disposes the instance and optionally outputs log messages.
+            </summary>
+            <param name="disposing">True if disposing managed resources.</param>
+        </member>
+        <member name="M:DepenMock.XUnit.BaseTestByAbstraction`2.GetCurrentTestMethod">
+            <summary>
+            Gets the current test method using reflection and stack trace analysis.
+            </summary>
+            <returns>The current test method or null if not found.</returns>
+        </member>
         <member name="T:DepenMock.XUnit.BaseTestByType`1">
             <summary>
             Provides a base class for tests that are specific to a given type.
@@ -84,6 +110,12 @@
             <remarks>This constructor ensures that a logger of type <see cref="T:Microsoft.Extensions.Logging.ILogger`1"/> is registered
             in the container for the test type. Derived classes can rely on this registration for logging
             purposes.</remarks>
+        </member>
+        <member name="M:DepenMock.XUnit.BaseTestByType`1.#ctor(Xunit.Abstractions.ITestOutputHelper)">
+            <summary>
+            Initializes a new instance of the <see cref="!:BaseTestByType"/> class with test output helper support.
+            </summary>
+            <param name="outputHelper">The XUnit test output helper for writing test output.</param>
         </member>
         <member name="M:DepenMock.XUnit.BaseTestByType`1.AddContainerCustomizations(DepenMock.Container)">
             <summary>
@@ -106,6 +138,26 @@
             Gets a logger instance for recording and managing log entries specific to the type <typeparamref
             name="TTestType"/>.
             </summary>
+        </member>
+        <member name="M:DepenMock.XUnit.BaseTestByType`1.Dispose">
+            <summary>
+            Outputs log messages if configured and disposes resources.
+            </summary>
+            <remarks>This method is called when the test is complete to output log messages when the <see cref="T:DepenMock.Attributes.LogOutputAttribute"/>
+            is present on the test method or class. Since XUnit doesn't provide direct access to test results, it assumes
+            the test passed if no exception was thrown.</remarks>
+        </member>
+        <member name="M:DepenMock.XUnit.BaseTestByType`1.Dispose(System.Boolean)">
+            <summary>
+            Disposes the instance and optionally outputs log messages.
+            </summary>
+            <param name="disposing">True if disposing managed resources.</param>
+        </member>
+        <member name="M:DepenMock.XUnit.BaseTestByType`1.GetCurrentTestMethod">
+            <summary>
+            Gets the current test method using reflection and stack trace analysis.
+            </summary>
+            <returns>The current test method or null if not found.</returns>
         </member>
     </members>
 </doc>

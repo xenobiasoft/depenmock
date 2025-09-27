@@ -1,6 +1,10 @@
-﻿using DepenMock.Loggers;
+﻿using System;
+using DepenMock.Attributes;
+using DepenMock.Helpers;
+using DepenMock.Loggers;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
+using NUnit.Framework.Interfaces;
 
 namespace DepenMock.NUnit;
 
@@ -25,7 +29,7 @@ public abstract class BaseTestByType<TTestType> : BaseTest where TTestType : cla
     /// <summary>
     /// Gets the logger instance used for logging operations specific to the <typeparamref name="TTestType"/> type.
     /// </summary>
-    public ListLogger<TTestType> Logger => new();
+    public ListLogger<TTestType> Logger { get; } = new();
 
     /// <summary>
     /// Sets up the test environment by registering required dependencies in the container.
@@ -38,6 +42,42 @@ public abstract class BaseTestByType<TTestType> : BaseTest where TTestType : cla
     {
         Container.Register<ILogger<TTestType>>(Logger);
         AddContainerCustomizations(Container);
+    }
+
+    /// <summary>
+    /// Tears down the test environment and outputs log messages if configured.
+    /// </summary>
+    /// <remarks>This method is executed after each test to output log messages when the <see cref="LogOutputAttribute"/>
+    /// is present on the test method or class. It uses NUnit's TestContext to determine test results and output
+    /// log messages accordingly.</remarks>
+    [TearDown]
+    public void TearDown()
+    {
+        try
+        {
+            var testContext = TestContext.CurrentContext;
+            var testMethod = GetType().GetMethod(testContext.Test.MethodName);
+            var testClass = GetType();
+
+            if (testMethod == null)
+                return;
+
+            var testPassed = testContext.Result.Outcome.Status == TestStatus.Passed;
+            
+            if (LogOutputHelper.ShouldOutputLogs(testMethod, testClass, testPassed))
+            {
+                var logOutput = LogOutputHelper.FormatLogMessages(Logger);
+                if (!string.IsNullOrWhiteSpace(logOutput))
+                {
+                    TestContext.WriteLine(logOutput);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // Don't let log output failures break the test
+            TestContext.WriteLine($"Warning: Failed to output log messages - {ex.Message}");
+        }
     }
 
     /// <summary>

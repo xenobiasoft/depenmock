@@ -4,6 +4,31 @@
         <name>DepenMock.NUnit</name>
     </assembly>
     <members>
+        <member name="T:DepenMock.NUnit.Attributes.LogOutputTestActionAttribute">
+            <summary>
+            Internal test action attribute that automatically outputs log messages based on LogOutputAttribute configuration.
+            This attribute is automatically applied by the NUnit framework when LogOutputAttribute is present.
+            </summary>
+        </member>
+        <member name="M:DepenMock.NUnit.Attributes.LogOutputTestActionAttribute.BeforeTest(NUnit.Framework.Interfaces.ITest)">
+            <summary>
+            Executes before the test to capture initial state.
+            </summary>
+            <param name="test">The test that is about to be run.</param>
+        </member>
+        <member name="M:DepenMock.NUnit.Attributes.LogOutputTestActionAttribute.AfterTest(NUnit.Framework.Interfaces.ITest)">
+            <summary>
+            Executes after the test to output logs if conditions are met.
+            </summary>
+            <param name="test">The test that was run.</param>
+        </member>
+        <member name="M:DepenMock.NUnit.Attributes.LogOutputTestActionAttribute.GetLoggerFromTestInstance(System.Object)">
+            <summary>
+            Attempts to extract the logger from the test instance using reflection.
+            </summary>
+            <param name="testInstance">The test instance.</param>
+            <returns>The test logger if found, null otherwise.</returns>
+        </member>
         <member name="T:DepenMock.NUnit.BaseTest">
             <summary>
             Represents the base class for test fixtures that require a dependency injection container.
@@ -57,6 +82,14 @@
             <remarks>This method is intended to be used as a setup step in unit tests, ensuring that the specified
             logger  implementation is available for dependency injection during the test execution.</remarks>
         </member>
+        <member name="M:DepenMock.NUnit.BaseTestByAbstraction`2.TearDown">
+            <summary>
+            Tears down the test environment and outputs log messages if configured.
+            </summary>
+            <remarks>This method is executed after each test to output log messages when the <see cref="T:DepenMock.Attributes.LogOutputAttribute"/>
+            is present on the test method or class. It uses NUnit's TestContext to determine test results and output
+            log messages accordingly.</remarks>
+        </member>
         <member name="M:DepenMock.NUnit.BaseTestByAbstraction`2.AddContainerCustomizations(DepenMock.Container)">
             <summary>
             Allows derived classes to add custom ISpecimenBuilder instances to the container's fixture.
@@ -93,6 +126,14 @@
             <remarks>This method is executed before each test to ensure the necessary dependencies, such as  the
             logger, are properly configured in the container. It is marked with the <see cref="T:NUnit.Framework.SetUpAttribute"/>  to
             indicate that it should run prior to each test in NUnit.</remarks>
+        </member>
+        <member name="M:DepenMock.NUnit.BaseTestByType`1.TearDown">
+            <summary>
+            Tears down the test environment and outputs log messages if configured.
+            </summary>
+            <remarks>This method is executed after each test to output log messages when the <see cref="T:DepenMock.Attributes.LogOutputAttribute"/>
+            is present on the test method or class. It uses NUnit's TestContext to determine test results and output
+            log messages accordingly.</remarks>
         </member>
         <member name="M:DepenMock.NUnit.BaseTestByType`1.AddContainerCustomizations(DepenMock.Container)">
             <summary>

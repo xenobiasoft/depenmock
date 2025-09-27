@@ -4,6 +4,55 @@
         <name>DepenMock</name>
     </assembly>
     <members>
+        <member name="T:DepenMock.Attributes.LogOutputTiming">
+            <summary>
+            Specifies when log messages should be output to the test runner's output window.
+            </summary>
+        </member>
+        <member name="F:DepenMock.Attributes.LogOutputTiming.Always">
+            <summary>
+            Always output log messages regardless of test result.
+            </summary>
+        </member>
+        <member name="F:DepenMock.Attributes.LogOutputTiming.OnFailure">
+            <summary>
+            Output log messages only when the test fails.
+            </summary>
+        </member>
+        <member name="F:DepenMock.Attributes.LogOutputTiming.OnSuccess">
+            <summary>
+            Output log messages only when the test succeeds.
+            </summary>
+        </member>
+        <member name="T:DepenMock.Attributes.LogOutputAttribute">
+            <summary>
+            Attribute that can be applied to test methods or test classes to control when
+            log messages should be output to the test runner's output window.
+            </summary>
+            <remarks>
+            This attribute configures when the logged messages captured by the test logger
+            should be displayed in the test runner output. The timing is controlled by the
+            <see cref="P:DepenMock.Attributes.LogOutputAttribute.Timing"/> property.
+            </remarks>
+        </member>
+        <member name="M:DepenMock.Attributes.LogOutputAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:DepenMock.Attributes.LogOutputAttribute"/> class
+            with the default timing of <see cref="F:DepenMock.Attributes.LogOutputTiming.Always"/>.
+            </summary>
+        </member>
+        <member name="M:DepenMock.Attributes.LogOutputAttribute.#ctor(DepenMock.Attributes.LogOutputTiming)">
+            <summary>
+            Initializes a new instance of the <see cref="T:DepenMock.Attributes.LogOutputAttribute"/> class
+            with the specified timing.
+            </summary>
+            <param name="timing">The timing that determines when log messages should be output.</param>
+        </member>
+        <member name="P:DepenMock.Attributes.LogOutputAttribute.Timing">
+            <summary>
+            Gets the timing that determines when log messages should be output.
+            </summary>
+        </member>
         <member name="T:DepenMock.Container">
             <summary>
             Provides object creation functionality, as well as acting as a pseudo dependency injection container
@@ -156,6 +205,35 @@
             <param name="logger">The logger instance to extract messages from.</param>
             <param name="logLevel">The log level to filter by.</param>
             <returns>A list of log messages for the specified log level.</returns>
+        </member>
+        <member name="T:DepenMock.Helpers.LogOutputHelper">
+            <summary>
+            Provides helper methods for formatting and outputting log messages from test loggers.
+            </summary>
+        </member>
+        <member name="M:DepenMock.Helpers.LogOutputHelper.FormatLogMessages(DepenMock.Loggers.ITestLogger)">
+            <summary>
+            Formats log messages from the test logger into a readable string format.
+            </summary>
+            <param name="logger">The test logger containing the log messages.</param>
+            <returns>A formatted string containing all log messages, or null if no messages exist.</returns>
+        </member>
+        <member name="M:DepenMock.Helpers.LogOutputHelper.ShouldOutputLogs(System.Reflection.MethodInfo,System.Type,System.Boolean)">
+            <summary>
+            Determines if log output should occur based on the attribute configuration and test result.
+            </summary>
+            <param name="method">The test method to check for log output attribute.</param>
+            <param name="testClass">The test class to check for log output attribute.</param>
+            <param name="testPassed">Whether the test passed or failed.</param>
+            <returns>True if log output should occur, false otherwise.</returns>
+        </member>
+        <member name="M:DepenMock.Helpers.LogOutputHelper.ShouldOutputForTiming(DepenMock.Attributes.LogOutputTiming,System.Boolean)">
+            <summary>
+            Determines if logs should be output based on timing configuration and test result.
+            </summary>
+            <param name="timing">The timing configuration.</param>
+            <param name="testPassed">Whether the test passed.</param>
+            <returns>True if logs should be output, false otherwise.</returns>
         </member>
         <member name="T:DepenMock.Loggers.ListLogger`1">
             <summary>
