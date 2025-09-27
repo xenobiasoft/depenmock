@@ -11,7 +11,7 @@ namespace DepenMock.Loggers;
 /// associated with a list of messages. It is primarily intended for scenarios where logs need to be captured and
 /// analyzed during runtime, such as testing or debugging.</remarks>
 /// <typeparam name="TLoggerType">The type associated with the logger, typically representing the category or context of the logs.</typeparam>
-public class ListLogger<TLoggerType> : ILogger<TLoggerType>, ILogger
+public class ListLogger<TLoggerType> : ILogger<TLoggerType>, ITestLogger
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="ListLogger"/> class.
