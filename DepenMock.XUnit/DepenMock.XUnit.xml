@@ -4,6 +4,55 @@
         <name>DepenMock.XUnit</name>
     </assembly>
     <members>
+        <member name="T:DepenMock.XUnit.Attributes.LogOutputTestActionAttribute">
+            <summary>
+            Internal test action attribute that automatically outputs log messages based on LogOutputAttribute configuration.
+            This attribute is automatically applied by the xUnit framework when LogOutputAttribute is present.
+            </summary>
+        </member>
+        <member name="M:DepenMock.XUnit.Attributes.LogOutputTestActionAttribute.After(System.Reflection.MethodInfo)">
+            <summary>
+            Executes after the test to output logs if conditions are met.
+            </summary>
+            <param name="methodUnderTest">The method that was tested.</param>
+        </member>
+        <member name="M:DepenMock.XUnit.Attributes.LogOutputTestActionAttribute.GetTestInstance(System.Reflection.MethodInfo)">
+            <summary>
+            Gets the test instance from the current execution context.
+            This is a simplified approach that works for most scenarios.
+            </summary>
+        </member>
+        <member name="M:DepenMock.XUnit.Attributes.LogOutputTestActionAttribute.GetOutputHelperFromTestInstance(System.Object)">
+            <summary>
+            Attempts to extract the ITestOutputHelper from the test instance.
+            </summary>
+            <param name="testInstance">The test instance.</param>
+            <returns>The test output helper if found, null otherwise.</returns>
+        </member>
+        <member name="M:DepenMock.XUnit.Attributes.LogOutputTestActionAttribute.GetLoggerFromTestInstance(System.Object)">
+            <summary>
+            Attempts to extract the logger from the test instance using reflection.
+            </summary>
+            <param name="testInstance">The test instance.</param>
+            <returns>The test logger if found, null otherwise.</returns>
+        </member>
+        <member name="T:DepenMock.XUnit.Attributes.XUnitLogOutputAttribute">
+            <summary>
+            xUnit-specific log output attribute that provides better integration with xUnit v3 while maintaining v2 compatibility.
+            </summary>
+        </member>
+        <member name="M:DepenMock.XUnit.Attributes.XUnitLogOutputAttribute.#ctor(DepenMock.Attributes.LogOutputTiming)">
+            <summary>
+            Initializes a new instance of the <see cref="T:DepenMock.XUnit.Attributes.XUnitLogOutputAttribute"/> class.
+            </summary>
+            <param name="timing">When to output log messages.</param>
+        </member>
+        <member name="M:DepenMock.XUnit.Attributes.XUnitLogOutputAttribute.After(System.Reflection.MethodInfo)">
+            <summary>
+            Called after the test method is executed.
+            </summary>
+            <param name="methodUnderTest">The method under test.</param>
+        </member>
         <member name="T:DepenMock.XUnit.BaseTest">
             <summary>
             Serves as a base class for test implementations, providing shared functionality and a dependency injection
@@ -137,6 +186,12 @@
             <summary>
             Gets a logger instance for recording and managing log entries specific to the type <typeparamref
             name="TTestType"/>.
+            </summary>
+        </member>
+        <member name="M:DepenMock.XUnit.BaseTestByType`1.OutputTestLogs">
+            <summary>
+            Override to provide custom log output handling for xUnit tests.
+            This method is called after each test method execution.
             </summary>
         </member>
         <member name="M:DepenMock.XUnit.BaseTestByType`1.Dispose">

@@ -35,12 +35,35 @@ public class MyTestClass : BaseTestByType<MyService>
 - **`OnSuccess`**: Output log messages only when the test passes
 - **`OnFailure`**: Output log messages only when the test fails
 
-## Framework Support
+## Framework Support and Limitations
 
-The LogOutput attribute works with all supported testing frameworks:
-- **NUnit**: Uses `TestContext.WriteLine()`
-- **MSTest**: Uses `TestContext.WriteLine()`
-- **xUnit**: Uses `ITestOutputHelper.WriteLine()`
+- **NUnit**: Full support using `TestContext.WriteLine()`
+- **MSTest**: Full support using `TestContext.WriteLine()`
+- **xUnit v2**: Limited support due to framework constraints. The attribute works but test result detection is simplified.
+- **xUnit v3**: Enhanced support with better test lifecycle integration.
+
+## xUnit Specific Notes
+
+For xUnit tests, the `LogOutputAttribute` has some limitations in v2:
+
+1. Test result detection is simplified (assumes tests pass if no exception is thrown)
+2. Log output timing may not work exactly as expected in all scenarios
+
+### xUnit v3 Improvements
+
+When using xUnit v3, you'll get:
+- Better test result detection
+- More accurate timing control
+- Improved integration with the test framework
+
+## Migration Path
+
+Your library will work with both xUnit v2 and v3. Users can:
+
+1. **Stay on xUnit v2**: LogOutput will work with limitations noted above
+2. **Upgrade to xUnit v3**: LogOutput will work with full functionality
+
+No code changes are required in your test classes when upgrading from v2 to v3.
 
 ## Example Output
 
@@ -54,4 +77,3 @@ When a test with `[LogOutput(LogOutputTiming.Always)]` runs, you'll see:
   This is a warning message
 [Error]
   An error occurred: Details here
-```

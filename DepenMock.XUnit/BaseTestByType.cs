@@ -66,13 +66,65 @@ public abstract class BaseTestByType<TTestType> : BaseTest, IDisposable where TT
     public ListLogger<TTestType> Logger { get; } = new();
 
     /// <summary>
+    /// Override to provide custom log output handling for xUnit tests.
+    /// This method is called after each test method execution.
+    /// </summary>
+    protected virtual void OutputTestLogs()
+    {
+        try
+        {
+            // Get the calling test method
+            var stackTrace = new System.Diagnostics.StackTrace();
+            MethodInfo? testMethod = null;
+            
+            for (int i = 0; i < stackTrace.FrameCount; i++)
+            {
+                var frame = stackTrace.GetFrame(i);
+                var method = frame?.GetMethod();
+                
+                if (method?.GetCustomAttribute<Xunit.FactAttribute>() != null ||
+                    method?.GetCustomAttribute<Xunit.TheoryAttribute>() != null)
+                {
+                    testMethod = method as MethodInfo;
+                    break;
+                }
+            }
+
+            if (testMethod == null)
+                return;
+
+            var testClass = testMethod.DeclaringType;
+            if (testClass == null)
+                return;
+
+            // Assume test passed if we reach here (xUnit v2 limitation)
+            var testPassed = true;
+            
+            if (!LogOutputHelper.ShouldOutputLogs(testMethod, testClass, testPassed))
+                return;
+
+            var logOutput = LogOutputHelper.FormatLogMessages(Logger);
+            if (!string.IsNullOrWhiteSpace(logOutput))
+            {
+                _outputHelper?.WriteLine(logOutput);
+            }
+        }
+        catch (Exception ex)
+        {
+            // Don't let log output failures break the test
+            _outputHelper?.WriteLine($"Warning: Failed to output log messages - {ex.Message}");
+        }
+    }
+
+    /// <summary>
     /// Outputs log messages if configured and disposes resources.
     /// </summary>
     /// <remarks>This method is called when the test is complete to output log messages when the <see cref="LogOutputAttribute"/>
     /// is present on the test method or class. Since XUnit doesn't provide direct access to test results, it assumes
     /// the test passed if no exception was thrown.</remarks>
-    public void Dispose()
+    public virtual void Dispose()
     {
+        OutputTestLogs();
         Dispose(true);
         GC.SuppressFinalize(this);
     }
@@ -88,28 +140,7 @@ public abstract class BaseTestByType<TTestType> : BaseTest, IDisposable where TT
 
         if (disposing)
         {
-            try
-            {
-                // XUnit doesn't provide direct access to test results in dispose, so we assume test passed
-                // if we reach disposal without exception
-                var testPassed = true;
-                var testMethod = GetCurrentTestMethod();
-                var testClass = GetType();
-
-                if (testMethod != null && LogOutputHelper.ShouldOutputLogs(testMethod, testClass, testPassed))
-                {
-                    var logOutput = LogOutputHelper.FormatLogMessages(Logger);
-                    if (!string.IsNullOrWhiteSpace(logOutput) && _outputHelper != null)
-                    {
-                        _outputHelper.WriteLine(logOutput);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // Don't let log output failures break the test
-                _outputHelper?.WriteLine($"Warning: Failed to output log messages - {ex.Message}");
-            }
+            // Resources cleanup if needed
         }
 
         _disposed = true;
