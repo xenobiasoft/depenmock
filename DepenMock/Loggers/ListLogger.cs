@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DepenMock.Loggers;
 
@@ -83,4 +84,17 @@ public class ListLogger<TLoggerType> : ILogger<TLoggerType>, ITestLogger
     /// Returns the <see cref="IDictionary{TKey,TValue}"/> of messages that have been logged
     /// </summary>
     public IDictionary<LogLevel, List<string>> Logs { get; }
+
+    /// <summary>
+    /// Clears all logged messages from all log levels.
+    /// </summary>
+    /// <remarks>This method removes all stored log messages, resetting the logger to its initial empty state.
+    /// This is useful in test scenarios where log isolation between tests is required.</remarks>
+    public void Clear()
+    {
+        foreach (var logLevel in Logs.Keys.ToList())
+        {
+            Logs[logLevel].Clear();
+        }
+    }
 }

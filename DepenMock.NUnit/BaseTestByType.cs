@@ -45,6 +45,7 @@ public abstract class BaseTestByType<TTestType> : BaseTest where TTestType : cla
     /// </summary>
     private void PerformSetup()
     {
+        Logger.Clear(); // Clear logs from any previous tests
         Container.Register<ILogger<TTestType>>(Logger);
         AddContainerCustomizations(Container);
     }

@@ -46,6 +46,7 @@ public abstract class BaseTestByAbstraction<TTestType, TInterfaceType> : BaseTes
     /// </summary>
     private void PerformSetup()
     {
+        Logger.Clear(); // Clear logs from any previous tests
         Container.Register<ILogger<TTestType>, ListLogger<TTestType>>(Logger);
         Container.Register<ILogger, ListLogger<TTestType>>(Logger);
         AddContainerCustomizations(Container);

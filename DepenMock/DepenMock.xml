@@ -235,6 +235,11 @@
             <param name="testPassed">Whether the test passed.</param>
             <returns>True if logs should be output, false otherwise.</returns>
         </member>
+        <member name="M:DepenMock.Loggers.ITestLogger.Clear">
+            <summary>
+            Clears all logged messages from all log levels.
+            </summary>
+        </member>
         <member name="T:DepenMock.Loggers.ListLogger`1">
             <summary>
             Provides a logger implementation that stores log messages categorized by <see cref="T:Microsoft.Extensions.Logging.LogLevel"/>.
@@ -287,6 +292,13 @@
             <summary>
             Returns the <see cref="T:System.Collections.Generic.IDictionary`2"/> of messages that have been logged
             </summary>
+        </member>
+        <member name="M:DepenMock.Loggers.ListLogger`1.Clear">
+            <summary>
+            Clears all logged messages from all log levels.
+            </summary>
+            <remarks>This method removes all stored log messages, resetting the logger to its initial empty state.
+            This is useful in test scenarios where log isolation between tests is required.</remarks>
         </member>
         <member name="T:DepenMock.Loggers.NullScope">
             <summary>

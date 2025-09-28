@@ -41,6 +41,7 @@ public abstract class BaseTestByAbstraction<TTestType, TInterfaceType> : BaseTes
     protected BaseTestByAbstraction(ITestOutputHelper? outputHelper)
     {
         _outputHelper = outputHelper;
+        Logger.Clear(); // Clear any previous logs (defensive programming)
         Container.Register<ILogger<TTestType>, ListLogger<TTestType>>(Logger);
         Container.Register<ILogger, ListLogger<TTestType>>(Logger);
         AddContainerCustomizations(Container);
