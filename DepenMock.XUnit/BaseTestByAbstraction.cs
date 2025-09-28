@@ -3,6 +3,7 @@ using System.Reflection;
 using DepenMock.Attributes;
 using DepenMock.Helpers;
 using DepenMock.Loggers;
+using DepenMock.XUnit.Internal;
 using Microsoft.Extensions.Logging;
 using Xunit;
 using Xunit.Abstractions;
@@ -71,8 +72,8 @@ public abstract class BaseTestByAbstraction<TTestType, TInterfaceType> : BaseTes
     /// Outputs log messages if configured and disposes resources.
     /// </summary>
     /// <remarks>This method is called when the test is complete to output log messages when the <see cref="LogOutputAttribute"/>
-    /// is present on the test method or class. Since XUnit doesn't provide direct access to test results, it assumes
-    /// the test passed if no exception was thrown.</remarks>
+    /// is present on the test method or class. For xUnit v3, it uses the test context to determine the actual test result.
+    /// For xUnit v2, it assumes the test passed if no exception was thrown during disposal.</remarks>
     public void Dispose()
     {
         Dispose(true);
@@ -92,9 +93,15 @@ public abstract class BaseTestByAbstraction<TTestType, TInterfaceType> : BaseTes
         {
             try
             {
-                // XUnit doesn't provide direct access to test results in dispose, so we assume test passed
-                // if we reach disposal without exception
-                var testPassed = true;
+                // Try to get actual test result from xUnit v3 context
+                var (isXunitV3Available, testPassed) = XUnitV3Helper.TryGetTestResult();
+                
+                if (!isXunitV3Available)
+                {
+                    // Fall back to xUnit v2 behavior: assume test passed if we reach disposal without exception
+                    testPassed = true;
+                }
+                
                 var testMethod = GetCurrentTestMethod();
                 var testClass = GetType();
 

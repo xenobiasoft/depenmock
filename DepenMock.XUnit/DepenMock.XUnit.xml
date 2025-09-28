@@ -78,8 +78,8 @@
             Outputs log messages if configured and disposes resources.
             </summary>
             <remarks>This method is called when the test is complete to output log messages when the <see cref="T:DepenMock.Attributes.LogOutputAttribute"/>
-            is present on the test method or class. Since XUnit doesn't provide direct access to test results, it assumes
-            the test passed if no exception was thrown.</remarks>
+            is present on the test method or class. For xUnit v3, it uses the test context to determine the actual test result.
+            For xUnit v2, it assumes the test passed if no exception was thrown during disposal.</remarks>
         </member>
         <member name="M:DepenMock.XUnit.BaseTestByAbstraction`2.Dispose(System.Boolean)">
             <summary>
@@ -144,8 +144,8 @@
             Outputs log messages if configured and disposes resources.
             </summary>
             <remarks>This method is called when the test is complete to output log messages when the <see cref="T:DepenMock.Attributes.LogOutputAttribute"/>
-            is present on the test method or class. Since XUnit doesn't provide direct access to test results, it assumes
-            the test passed if no exception was thrown.</remarks>
+            is present on the test method or class. For xUnit v3, it uses the test context to determine the actual test result.
+            For xUnit v2, it assumes the test passed if no exception was thrown during disposal.</remarks>
         </member>
         <member name="M:DepenMock.XUnit.BaseTestByType`1.Dispose(System.Boolean)">
             <summary>
@@ -158,6 +158,31 @@
             Gets the current test method using reflection and stack trace analysis.
             </summary>
             <returns>The current test method or null if not found.</returns>
+        </member>
+        <member name="T:DepenMock.XUnit.Internal.XUnitV3Helper">
+            <summary>
+            Helper class to detect and interact with xUnit v3 features when available.
+            </summary>
+            <remarks>
+            This class uses reflection to detect if xUnit v3 is available and provides
+            access to test context and test outcome information. For xUnit v2, it falls
+            back to assuming the test passed if no exception was thrown.
+            </remarks>
+        </member>
+        <member name="P:DepenMock.XUnit.Internal.XUnitV3Helper.IsXUnitV3Available">
+            <summary>
+            Gets a value indicating whether xUnit v3 is available.
+            </summary>
+        </member>
+        <member name="M:DepenMock.XUnit.Internal.XUnitV3Helper.TryGetTestResult">
+            <summary>
+            Attempts to get the current test result state from xUnit v3 context.
+            </summary>
+            <returns>
+            A tuple containing (isAvailable, testPassed) where:
+            - isAvailable: true if xUnit v3 context is available and test state could be determined
+            - testPassed: true if the test passed, false if it failed
+            </returns>
         </member>
     </members>
 </doc>
