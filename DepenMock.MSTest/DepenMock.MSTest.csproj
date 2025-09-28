@@ -23,6 +23,7 @@
 		<Copyright>2024 XenobiaSoft</Copyright>
 		<RequireLicenseAcceptance>true</RequireLicenseAcceptance>
 		<PackageIcon>x-logo.png</PackageIcon>
+		<IsTestProject>false</IsTestProject>
 	</PropertyGroup>
 
 	<ItemGroup>
