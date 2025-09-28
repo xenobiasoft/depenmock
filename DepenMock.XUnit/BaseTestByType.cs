@@ -39,6 +39,7 @@ public abstract class BaseTestByType<TTestType> : BaseTest, IDisposable where TT
     protected BaseTestByType(ITestOutputHelper? outputHelper)
     {
         _outputHelper = outputHelper;
+        Logger.Clear(); // Clear any previous logs (defensive programming)
         Container.Register<ILogger<TTestType>>(Logger);
         AddContainerCustomizations(Container);
     }

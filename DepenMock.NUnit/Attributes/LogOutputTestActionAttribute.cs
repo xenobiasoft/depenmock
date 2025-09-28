@@ -24,6 +24,14 @@ internal class LogOutputTestActionAttribute : TestActionAttribute
     public override void BeforeTest(ITest test)
     {
         _logOutput = null;
+        
+        // Clear logs from any previous tests to ensure log isolation
+        var testInstance = test.Fixture;
+        if (testInstance != null)
+        {
+            var logger = GetLoggerFromTestInstance(testInstance);
+            logger?.Clear();
+        }
     }
 
     /// <summary>

@@ -69,6 +69,13 @@
             Gets or sets the test context which provides information about and functionality for the current test run.
             </summary>
         </member>
+        <member name="M:DepenMock.MSTest.BaseTestByAbstraction`2.Initialize">
+            <summary>
+            Initializes the test environment before each test.
+            </summary>
+            <remarks>This method is executed before each test to clear any previous log messages,
+            ensuring log isolation between tests.</remarks>
+        </member>
         <member name="M:DepenMock.MSTest.BaseTestByAbstraction`2.CleanUp">
             <summary>
             Cleans up after each test and outputs log messages if configured.
@@ -119,6 +126,13 @@
             <summary>
             Gets or sets the test context which provides information about and functionality for the current test run.
             </summary>
+        </member>
+        <member name="M:DepenMock.MSTest.BaseTestByType`1.Initialize">
+            <summary>
+            Initializes the test environment before each test.
+            </summary>
+            <remarks>This method is executed before each test to clear any previous log messages,
+            ensuring log isolation between tests.</remarks>
         </member>
         <member name="M:DepenMock.MSTest.BaseTestByType`1.CleanUp">
             <summary>

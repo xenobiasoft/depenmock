@@ -55,6 +55,17 @@ public abstract class BaseTestByType<TTestType> : BaseTest where TTestType : cla
     public TestContext? TestContext { get; set; }
 
     /// <summary>
+    /// Initializes the test environment before each test.
+    /// </summary>
+    /// <remarks>This method is executed before each test to clear any previous log messages,
+    /// ensuring log isolation between tests.</remarks>
+    [TestInitialize]
+    public void Initialize()
+    {
+        Logger.Clear(); // Clear logs from any previous tests
+    }
+
+    /// <summary>
     /// Cleans up after each test and outputs log messages if configured.
     /// </summary>
     /// <remarks>This method is executed after each test to output log messages when the <see cref="LogOutputAttribute"/>
