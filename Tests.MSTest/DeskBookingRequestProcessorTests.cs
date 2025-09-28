@@ -1,15 +1,16 @@
 using AutoFixture;
 using DepenMock;
+using DepenMock.Attributes;
 using DepenMock.MSTest;
 using DeskBooker.Core.Domain;
 using DeskBooker.Core.Interfaces;
 using DeskBooker.Core.Processor;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
 namespace Tests.MSTest;
 
 [TestClass]
+[LogOutput(LogOutputTiming.Always)]
 public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookingRequestProcessor, IDeskBookingRequestProcessor>
 {
     [TestMethod]

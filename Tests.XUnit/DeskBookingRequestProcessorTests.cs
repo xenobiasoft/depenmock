@@ -1,14 +1,17 @@
-﻿using DeskBooker.Core.Domain;
+﻿using AutoFixture;
+using DepenMock;
+using DepenMock.Attributes;
+using DepenMock.XUnit;
+using DeskBooker.Core.Domain;
 using DeskBooker.Core.Interfaces;
 using DeskBooker.Core.Processor;
 using Moq;
 using Xunit;
-using AutoFixture;
-using DepenMock;
-using DepenMock.XUnit;
 
 namespace Tests.XUnit;
 
+
+[LogOutput(LogOutputTiming.Always)]
 public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookingRequestProcessor, IDeskBookingRequestProcessor>
 {
 	[Fact]

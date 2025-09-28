@@ -13,7 +13,7 @@ using DepenMock.Attributes;
 namespace Tests.NUnit;
 
 [TestFixture]
-[LogOutput(LogOutputTiming.OnFailure)]
+[LogOutput(LogOutputTiming.Always)]
 public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookingRequestProcessor, IDeskBookingRequestProcessor>
 {
 	[Test]
