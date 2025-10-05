@@ -21,24 +21,34 @@ jobs:
           echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
           echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
-      - name: Make script executable
-        run: chmod +x ./detect-changed-packages.sh
-        
-      - name: Check for changes in ${{ matrix.project }} or its dependencies
-        id: detect-changes
-        run: |
-          CHANGED=$(./detect-changed-packages.sh ${{ matrix.project }})
-          echo "$CHANGED" >> $GITHUB_OUTPUT
-
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref }}
-          name: "Release ${{ env.VERSION }}"
+          name: "Release v${{ env.VERSION }}"
+          generate_release_notes: true
           body: |
             ## 🚀 DepenMock v${{ env.VERSION }} – ${{ env.DATE }}
 
-            ### 🧱 Packages Published
-            ${{ env.PACKAGE_STATUS }}
+            ### 📦 NuGet Packages Published
 
-            _This release was automatically generated._
+            The following packages are available on NuGet.org:
+            
+            - **DepenMock** - Core testing library
+            - **DepenMock.NUnit** - NUnit integration
+            - **DepenMock.XUnit** - XUnit integration
+            - **DepenMock.MSTest** - MSTest integration
+
+            Install via Package Manager:
+            ```
+            Install-Package DepenMock -Version ${{ env.VERSION }}
+            ```
+
+            Or via .NET CLI:
+            ```
+            dotnet add package DepenMock --version ${{ env.VERSION }}
+            ```
+
+            ### 📝 Release Notes
+
+            _Automatically generated release notes appear below._
