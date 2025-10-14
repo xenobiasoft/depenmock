@@ -85,10 +85,7 @@ public static class ListLoggerAssertionExtensions
     /// <exception cref="Exception">Thrown when no log message contains the specified fragment.</exception>
     public static void ContainsMessage(this List<string> logMessages, string messageFragment)
     {
-        if (!logMessages.Any(log => log.Contains(messageFragment, StringComparison.OrdinalIgnoreCase)))
-        {
-            throw new Exception($"No log message contains the message: '{messageFragment}'");
-        }
+        AssertLogContains(logMessages, messageFragment);
     }
 
     /// <summary>
@@ -99,6 +96,17 @@ public static class ListLoggerAssertionExtensions
     /// <param name="messageFragment">The text fragment to search for in the log messages.</param>
     /// <exception cref="Exception">Thrown when no log message contains the specified fragment.</exception>
     public static void AssertContains(this List<string> logMessages, string messageFragment)
+    {
+        AssertLogContains(logMessages, messageFragment);
+    }
+
+    /// <summary>
+    /// Helper method to validate that at least one log message contains the specified text fragment.
+    /// </summary>
+    /// <param name="logMessages">The list of log messages to check.</param>
+    /// <param name="messageFragment">The text fragment to search for in the log messages.</param>
+    /// <exception cref="Exception">Thrown when no log message contains the specified fragment.</exception>
+    private static void AssertLogContains(List<string> logMessages, string messageFragment)
     {
         if (!logMessages.Any(log => log.Contains(messageFragment, StringComparison.OrdinalIgnoreCase)))
         {
