@@ -92,6 +92,21 @@ public static class ListLoggerAssertionExtensions
     }
 
     /// <summary>
+    /// Asserts that at least one log message contains the specified text fragment.
+    /// This method provides explicit assertion naming for linters that require it.
+    /// </summary>
+    /// <param name="logMessages">The list of log messages to check.</param>
+    /// <param name="messageFragment">The text fragment to search for in the log messages.</param>
+    /// <exception cref="Exception">Thrown when no log message contains the specified fragment.</exception>
+    public static void AssertContains(this List<string> logMessages, string messageFragment)
+    {
+        if (!logMessages.Any(log => log.Contains(messageFragment, StringComparison.OrdinalIgnoreCase)))
+        {
+            throw new Exception($"No log message contains the message: '{messageFragment}'");
+        }
+    }
+
+    /// <summary>
     /// Helper method to extract log messages of a specific level from the logger.
     /// </summary>
     /// <typeparam name="T">The type associated with the logger.</typeparam>
