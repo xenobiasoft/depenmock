@@ -175,5 +175,70 @@ public class ListLoggerAssertionExtensionsTests
         Assert.Null(exception);
     }
 
+    [Fact]
+    public void AssertContains_WithMatchingMessage_ShouldNotThrow()
+    {
+        // Arrange
+        var messages = new List<string> { "First message", "Second message", "Third message" };
+        var searchFragment = "Second";
+
+        // Act
+        var exception = Record.Exception(() => messages.AssertContains(searchFragment));
+
+        // Assert
+        Assert.Null(exception);
+    }
+
+    [Fact]
+    public void AssertContains_WithCaseInsensitiveMatch_ShouldNotThrow()
+    {
+        // Arrange
+        var messages = new List<string> { "First Message", "SECOND MESSAGE", "third message" };
+        var searchFragment = "second";
+
+        // Act
+        var exception = Record.Exception(() => messages.AssertContains(searchFragment));
+
+        // Assert
+        Assert.Null(exception);
+    }
+
+    [Fact]
+    public void AssertContains_WithNonMatchingMessage_ShouldThrowException()
+    {
+        // Arrange
+        var messages = new List<string> { "First message", "Second message", "Third message" };
+        var searchFragment = "Fourth";
+
+        // Act & Assert
+        var exception = Assert.Throws<Exception>(() => messages.AssertContains(searchFragment));
+        Assert.Contains(searchFragment, exception.Message);
+    }
+
+    [Fact]
+    public void AssertContains_WithEmptyList_ShouldThrowException()
+    {
+        // Arrange
+        var messages = new List<string>();
+        var searchFragment = "Any message";
+
+        // Act & Assert
+        Assert.Throws<Exception>(() => messages.AssertContains(searchFragment));
+    }
+
+    [Fact]
+    public void AssertContains_WithPartialMatch_ShouldNotThrow()
+    {
+        // Arrange
+        var messages = new List<string> { "This is a complete message" };
+        var searchFragment = "complete";
+
+        // Act
+        var exception = Record.Exception(() => messages.AssertContains(searchFragment));
+
+        // Assert
+        Assert.Null(exception);
+    }
+
     private class TestClass { }
 }

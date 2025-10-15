@@ -168,5 +168,61 @@ public class ListLoggerAssertionExtensionsTests
         messages.ContainsMessage(searchFragment);
     }
 
+    [TestMethod]
+    public void AssertContains_WithMatchingMessage_ShouldNotThrow()
+    {
+        // Arrange
+        var messages = new List<string> { "First message", "Second message", "Third message" };
+        var searchFragment = "Second";
+
+        // Act & Assert - Should not throw
+        messages.AssertContains(searchFragment);
+    }
+
+    [TestMethod]
+    public void AssertContains_WithCaseInsensitiveMatch_ShouldNotThrow()
+    {
+        // Arrange
+        var messages = new List<string> { "First Message", "SECOND MESSAGE", "third message" };
+        var searchFragment = "second";
+
+        // Act & Assert - Should not throw
+        messages.AssertContains(searchFragment);
+    }
+
+    [TestMethod]
+    public void AssertContains_WithNonMatchingMessage_ShouldThrowException()
+    {
+        // Arrange
+        var messages = new List<string> { "First message", "Second message", "Third message" };
+        var searchFragment = "Fourth";
+
+        // Act & Assert
+        var exception = Assert.ThrowsException<Exception>(() => messages.AssertContains(searchFragment));
+        Assert.IsTrue(exception.Message.Contains(searchFragment));
+    }
+
+    [TestMethod]
+    public void AssertContains_WithEmptyList_ShouldThrowException()
+    {
+        // Arrange
+        var messages = new List<string>();
+        var searchFragment = "Any message";
+
+        // Act & Assert
+        Assert.ThrowsException<Exception>(() => messages.AssertContains(searchFragment));
+    }
+
+    [TestMethod]
+    public void AssertContains_WithPartialMatch_ShouldNotThrow()
+    {
+        // Arrange
+        var messages = new List<string> { "This is a complete message" };
+        var searchFragment = "complete";
+
+        // Act & Assert - Should not throw
+        messages.AssertContains(searchFragment);
+    }
+
     private class TestClass { }
 }

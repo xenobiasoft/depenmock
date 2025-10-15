@@ -197,6 +197,23 @@
             <param name="messageFragment">The text fragment to search for in the log messages.</param>
             <exception cref="T:System.Exception">Thrown when no log message contains the specified fragment.</exception>
         </member>
+        <member name="M:DepenMock.ListLoggerAssertionExtensions.AssertContains(System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            Asserts that at least one log message contains the specified text fragment.
+            This method provides explicit assertion naming for linters that require it.
+            </summary>
+            <param name="logMessages">The list of log messages to check.</param>
+            <param name="messageFragment">The text fragment to search for in the log messages.</param>
+            <exception cref="T:System.Exception">Thrown when no log message contains the specified fragment.</exception>
+        </member>
+        <member name="M:DepenMock.ListLoggerAssertionExtensions.AssertLogContains(System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            Helper method to validate that at least one log message contains the specified text fragment.
+            </summary>
+            <param name="logMessages">The list of log messages to check.</param>
+            <param name="messageFragment">The text fragment to search for in the log messages.</param>
+            <exception cref="T:System.Exception">Thrown when no log message contains the specified fragment.</exception>
+        </member>
         <member name="M:DepenMock.ListLoggerAssertionExtensions.LogMessages``1(DepenMock.Loggers.ListLogger{``0},Microsoft.Extensions.Logging.LogLevel)">
             <summary>
             Helper method to extract log messages of a specific level from the logger.
