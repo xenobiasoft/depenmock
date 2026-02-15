@@ -4,6 +4,71 @@
         <name>DepenMock.XUnit.V3</name>
     </assembly>
     <members>
+        <member name="T:DepenMock.XUnit.V3.Attributes.LogOutputAttribute">
+            <summary>
+            Attribute that controls when log messages should be output to the test runner's output window in xUnit v3 tests.
+            </summary>
+            <remarks>
+            <para>
+            This attribute combines the functionality of <see cref="T:DepenMock.Attributes.LogOutputAttribute"/> with xUnit v3's 
+            <see cref="T:Xunit.v3.IBeforeAfterTestAttribute"/> to enable automatic log output based on test outcome.
+            Unlike xUnit v2, xUnit v3 provides access to test results, making it possible to conditionally 
+            output logs based on test outcome.
+            </para>
+            <para>
+            Use this attribute instead of <see cref="T:DepenMock.Attributes.LogOutputAttribute"/> when working with xUnit v3.
+            The standard <see cref="T:DepenMock.Attributes.LogOutputAttribute"/> will not work with xUnit because xUnit v2 doesn't 
+            provide test outcome information.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:DepenMock.XUnit.V3.Attributes.LogOutputAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:DepenMock.XUnit.V3.Attributes.LogOutputAttribute"/> class
+            with the default timing of <see cref="F:DepenMock.Attributes.LogOutputTiming.Always"/>.
+            </summary>
+        </member>
+        <member name="M:DepenMock.XUnit.V3.Attributes.LogOutputAttribute.#ctor(DepenMock.Attributes.LogOutputTiming)">
+            <summary>
+            Initializes a new instance of the <see cref="T:DepenMock.XUnit.V3.Attributes.LogOutputAttribute"/> class
+            with the specified timing.
+            </summary>
+            <param name="timing">The timing that determines when log messages should be output.</param>
+        </member>
+        <member name="P:DepenMock.XUnit.V3.Attributes.LogOutputAttribute.Timing">
+            <summary>
+            Gets the timing that determines when log messages should be output.
+            </summary>
+        </member>
+        <member name="M:DepenMock.XUnit.V3.Attributes.LogOutputAttribute.Before(System.Reflection.MethodInfo,Xunit.v3.IXunitTest)">
+            <summary>
+            Executes before the test to capture initial state.
+            </summary>
+            <param name="methodUnderTest">The method under test.</param>
+            <param name="test">The current xUnit test.</param>
+        </member>
+        <member name="M:DepenMock.XUnit.V3.Attributes.LogOutputAttribute.After(System.Reflection.MethodInfo,Xunit.v3.IXunitTest)">
+            <summary>
+            Executes after the test to output logs if conditions are met.
+            </summary>
+            <param name="methodUnderTest">The method under test.</param>
+            <param name="test">The current xUnit test.</param>
+        </member>
+        <member name="M:DepenMock.XUnit.V3.Attributes.LogOutputAttribute.ShouldOutputForTiming(DepenMock.Attributes.LogOutputTiming,System.Boolean)">
+            <summary>
+            Determines if logs should be output based on timing configuration and test result.
+            </summary>
+            <param name="timing">The timing configuration.</param>
+            <param name="testPassed">Whether the test passed.</param>
+            <returns>True if logs should be output, false otherwise.</returns>
+        </member>
+        <member name="M:DepenMock.XUnit.V3.Attributes.LogOutputAttribute.GetLoggerFromTestInstance(System.Object)">
+            <summary>
+            Attempts to extract the logger from the test instance using reflection.
+            </summary>
+            <param name="testInstance">The test instance.</param>
+            <returns>The test logger if found, null otherwise.</returns>
+        </member>
         <member name="T:DepenMock.XUnit.V3.BaseTest">
             <summary>
             Serves as a base class for test implementations, providing shared functionality and a dependency injection

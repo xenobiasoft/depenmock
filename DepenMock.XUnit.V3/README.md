@@ -145,6 +145,48 @@ Logger.Logs[LogLevel.Warning]
 Logger.Logs[LogLevel.Information]
 ```
 
+### Outputting Logs to Test Results
+
+xUnit v3 supports automatically outputting log messages to the test runner's output window using the `LogOutputAttribute`. This is useful for debugging tests or understanding what happened during test execution.
+
+**Method-level LogOutput**
+
+```c#
+using DepenMock.XUnit.V3.Attributes;
+
+[Fact]
+[LogOutput(LogOutputTiming.Always)]
+public void TestWithLogOutput_ShouldOutputLogs()
+{
+    // Your test code here
+    // Logs will be output to the test runner output window
+}
+```
+
+**Class-level LogOutput**
+
+```c#
+using DepenMock.XUnit.V3.Attributes;
+
+[LogOutput(LogOutputTiming.Always)]
+public class MyTestClass : BaseTestByType<MyService>
+{
+    [Fact]
+    public void MyTest()
+    {
+        // All tests in this class will output logs
+    }
+}
+```
+
+**LogOutputTiming Options**
+
+- `LogOutputTiming.Always` - Always output logs regardless of test result
+- `LogOutputTiming.OnSuccess` - Output logs only when the test passes
+- `LogOutputTiming.OnFailure` - Output logs only when the test fails
+
+> **Note**: The `LogOutputAttribute` only works with xUnit v3. xUnit v2 does not support automatic log output due to framework limitations. For xUnit v2 tests, inspect logs directly in your test assertions using `Logger.Logs[LogLevel.Information]` etc.
+
 ## Sample Project
 
 Explore the sample project, DeskBooker.Core, which includes example unit tests for both NUnit and XUnit to help you get started with DepenMock.
