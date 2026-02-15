@@ -51,7 +51,8 @@ public class LogOutputAttributeTests : BaseTestByType<TestService>
         // Act
         service.DoWork("FailureMessage");
         
-        // Assert - This test passes, so logs should not be output with OnFailure
+        // Assert - This test passes, so logs should not be output to the test runner window with OnFailure
+        // However, logs are still captured in Logger.Logs for verification
         Assert.Equal(initialLogCount + 1, Logger.Logs[LogLevel.Information].Count);
     }
 

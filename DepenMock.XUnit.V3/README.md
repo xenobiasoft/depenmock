@@ -185,7 +185,7 @@ public class MyTestClass : BaseTestByType<MyService>
 - `LogOutputTiming.OnSuccess` - Output logs only when the test passes
 - `LogOutputTiming.OnFailure` - Output logs only when the test fails
 
-> **Note**: The `LogOutputAttribute` only works with xUnit v3. For xUnit v2, use the standard `DepenMock.Attributes.LogOutputAttribute` which does not provide log output functionality due to xUnit v2 limitations.
+> **Note**: The `LogOutputAttribute` only works with xUnit v3. xUnit v2 does not support automatic log output due to framework limitations. For xUnit v2 tests, inspect logs directly in your test assertions using `Logger.Logs[LogLevel.Information]` etc.
 
 ## Sample Project
 
