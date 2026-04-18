@@ -110,16 +110,17 @@ public class ListLoggerTests
     }
 
     [TestMethod]
-    public void IsEnabled_ShouldAlwaysReturnTrue()
+    [DataRow(LogLevel.Critical, true)]
+    [DataRow(LogLevel.Debug, true)]
+    [DataRow(LogLevel.Error, true)]
+    [DataRow(LogLevel.Information, true)]
+    [DataRow(LogLevel.None, false)]
+    [DataRow(LogLevel.Trace, true)]
+    [DataRow(LogLevel.Warning, true)]
+    public void IsEnabled_ShouldAlwaysReturnTrue(LogLevel logLevel, bool isEnabled)
     {
         // Act & Assert
-        Assert.IsTrue(_logger.IsEnabled(LogLevel.Trace));
-        Assert.IsTrue(_logger.IsEnabled(LogLevel.Debug));
-        Assert.IsTrue(_logger.IsEnabled(LogLevel.Information));
-        Assert.IsTrue(_logger.IsEnabled(LogLevel.Warning));
-        Assert.IsTrue(_logger.IsEnabled(LogLevel.Error));
-        Assert.IsTrue(_logger.IsEnabled(LogLevel.Critical));
-        Assert.IsTrue(_logger.IsEnabled(LogLevel.None));
+        Assert.AreEqual(_logger.IsEnabled(logLevel), isEnabled);
     }
 
     private class TestClass { }
