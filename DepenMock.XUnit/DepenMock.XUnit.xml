@@ -89,9 +89,23 @@
         </member>
         <member name="M:DepenMock.XUnit.BaseTestByAbstraction`2.GetCurrentTestMethod">
             <summary>
-            Gets the current test method using reflection and stack trace analysis.
+            Gets the current test method by inspecting <see cref="T:Xunit.Abstractions.ITestOutputHelper"/> internals first,
+            then falling back to stack trace analysis. Supports both <see cref="T:Xunit.FactAttribute"/> and
+            <see cref="T:Xunit.TheoryAttribute"/> test methods.
             </summary>
-            <returns>The current test method or null if not found.</returns>
+            <returns>The current test method, or <see langword="null"/> if it cannot be determined.</returns>
+        </member>
+        <member name="M:DepenMock.XUnit.BaseTestByAbstraction`2.GetTestMethodNameFromOutputHelper(Xunit.Abstractions.ITestOutputHelper)">
+            <summary>
+            Extracts the test method name from xUnit's <see cref="T:Xunit.Abstractions.ITestOutputHelper"/> by reflecting over
+            its internal state. xUnit stores the running <c>ITest</c> instance (which carries the display
+            name) as a private field on <c>TestOutputHelper</c>.
+            </summary>
+            <param name="outputHelper">The xUnit output helper for the current test.</param>
+            <returns>
+            The unqualified method name (e.g. <c>"My_Test_Method"</c>), or <see langword="null"/> if it
+            cannot be determined.
+            </returns>
         </member>
         <member name="T:DepenMock.XUnit.BaseTestByType`1">
             <summary>
@@ -155,9 +169,23 @@
         </member>
         <member name="M:DepenMock.XUnit.BaseTestByType`1.GetCurrentTestMethod">
             <summary>
-            Gets the current test method using reflection and stack trace analysis.
+            Gets the current test method by inspecting <see cref="T:Xunit.Abstractions.ITestOutputHelper"/> internals first,
+            then falling back to stack trace analysis. Supports both <see cref="T:Xunit.FactAttribute"/> and
+            <see cref="T:Xunit.TheoryAttribute"/> test methods.
             </summary>
-            <returns>The current test method or null if not found.</returns>
+            <returns>The current test method, or <see langword="null"/> if it cannot be determined.</returns>
+        </member>
+        <member name="M:DepenMock.XUnit.BaseTestByType`1.GetTestMethodNameFromOutputHelper(Xunit.Abstractions.ITestOutputHelper)">
+            <summary>
+            Extracts the test method name from xUnit's <see cref="T:Xunit.Abstractions.ITestOutputHelper"/> by reflecting over
+            its internal state. xUnit stores the running <c>ITest</c> instance (which carries the display
+            name) as a private field on <c>TestOutputHelper</c>.
+            </summary>
+            <param name="outputHelper">The xUnit output helper for the current test.</param>
+            <returns>
+            The unqualified method name (e.g. <c>"My_Test_Method"</c>), or <see langword="null"/> if it
+            cannot be determined.
+            </returns>
         </member>
     </members>
 </doc>

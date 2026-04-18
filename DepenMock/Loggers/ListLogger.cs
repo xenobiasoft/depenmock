@@ -78,7 +78,7 @@ public class ListLogger<TLoggerType> : ILogger<TLoggerType>, ITestLogger
     /// <param name="logLevel">The log level to check for enabled logging.</param>
     /// <returns><see langword="true"/> if logging is enabled for the specified <paramref name="logLevel"/>;  otherwise, <see
     /// langword="false"/>.</returns>
-    public bool IsEnabled(LogLevel logLevel) => false;
+    public bool IsEnabled(LogLevel logLevel) => true;
         
     /// <summary>
     /// Returns the <see cref="IDictionary{TKey,TValue}"/> of messages that have been logged
