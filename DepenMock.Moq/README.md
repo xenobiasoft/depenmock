@@ -1,19 +1,19 @@
-# DepenMock.NSubstitute
+# DepenMock.Moq
 
-NSubstitute integration for [DepenMock](https://github.com/xenobiasoft/depenmock) — a C# testing library that automates mock creation for your System Under Test (SUT) dependencies.
+Moq integration for [DepenMock](https://github.com/xenobiasoft/depenmock) — a C# testing library that automates mock creation for your System Under Test (SUT) dependencies.
 
-Install this package alongside one of the DepenMock test-framework packages (`DepenMock.XUnit`, `DepenMock.NUnit`, or `DepenMock.MSTest`) to use NSubstitute as your mocking framework.
+Install this package alongside one of the DepenMock test-framework packages (`DepenMock.XUnit`, `DepenMock.NUnit`, or `DepenMock.MSTest`) to use Moq as your mocking framework.
 
 ## Installation
 
 ```
-dotnet add package DepenMock.NSubstitute
+dotnet add package DepenMock.Moq
 dotnet add package DepenMock.XUnit   # or DepenMock.NUnit / DepenMock.MSTest
 ```
 
 ## Setting Up the Test Container
 
-Pass `NSubstituteMockFactory` to the base class constructor to configure DepenMock to use NSubstitute for all auto-created mocks.
+Pass `MoqMockFactory` to the base class constructor to configure DepenMock to use Moq for all auto-created mocks.
 
 **BaseTestByAbstraction**
 
@@ -24,7 +24,7 @@ public class DeskBookingRequestProcessorTests
     : BaseTestByAbstraction<DeskBookingRequestProcessor, IDeskBookingRequestProcessor>
 {
     public DeskBookingRequestProcessorTests()
-        : base(new NSubstituteMockFactory()) { }
+        : base(new MoqMockFactory()) { }
 
     // Your test methods here
 }
@@ -38,7 +38,7 @@ Use this base class when your SUT does not implement an interface, such as when 
 public class AccountControllerTests : BaseTestByType<AccountController>
 {
     public AccountControllerTests()
-        : base(new NSubstituteMockFactory()) { }
+        : base(new MoqMockFactory()) { }
 
     // Your test methods here
 }
@@ -117,15 +117,15 @@ var deskBookingResult = Container
 
 ## Creating Mock Dependencies
 
-DepenMock automatically creates NSubstitute substitutes for all unregistered dependencies. Call `ResolveMock<T>()` to get a reference to a substitute, then use `AsNSubstitute()` to access NSubstitute's `Returns` and `Received` APIs.
+DepenMock automatically creates Moq mocks for all unregistered dependencies. Call `ResolveMock<T>()` to get a reference to a mock, then use `AsMoq()` to access Moq's `Setup` and `Verify` APIs.
 
 **Creating a stub**
 
 ```c#
 Container
     .ResolveMock<IDeskRepository>()
-    .AsNSubstitute()
-    .GetAvailableDesks(Arg.Any<DateTime>())
+    .AsMoq()
+    .Setup(x => x.GetAvailableDesks(It.IsAny<DateTime>()))
     .Returns(Container.CreateMany<Desk>());
 ```
 
@@ -134,9 +134,8 @@ Container
 ```c#
 Container
     .ResolveMock<IDeskBookingRepository>()
-    .AsNSubstitute()
-    .Received(1)
-    .Save(Arg.Any<DeskBooking>());
+    .AsMoq()
+    .Verify(x => x.Save(It.IsAny<DeskBooking>()), Times.Once);
 ```
 
 ## Testing Logging
@@ -160,7 +159,7 @@ Override `AddContainerCustomizations` to register custom `ISpecimenBuilder` inst
 ```c#
 public class MyTests : BaseTestByType<MyType>
 {
-    public MyTests() : base(new NSubstituteMockFactory()) { }
+    public MyTests() : base(new MoqMockFactory()) { }
 
     protected override void AddContainerCustomizations(Container container)
     {

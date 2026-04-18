@@ -8,8 +8,8 @@
     <Version Condition="'$(VERSION)' == ''">2.0.0</Version>
     <Version Condition="'$(VERSION)' != ''">$(VERSION)</Version>
     <PackageId>DepenMock.Moq</PackageId>
-    <Authors>XenobiaSoft</Authors>
-    <Company>XenobiaSoft</Company>
+    <Authors>Xenobiasoft</Authors>
+    <Company>Xenobiasoft</Company>
     <Description>Moq integration for DepenMock. Provides MoqMockFactory and the AsMoq() extension for accessing Moq's Setup and Verify APIs via the IMock&lt;T&gt; abstraction.</Description>
     <PackageTags>Moq, Testing, Unit Testing, Auto Mocking, Dependency Injection, DepenMock</PackageTags>
     <RepositoryUrl>https://github.com/xenobiasoft/depenmock</RepositoryUrl>
@@ -18,9 +18,10 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <Title>DepenMock Moq integration</Title>
-    <Copyright>2025 XenobiaSoft</Copyright>
+    <Copyright>2025 Xenobiasoft</Copyright>
     <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
     <PackageIcon>x-logo.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
@@ -35,6 +36,10 @@
 
   <ItemGroup>
     <None Include="..\Assets\x-logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
