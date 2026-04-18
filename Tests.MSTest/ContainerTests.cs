@@ -1,5 +1,6 @@
 using AutoFixture;
 using AutoFixture.Kernel;
+using DepenMock.Moq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -13,7 +14,7 @@ namespace Tests.MSTest
         [TestInitialize]
         public void Setup()
         {
-            _container = new DepenMock.Container();
+            _container = new DepenMock.Container(new MoqMockFactory());
         }
 
         [TestMethod]

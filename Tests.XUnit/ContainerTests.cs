@@ -1,5 +1,6 @@
 using AutoFixture;
 using AutoFixture.Kernel;
+using DepenMock.Moq;
 using Moq;
 using Xunit;
 
@@ -11,7 +12,7 @@ public class ContainerTests
 
     public ContainerTests()
     {
-        _container = new DepenMock.Container();
+        _container = new DepenMock.Container(new MoqMockFactory());
     }
 
     [Fact]

@@ -19,8 +19,8 @@
             Initializes a new instance of the <see cref="T:DepenMock.XUnit.BaseTest"/> class.
             </summary>
             <remarks>This constructor sets up the <see cref="P:DepenMock.XUnit.BaseTest.Container"/> property with a new instance of the <see
-            cref="P:DepenMock.XUnit.BaseTest.Container"/> class. Derived classes can use this container for dependency injection or other
-            purposes.</remarks>
+            cref="P:DepenMock.XUnit.BaseTest.Container"/> class backed by <see cref="T:DepenMock.Moq.MoqMockFactory"/>. Derived classes can use this container
+            for dependency injection or other purposes.</remarks>
         </member>
         <member name="P:DepenMock.XUnit.BaseTest.Container">
             <summary>

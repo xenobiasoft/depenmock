@@ -40,6 +40,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\DepenMock\DepenMock.csproj" />
+		<ProjectReference Include="..\DepenMock.Moq\DepenMock.Moq.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

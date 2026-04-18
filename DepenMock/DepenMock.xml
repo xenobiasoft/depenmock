@@ -58,10 +58,15 @@
             Provides object creation functionality, as well as acting as a pseudo dependency injection container
             </summary>
         </member>
-        <member name="M:DepenMock.Container.#ctor">
+        <member name="M:DepenMock.Container.#ctor(DepenMock.Mocks.IMockFactory)">
             <summary>
-            Initializes a new instance of <see cref="T:DepenMock.Container"/>
+            Initializes a new instance of <see cref="T:DepenMock.Container"/> using the provided mock factory.
             </summary>
+            <param name="mockFactory">
+            The factory that integrates a mocking framework with AutoFixture and produces
+            <see cref="T:DepenMock.Mocks.IMock`1"/> wrappers. Use <c>new MoqMockFactory()</c> from the
+            <c>DepenMock.Moq</c> package for the default Moq-backed implementation.
+            </param>
         </member>
         <member name="M:DepenMock.Container.Create``1">
             <summary>
@@ -103,13 +108,19 @@
         </member>
         <member name="M:DepenMock.Container.ResolveMock``1">
             <summary>
-            Creates a mock of the requested type and registers it in the Fixture. As a default, all properties and methods
-            are automatically mocked, but can be overridden using a setup on the returned mocked object.
-            The fixture always returns the same instance of the mock whenever the instance of the type is requested
-            either directly, or indirectly as a nested value of other types.
+            Retrieves or creates the mock for <typeparamref name="TType"/> and registers it in the fixture
+            so that the same instance is returned whenever the type is requested, either directly or as a
+            nested dependency. Repeated calls for the same type always return the same
+            <see cref="T:DepenMock.Mocks.IMock`1"/> wrapper. All properties and methods are automatically configured
+            by the underlying mocking framework, but can be overridden via the returned wrapper.
+            Use <c>AsMoq()</c> from the <c>DepenMock.Moq</c> package to access Moq-specific
+            <c>Setup</c> and <c>Verify</c> APIs.
             </summary>
-            <typeparam name="TType">Any object type</typeparam>
-            <returns>A mock instance of the requested type</returns>
+            <typeparam name="TType">Any reference type to mock.</typeparam>
+            <returns>
+            The same <see cref="T:DepenMock.Mocks.IMock`1"/> wrapper on every call for a given
+            <typeparamref name="TType"/> within this container instance.
+            </returns>
         </member>
         <member name="M:DepenMock.Container.Register``1(``0)">
             <summary>
@@ -329,6 +340,40 @@
         </member>
         <member name="M:DepenMock.Loggers.NullScope.Dispose">
             <inheritdoc />
+        </member>
+        <member name="T:DepenMock.Mocks.IMock`1">
+            <summary>
+            Represents a mock object wrapping an instance of <typeparamref name="T"/>, decoupled from any
+            specific mocking framework. Use <c>AsMoq()</c> (from the <c>DepenMock.Moq</c> package) to access
+            Moq-specific setup and verification APIs.
+            </summary>
+            <typeparam name="T">The type being mocked. Must be a reference type.</typeparam>
+        </member>
+        <member name="P:DepenMock.Mocks.IMock`1.Object">
+            <summary>
+            Gets the mocked instance of <typeparamref name="T"/> that can be passed to the system under test.
+            </summary>
+        </member>
+        <member name="T:DepenMock.Mocks.IMockFactory">
+            <summary>
+            Defines a factory that integrates a mocking framework with AutoFixture and produces
+            <see cref="T:DepenMock.Mocks.IMock`1"/> wrappers. Implement this interface to swap in a different mocking
+            framework (e.g. NSubstitute, FakeItEasy) without changing any other DepenMock code.
+            </summary>
+        </member>
+        <member name="M:DepenMock.Mocks.IMockFactory.GetCustomization">
+            <summary>
+            Returns the AutoFixture <see cref="T:AutoFixture.ICustomization"/> that wires the mocking framework into
+            the fixture so that unregistered dependencies are automatically created as mocks.
+            </summary>
+        </member>
+        <member name="M:DepenMock.Mocks.IMockFactory.GetMock``1(AutoFixture.IFixture)">
+            <summary>
+            Retrieves or creates the mock for <typeparamref name="T"/> from <paramref name="fixture"/>
+            and returns it wrapped in an <see cref="T:DepenMock.Mocks.IMock`1"/>.
+            </summary>
+            <typeparam name="T">The type to mock. Must be a reference type.</typeparam>
+            <param name="fixture">The AutoFixture fixture that owns the mock instance.</param>
         </member>
     </members>
 </doc>

@@ -1,6 +1,7 @@
 using AutoFixture;
 using DepenMock;
 using DepenMock.Attributes;
+using DepenMock.Moq;
 using DepenMock.MSTest;
 using DeskBooker.Core.Domain;
 using DeskBooker.Core.Interfaces;
@@ -73,9 +74,9 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
     {
         // Assemble
         var correlationId = Container.Create<string>();
-        var mockRepo = Container.ResolveMock<IDeskBookingRepository>();
+        var mockRepo = Container.ResolveMock<IDeskBookingRepository>().AsMoq();
         Container
-            .ResolveMock<IDeskRepository>()
+            .ResolveMock<IDeskRepository>().AsMoq()
             .Setup(x => x.GetAvailableDesks(It.IsAny<DateTime>()))
             .Returns(Container.CreateMany<Desk>());
 
@@ -94,10 +95,10 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
         // Assemble
         var correlationId = Container.Create<string>();
         Container
-            .ResolveMock<IDeskRepository>()
+            .ResolveMock<IDeskRepository>().AsMoq()
             .Setup(x => x.GetAvailableDesks(It.IsAny<DateTime>()))
             .Returns(new List<Desk>());
-        var mockRepo = Container.ResolveMock<IDeskBookingRepository>();
+        var mockRepo = Container.ResolveMock<IDeskBookingRepository>().AsMoq();
         var sut = ResolveSut();
 
         // Act
@@ -113,7 +114,7 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
         // Assemble
         var correlationId = Container.Create<string>();
         Container
-            .ResolveMock<IDeskRepository>()
+            .ResolveMock<IDeskRepository>().AsMoq()
             .Setup(x => x.GetAvailableDesks(It.IsAny<DateTime>()))
             .Returns(new List<Desk>());
 
@@ -146,7 +147,7 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
         // Assemble
         var correlationId = Container.Create<string>();
         Container
-            .ResolveMock<IDeskRepository>()
+            .ResolveMock<IDeskRepository>().AsMoq()
             .Setup(x => x.GetAvailableDesks(It.IsAny<DateTime>()))
             .Returns(new List<Desk>());
 

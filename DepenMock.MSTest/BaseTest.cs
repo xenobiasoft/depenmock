@@ -1,3 +1,5 @@
+using DepenMock.Moq;
+
 namespace DepenMock.MSTest;
 
 /// <summary>
@@ -16,7 +18,7 @@ public abstract class BaseTest
     /// testing scenarios.</remarks>
     protected BaseTest()
     {
-        Container = new Container();
+        Container = new Container(new MoqMockFactory());
     }
 
     /// <summary>

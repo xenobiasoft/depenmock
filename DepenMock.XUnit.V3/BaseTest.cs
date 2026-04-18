@@ -1,4 +1,6 @@
-﻿namespace DepenMock.XUnit.V3;
+﻿using DepenMock.Moq;
+
+namespace DepenMock.XUnit.V3;
 
 /// <summary>
 /// Serves as a base class for test implementations, providing shared functionality and a dependency injection
@@ -18,7 +20,7 @@ public abstract class BaseTest
     /// purposes.</remarks>
     protected BaseTest()
     {
-        Container = new Container();
+        Container = new Container(new MoqMockFactory());
     }
 
     /// <summary>

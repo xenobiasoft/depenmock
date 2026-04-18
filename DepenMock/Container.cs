@@ -1,12 +1,11 @@
 ﻿using System;
 using AutoFixture;
-using AutoFixture.AutoMoq;
 using AutoFixture.Dsl;
 using AutoFixture.Kernel;
-using Moq;
 using System.Collections.Generic;
 using System.Linq;
 using DepenMock.Customizations;
+using DepenMock.Mocks;
 
 namespace DepenMock;
 
@@ -16,13 +15,21 @@ namespace DepenMock;
 public class Container
 {
     private readonly IFixture _fixture;
+    private readonly IMockFactory _mockFactory;
+    private readonly Dictionary<Type, object> _mockCache = new();
 
     /// <summary>
-    /// Initializes a new instance of <see cref="Container"/>
+    /// Initializes a new instance of <see cref="Container"/> using the provided mock factory.
     /// </summary>
-    public Container()
+    /// <param name="mockFactory">
+    /// The factory that integrates a mocking framework with AutoFixture and produces
+    /// <see cref="IMock{T}"/> wrappers. Use <c>new MoqMockFactory()</c> from the
+    /// <c>DepenMock.Moq</c> package for the default Moq-backed implementation.
+    /// </param>
+    public Container(IMockFactory mockFactory)
     {
-        _fixture = new Fixture().Customize(new AutoMoqCustomization { ConfigureMembers = true });
+        _mockFactory = mockFactory;
+        _fixture = new Fixture().Customize(mockFactory.GetCustomization());
 
         _fixture.Behaviors.OfType<ThrowingRecursionBehavior>()
             .ToList()
@@ -83,16 +90,28 @@ public class Container
     }
 
     /// <summary>
-    /// Creates a mock of the requested type and registers it in the Fixture. As a default, all properties and methods
-    /// are automatically mocked, but can be overridden using a setup on the returned mocked object.
-    /// The fixture always returns the same instance of the mock whenever the instance of the type is requested
-    /// either directly, or indirectly as a nested value of other types.
+    /// Retrieves or creates the mock for <typeparamref name="TType"/> and registers it in the fixture
+    /// so that the same instance is returned whenever the type is requested, either directly or as a
+    /// nested dependency. Repeated calls for the same type always return the same
+    /// <see cref="IMock{TType}"/> wrapper. All properties and methods are automatically configured
+    /// by the underlying mocking framework, but can be overridden via the returned wrapper.
+    /// Use <c>AsMoq()</c> from the <c>DepenMock.Moq</c> package to access Moq-specific
+    /// <c>Setup</c> and <c>Verify</c> APIs.
     /// </summary>
-    /// <typeparam name="TType">Any object type</typeparam>
-    /// <returns>A mock instance of the requested type</returns>
-    public Mock<TType> ResolveMock<TType>() where TType : class
+    /// <typeparam name="TType">Any reference type to mock.</typeparam>
+    /// <returns>
+    /// The same <see cref="IMock{TType}"/> wrapper on every call for a given
+    /// <typeparamref name="TType"/> within this container instance.
+    /// </returns>
+    public IMock<TType> ResolveMock<TType>() where TType : class
     {
-        return _fixture.Freeze<Mock<TType>>();
+        var key = typeof(TType);
+        if (!_mockCache.TryGetValue(key, out var cached))
+        {
+            cached = _mockFactory.GetMock<TType>(_fixture);
+            _mockCache[key] = cached;
+        }
+        return (IMock<TType>)cached;
     }
 
     /// <summary>

@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using DepenMock.Moq;
+using NUnit.Framework;
 
 namespace DepenMock.NUnit;
 
@@ -53,7 +54,7 @@ public abstract class BaseTest
     {
         if (!_isInitialized)
         {
-            Container = new Container();
+            Container = new Container(new MoqMockFactory());
             _isInitialized = true;
         }
     }

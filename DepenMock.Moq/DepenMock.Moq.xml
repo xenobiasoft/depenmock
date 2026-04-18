@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DepenMock.Moq</name>
+    </assembly>
+    <members>
+        <member name="T:DepenMock.Moq.MoqExtensions">
+            <summary>
+            Extension methods for working with Moq-backed <see cref="T:DepenMock.Mocks.IMock`1"/> instances.
+            </summary>
+        </member>
+        <member name="M:DepenMock.Moq.MoqExtensions.AsMoq``1(DepenMock.Mocks.IMock{``0})">
+             <summary>
+             Unwraps the underlying Moq <see cref="T:Moq.Mock`1"/> from an <see cref="T:DepenMock.Mocks.IMock`1"/>, giving
+             access to Moq's <c>Setup</c> and <c>Verify</c> APIs.
+             </summary>
+             <typeparam name="T">The mocked type.</typeparam>
+             <param name="mock">The <see cref="T:DepenMock.Mocks.IMock`1"/> returned by <c>Container.ResolveMock&lt;T&gt;()</c>.</param>
+             <returns>The underlying <see cref="T:Moq.Mock`1"/>.</returns>
+             <example>
+             <code>
+             // Stub
+             Container.ResolveMock&lt;IDeskRepository&gt;().AsMoq()
+                 .Setup(x => x.GetAvailableDesks(It.IsAny&lt;DateTime&gt;()))
+                 .Returns(Container.CreateMany&lt;Desk&gt;());
+            
+             // Spy
+             var mock = Container.ResolveMock&lt;IDeskBookingRepository&gt;().AsMoq();
+             mock.Verify(x => x.Save(It.IsAny&lt;DeskBooking&gt;()), Times.Once);
+             </code>
+             </example>
+        </member>
+        <member name="T:DepenMock.Moq.MoqMock`1">
+            <summary>
+            An <see cref="T:DepenMock.Mocks.IMock`1"/> implementation backed by a Moq <see cref="T:Moq.Mock`1"/>. Access the
+            underlying <see cref="P:DepenMock.Moq.MoqMock`1.Mock"/> property (or call <see cref="M:DepenMock.Moq.MoqExtensions.AsMoq``1(DepenMock.Mocks.IMock{``0})"/>) to use
+            Moq's <c>Setup</c> and <c>Verify</c> APIs.
+            </summary>
+            <typeparam name="T">The type being mocked. Must be a reference type.</typeparam>
+        </member>
+        <member name="M:DepenMock.Moq.MoqMock`1.#ctor(Moq.Mock{`0})">
+            <summary>
+            Initializes a new instance of <see cref="T:DepenMock.Moq.MoqMock`1"/> wrapping the given Moq mock.
+            </summary>
+            <param name="mock">The underlying Moq <see cref="T:Moq.Mock`1"/> instance.</param>
+        </member>
+        <member name="P:DepenMock.Moq.MoqMock`1.Object">
+            <inheritdoc />
+        </member>
+        <member name="P:DepenMock.Moq.MoqMock`1.Mock">
+            <summary>
+            Gets the underlying Moq <see cref="T:Moq.Mock`1"/>, providing access to <c>Setup</c>,
+            <c>Verify</c>, and all other Moq-specific APIs.
+            </summary>
+        </member>
+        <member name="T:DepenMock.Moq.MoqMockFactory">
+            <summary>
+            An <see cref="T:DepenMock.Mocks.IMockFactory"/> implementation that uses Moq and AutoFixture.AutoMoq to
+            automatically create and register mocks for unregistered dependencies.
+            </summary>
+        </member>
+        <member name="M:DepenMock.Moq.MoqMockFactory.GetCustomization">
+            <inheritdoc />
+            <remarks>
+            Returns an <see cref="T:AutoFixture.AutoMoq.AutoMoqCustomization"/> with <c>ConfigureMembers = true</c>, which
+            instructs AutoFixture to automatically stub all members of auto-created mocks.
+            </remarks>
+        </member>
+        <member name="M:DepenMock.Moq.MoqMockFactory.GetMock``1(AutoFixture.IFixture)">
+            <inheritdoc />
+            <remarks>
+            Freezes a <see cref="T:Moq.Mock`1"/> in the fixture so the same instance is reused whenever
+            <typeparamref name="T"/> is resolved, then wraps it in a <see cref="T:DepenMock.Moq.MoqMock`1"/>.
+            </remarks>
+        </member>
+    </members>
+</doc>

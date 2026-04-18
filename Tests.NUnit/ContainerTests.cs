@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using AutoFixture.Kernel;
+using DepenMock.Moq;
 using Moq;
 using NUnit.Framework;
 using AutoFixture;
@@ -15,7 +16,7 @@ public class ContainerTests
     [SetUp]
     public void Setup()
     {
-        _container = new DepenMock.Container();
+        _container = new DepenMock.Container(new MoqMockFactory());
     }
 
     [Test]

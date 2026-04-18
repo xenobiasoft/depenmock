@@ -1,4 +1,6 @@
-﻿namespace DepenMock.XUnit;
+﻿using DepenMock.Moq;
+
+namespace DepenMock.XUnit;
 
 /// <summary>
 /// Serves as a base class for test implementations, providing shared functionality and a dependency injection
@@ -14,11 +16,11 @@ public abstract class BaseTest
     /// Initializes a new instance of the <see cref="BaseTest"/> class.
     /// </summary>
     /// <remarks>This constructor sets up the <see cref="Container"/> property with a new instance of the <see
-    /// cref="Container"/> class. Derived classes can use this container for dependency injection or other
-    /// purposes.</remarks>
+    /// cref="Container"/> class backed by <see cref="MoqMockFactory"/>. Derived classes can use this container
+    /// for dependency injection or other purposes.</remarks>
     protected BaseTest()
     {
-        Container = new Container();
+        Container = new Container(new MoqMockFactory());
     }
 
     /// <summary>
