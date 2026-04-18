@@ -117,33 +117,89 @@ public abstract class BaseTestByType<TTestType> : BaseTest, IDisposable where TT
     }
 
     /// <summary>
-    /// Gets the current test method using reflection and stack trace analysis.
+    /// Gets the current test method by inspecting <see cref="ITestOutputHelper"/> internals first,
+    /// then falling back to stack trace analysis. Supports both <see cref="FactAttribute"/> and
+    /// <see cref="TheoryAttribute"/> test methods.
     /// </summary>
-    /// <returns>The current test method or null if not found.</returns>
+    /// <returns>The current test method, or <see langword="null"/> if it cannot be determined.</returns>
     private MethodInfo? GetCurrentTestMethod()
+    {
+        // Prefer reading the method name from xUnit's ITestOutputHelper, which holds the test
+        // metadata directly and works for both [Fact] and [Theory] without walking the call stack.
+        if (_outputHelper != null)
+        {
+            var methodName = GetTestMethodNameFromOutputHelper(_outputHelper);
+            if (methodName != null)
+            {
+                var method = GetType().GetMethod(methodName,
+                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                if (method != null)
+                    return method;
+            }
+        }
+
+        // Fall back to stack trace analysis, covering both [Fact] and [Theory].
+        try
+        {
+            var frames = new System.Diagnostics.StackTrace().GetFrames();
+            foreach (var frame in frames)
+            {
+                if (frame.GetMethod() is not MethodInfo method) continue;
+                if (method.DeclaringType == null) continue;
+                if (!method.DeclaringType.IsAssignableFrom(GetType())) continue;
+                if (method.GetCustomAttribute<FactAttribute>() != null ||
+                    method.GetCustomAttribute<TheoryAttribute>() != null)
+                {
+                    return method;
+                }
+            }
+        }
+        catch { /* ignored */ }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Extracts the test method name from xUnit's <see cref="ITestOutputHelper"/> by reflecting over
+    /// its internal state. xUnit stores the running <c>ITest</c> instance (which carries the display
+    /// name) as a private field on <c>TestOutputHelper</c>.
+    /// </summary>
+    /// <param name="outputHelper">The xUnit output helper for the current test.</param>
+    /// <returns>
+    /// The unqualified method name (e.g. <c>"My_Test_Method"</c>), or <see langword="null"/> if it
+    /// cannot be determined.
+    /// </returns>
+    private static string? GetTestMethodNameFromOutputHelper(ITestOutputHelper outputHelper)
     {
         try
         {
-            var stackTrace = new System.Diagnostics.StackTrace();
-            var frames = stackTrace.GetFrames();
-
-            foreach (var frame in frames)
+            // Walk every private instance field on the concrete helper type looking for one that
+            // exposes a "DisplayName" property — that is xUnit's internal ITest object.
+            foreach (var field in outputHelper.GetType()
+                         .GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
             {
-                var method = frame.GetMethod();
-                if (method != null && 
-                    method.DeclaringType != null && 
-                    method.DeclaringType.IsAssignableFrom(GetType()) &&
-                    method.GetCustomAttribute<FactAttribute>() != null)
-                {
-                    return method as MethodInfo;
-                }
-            }
+                var value = field.GetValue(outputHelper);
+                if (value == null) continue;
 
-            return null;
+                var displayNameProp = value.GetType().GetProperty("DisplayName");
+                if (displayNameProp == null) continue;
+
+                var displayName = displayNameProp.GetValue(value) as string;
+                if (string.IsNullOrWhiteSpace(displayName)) continue;
+
+                // xUnit display names look like "Namespace.Class.Method" or "Method(param, …)".
+                // Strip any parameter list first, then take the last dot-separated segment.
+                var withoutParams = displayName.Contains('(')
+                    ? displayName[..displayName.IndexOf('(')]
+                    : displayName;
+
+                return withoutParams.Contains('.')
+                    ? withoutParams[(withoutParams.LastIndexOf('.') + 1)..]
+                    : withoutParams;
+            }
         }
-        catch
-        {
-            return null;
-        }
+        catch { /* ignored */ }
+
+        return null;
     }
 }

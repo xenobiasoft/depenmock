@@ -52,9 +52,9 @@ public class Container
     /// <typeparam name="TType">Any primitive type, string, or object</typeparam>
     /// <param name="count">The number of instances to create</param>
     /// <returns>A list of instances of the requested type.</returns>
-    public IEnumerable<TType> CreateMany<TType>(int? count = 3)
+    public IList<TType> CreateMany<TType>(int? count = 3)
     {
-        return _fixture.CreateMany<TType>(count.GetValueOrDefault());
+        return _fixture.CreateMany<TType>(count.GetValueOrDefault()).ToList();
     }
 
     /// <summary>

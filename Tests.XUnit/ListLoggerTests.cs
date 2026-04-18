@@ -107,17 +107,18 @@ public class ListLoggerTests
         Assert.NotNull(scope);
     }
 
-    [Fact]
-    public void IsEnabled_ShouldAlwaysReturnFalse()
+    [Theory]
+    [InlineData(LogLevel.Trace, true)]
+    [InlineData(LogLevel.Debug, true)]
+    [InlineData(LogLevel.Information, true)]
+    [InlineData(LogLevel.Warning, true)]
+    [InlineData(LogLevel.Error, true)]
+    [InlineData(LogLevel.Critical, true)]
+    [InlineData(LogLevel.None, false)]
+    public void IsEnabled_WhenGivenLogLevel_ReturnsExpected(LogLevel logLevel, bool isEnabled)
     {
         // Act & Assert
-        Assert.False(_logger.IsEnabled(LogLevel.Trace));
-        Assert.False(_logger.IsEnabled(LogLevel.Debug));
-        Assert.False(_logger.IsEnabled(LogLevel.Information));
-        Assert.False(_logger.IsEnabled(LogLevel.Warning));
-        Assert.False(_logger.IsEnabled(LogLevel.Error));
-        Assert.False(_logger.IsEnabled(LogLevel.Critical));
-        Assert.False(_logger.IsEnabled(LogLevel.None));
+        Assert.Equal(_logger.IsEnabled(logLevel), isEnabled);
     }
 
     private class TestClass { }
