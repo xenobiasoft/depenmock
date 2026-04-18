@@ -38,6 +38,7 @@ jobs:
             - **DepenMock.NUnit** - NUnit integration
             - **DepenMock.XUnit** - XUnit integration
             - **DepenMock.MSTest** - MSTest integration
+            - **DepenMock.Moq** - Moq integration
 
             Install via Package Manager:
             ```
