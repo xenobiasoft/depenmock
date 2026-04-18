@@ -111,13 +111,13 @@ public class ListLoggerTests
         Assert.That(scope, Is.Not.Null);
     }
 
-    [TestCase(LogLevel.Critical, true)]
-    [TestCase(LogLevel.Debug, true)]
-    [TestCase(LogLevel.Error, true)]
-    [TestCase(LogLevel.Information, true)]
-    [TestCase(LogLevel.None, false)]
     [TestCase(LogLevel.Trace, true)]
+    [TestCase(LogLevel.Debug, true)]
+    [TestCase(LogLevel.Information, true)]
     [TestCase(LogLevel.Warning, true)]
+    [TestCase(LogLevel.Error, true)]
+    [TestCase(LogLevel.Critical, true)]
+    [TestCase(LogLevel.None, false)]
     public void IsEnabled_WhenGivenLogLevel_ReturnsExpected(LogLevel logLevel, bool isEnabled)
     {
         // Act & Assert
