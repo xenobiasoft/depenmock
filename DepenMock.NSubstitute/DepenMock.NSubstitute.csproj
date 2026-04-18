@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Title>DepenMock NSubstitute integration</Title>
+    <PackageId>DepenMock.NSubstitute</PackageId>
+    <Authors>Xenobiasoft</Authors>
+    <Company>Xenobiasoft</Company>
+    <PackageProjectUrl>https://github.com/xenobiasoft/depenmock</PackageProjectUrl>
+    <Copyright>2026 Xenobiasoft</Copyright>
+    <Description>NSubstitute integration for DepenMock. Provides NSubstituteMockFactory and the AsNSubstitute() extension for accessing NSubstitute Setup and Verify APIs via the IMock&lt;T&gt; abstraction.</Description>
+    <PackageIcon>x-logo.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/xenobiasoft/depenmock</RepositoryUrl>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoFixture.AutoNSubstitute" Version="4.18.1" />
+    <PackageReference Include="NSubstitute" Version="5.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DepenMock\DepenMock.csproj" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\Assets\x-logo.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="README.md">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+</Project>

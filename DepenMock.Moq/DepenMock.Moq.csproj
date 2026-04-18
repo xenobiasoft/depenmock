@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>$(MSBuildProjectName)</AssemblyName>
-    <RootNamespace>$(MSBuildProjectName.Replace(" ", "_").Replace(".", "_"))</RootNamespace>
+    <RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Version Condition="'$(VERSION)' == ''">2.0.0</Version>
     <Version Condition="'$(VERSION)' != ''">$(VERSION)</Version>
@@ -21,6 +21,7 @@
     <Copyright>2025 XenobiaSoft</Copyright>
     <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
     <PackageIcon>x-logo.png</PackageIcon>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>

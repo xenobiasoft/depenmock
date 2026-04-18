@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DepenMock.NSubstitute</name>
+    </assembly>
+    <members>
+        <member name="T:DepenMock.NSubstitute.NSubstituteExtensions">
+            <summary>
+            Extension methods for working with NSubstitute-backed <see cref="T:DepenMock.Mocks.IMock`1"/> instances.
+            </summary>
+        </member>
+        <member name="M:DepenMock.NSubstitute.NSubstituteExtensions.AsNSubstitute``1(DepenMock.Mocks.IMock{``0})">
+             <summary>
+             Unwraps the underlying NSubstitute substitute from an <see cref="T:DepenMock.Mocks.IMock`1"/>, giving
+             access to NSubstitute's <c>Returns</c> and <c>Received</c> APIs.
+             </summary>
+             <typeparam name="T">The mocked type.</typeparam>
+             <param name="mock">The <see cref="T:DepenMock.Mocks.IMock`1"/> returned by <c>Container.ResolveMock&lt;T&gt;()</c>.</param>
+             <returns>The underlying NSubstitute substitute instance.</returns>
+             <example>
+             <code>
+             // Stub
+             Container.ResolveMock&lt;IDeskRepository&gt;().AsNSubstitute()
+                 .GetAvailableDesks(Arg.Any&lt;DateTime&gt;())
+                 .Returns(Container.CreateMany&lt;Desk&gt;());
+            
+             // Spy
+             Container.ResolveMock&lt;IDeskBookingRepository&gt;().AsNSubstitute()
+                 .Received(1).Save(Arg.Any&lt;DeskBooking&gt;());
+             </code>
+             </example>
+        </member>
+        <member name="T:DepenMock.NSubstitute.NSubstituteMock`1">
+            <summary>
+            An <see cref="T:DepenMock.Mocks.IMock`1"/> implementation backed by an NSubstitute substitute. Access the
+            underlying <see cref="P:DepenMock.NSubstitute.NSubstituteMock`1.Substitute"/> property (or call <see cref="M:DepenMock.NSubstitute.NSubstituteExtensions.AsNSubstitute``1(DepenMock.Mocks.IMock{``0})"/>)
+            to use NSubstitute's <c>Returns</c> and <c>Received</c> APIs.
+            </summary>
+            <typeparam name="T">The type being mocked. Must be a reference type.</typeparam>
+        </member>
+        <member name="M:DepenMock.NSubstitute.NSubstituteMock`1.#ctor(`0)">
+            <summary>
+            Initializes a new instance of <see cref="T:DepenMock.NSubstitute.NSubstituteMock`1"/> wrapping the given substitute.
+            </summary>
+            <param name="substitute">The underlying NSubstitute instance.</param>
+        </member>
+        <member name="P:DepenMock.NSubstitute.NSubstituteMock`1.Object">
+            <inheritdoc />
+        </member>
+        <member name="P:DepenMock.NSubstitute.NSubstituteMock`1.Substitute">
+            <summary>
+            Gets the underlying NSubstitute instance, providing access to <c>Returns</c>,
+            <c>Received</c>, and all other NSubstitute-specific APIs.
+            </summary>
+        </member>
+        <member name="T:DepenMock.NSubstitute.NSubstituteMockFactory">
+            <summary>
+            An <see cref="T:DepenMock.Mocks.IMockFactory"/> implementation that uses NSubstitute and AutoFixture.AutoNSubstitute to
+            automatically create and register substitutes for unregistered dependencies.
+            </summary>
+        </member>
+        <member name="M:DepenMock.NSubstitute.NSubstituteMockFactory.GetCustomization">
+            <inheritdoc />
+            <remarks>
+            Returns an <see cref="T:AutoFixture.AutoNSubstitute.AutoNSubstituteCustomization"/> with <c>ConfigureMembers = true</c>, which
+            instructs AutoFixture to automatically stub all members of auto-created substitutes.
+            </remarks>
+        </member>
+        <member name="M:DepenMock.NSubstitute.NSubstituteMockFactory.GetMock``1(AutoFixture.IFixture)">
+            <inheritdoc />
+            <remarks>
+            Freezes <typeparamref name="T"/> in the fixture so the same substitute instance is reused whenever
+            <typeparamref name="T"/> is resolved, then wraps it in a <see cref="T:DepenMock.NSubstitute.NSubstituteMock`1"/>.
+            </remarks>
+        </member>
+    </members>
+</doc>
