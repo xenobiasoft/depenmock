@@ -37,6 +37,7 @@ jobs:
             - **DepenMock** - Core testing library
             - **DepenMock.NUnit** - NUnit integration
             - **DepenMock.XUnit** - XUnit integration
+            - **DepenMock.XUnit.V3** - XUnit v3 integration
             - **DepenMock.MSTest** - MSTest integration
             - **DepenMock.Moq** - Moq integration
 
