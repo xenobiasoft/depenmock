@@ -19,8 +19,8 @@
 		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
-		<Title>XUnit Auto-mocking unit test framework</Title>
-		<Copyright>2024 XenobiaSoft</Copyright>
+		<Title>XUnit Auto-mocking unit test library</Title>
+		<Copyright>2026 Xenobiasoft</Copyright>
 		<RequireLicenseAcceptance>true</RequireLicenseAcceptance>
 		<PackageIcon>x-logo.png</PackageIcon>
 		<IsTestProject>false</IsTestProject>

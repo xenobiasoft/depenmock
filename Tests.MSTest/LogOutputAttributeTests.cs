@@ -3,12 +3,14 @@ using DepenMock.Attributes;
 using DepenMock.MSTest;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using DepenMock.Moq;
 
 namespace Tests.MSTest;
 
 [TestClass]
 public class LogOutputAttributeTests : BaseTestByType<TestService>
 {
+    public LogOutputAttributeTests() : base(new MoqMockFactory()) { }
     [TestMethod]
     [LogOutput(LogOutputTiming.Always)]
     public void TestWithLogOutput_Always_ShouldOutputLogs()
@@ -75,6 +77,8 @@ public class LogOutputAttributeTests : BaseTestByType<TestService>
 [LogOutput(LogOutputTiming.Always)]
 public class LogOutputAttributeClassLevelTests : BaseTestByType<TestService>
 {
+    public LogOutputAttributeClassLevelTests() : base(new MoqMockFactory()) { }
+
     [TestMethod]
     public void TestWithClassLevelLogOutput_ShouldOutputLogs()
     {

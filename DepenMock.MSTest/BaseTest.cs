@@ -1,4 +1,4 @@
-using DepenMock.Moq;
+using DepenMock.Mocks;
 
 namespace DepenMock.MSTest;
 
@@ -16,9 +16,9 @@ public abstract class BaseTest
     /// <remarks>This constructor initializes the <see cref="Container"/> property with a new instance
     /// of the <see cref="Container"/> class. Derived classes can use this constructor to set up the base state for
     /// testing scenarios.</remarks>
-    protected BaseTest()
+    protected BaseTest(IMockFactory mockFactory)
     {
-        Container = new Container(new MoqMockFactory());
+        Container = new Container(mockFactory);
     }
 
     /// <summary>

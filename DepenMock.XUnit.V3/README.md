@@ -1,38 +1,68 @@
-# DepenMock - C# Testing Library
+# DepenMock.XUnit.V3
 
-## Introduction
+XUnit v3 integration for [DepenMock](https://github.com/xenobiasoft/depenmock) — a C# testing library that automates mock creation for your System Under Test (SUT) dependencies.
 
-DepenMock is a robust C# testing library designed to streamline the mocking process for your System Under Test (SUT) dependencies. By automating the mock creation process, DepenMock simplifies unit testing and encourages adherence to established software design principles.
+## Installation
+
+Install this package alongside a DepenMock mock-framework package:
+
+```
+dotnet add package DepenMock.XUnit.V3
+dotnet add package DepenMock.Moq          # or DepenMock.NSubstitute
+```
 
 ## Setting Up the Test Container
 
-To effectively utilize DepenMock in your unit tests, consider the following base classes that your test classes should inherit from:
+The base classes require an `IMockFactory` to be passed through the constructor. The recommended approach is to define a project-level base class once that wires up your chosen mock factory, so individual test classes need no constructor boilerplate.
 
-**BaseTestByAbstraction**
+**Recommended: project-level base class**
 
-This base class is suitable for testing your SUT when it implements an interface. Testing through interfaces helps ensure adherence to the Liskov Substitution Principle (LSP).
+Define these once in your test project and inherit from them everywhere:
 
 ```c#
-public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookingRequestProcessor, IDeskBookingRequestProcessor>
+public abstract class TestByAbstraction<TType, TInterface>
+    : BaseTestByAbstraction<TType, TInterface>(new MoqMockFactory())
+    where TType : class, TInterface;
+
+public abstract class TestByType<TType>
+    : BaseTestByType<TType>(new MoqMockFactory())
+    where TType : class;
+```
+
+Then each test class simply inherits with no constructor required:
+
+```c#
+public class DeskBookingRequestProcessorTests
+    : TestByAbstraction<DeskBookingRequestProcessor, IDeskBookingRequestProcessor>
 {
     // Your test methods here
 }
 ```
 
-**BaseTestByType**
+**Alternative: pass the factory directly**
 
-Use this base class when your SUT does not implement an interface, such as when testing an API controller.
+If you prefer not to define a shared base class, pass the factory explicitly per test class:
 
 ```c#
+public class DeskBookingRequestProcessorTests
+    : BaseTestByAbstraction<DeskBookingRequestProcessor, IDeskBookingRequestProcessor>
+{
+    public DeskBookingRequestProcessorTests()
+        : base(new MoqMockFactory()) { }
+}
+
 public class AccountControllerTests : BaseTestByType<AccountController>
 {
-    // Your test methods here
+    public AccountControllerTests()
+        : base(new MoqMockFactory()) { }
 }
 ```
+
+Swap `MoqMockFactory` for `NSubstituteMockFactory` to use NSubstitute instead.
 
 ## Creating the System Under Test (SUT)
 
-To create an instance of your SUT, use the ```ResolveSut``` method. It is essential to set up any dependencies that need to be mocked before creating the SUT. Place the ResolveSut call as the final step before executing your test action.
+Call `ResolveSut()` as the final step of your arrange phase, after any mock setup.
 
 ```c#
 var sut = ResolveSut();
@@ -42,7 +72,7 @@ var sut = ResolveSut();
 
 **Create\<T>()**
 
-The ```Create<T>``` method generates a single instance of the specified type.
+The `Create<T>` method generates a single instance of the specified type.
 
 ```c#
 // Creates a random string in the format of a guid i.e "fe06998d-aec1-4808-8968-d8f37024a294"
@@ -66,7 +96,7 @@ var randomStrings = Container.Create<List<string>>();
 
 **CreateMany\<T>(int? numberOfInstances)**
 
-The ```CreateMany<T>``` method generates a list of instances of the specified type. By default, it creates a list of three items, but you can customize the number of instances by setting by setting the ```numberOfInstances``` parameter.
+The `CreateMany<T>` method generates a list of instances of the specified type. By default it creates three items, but you can customise the count with the `numberOfInstances` parameter.
 
 ```c#
 // Creates a list of strings
@@ -87,12 +117,12 @@ var addressList = Container.CreateMany<Address>();
 
 **Build\<T>()**
 
-The ```Build<T>``` method provides a builder pattern for creating objects with specified data rather than using all generated data.
+The `Build<T>` method provides a builder pattern for creating objects with specific values rather than using all auto-generated data.
 
 ```c#
 var deskBookingResult = Container
     .Build<DeskBookingResult>()
-    .Without(x => x.DeskBookingId) // Here, DeskBookingId will be set to null
+    .Without(x => x.DeskBookingId) // DeskBookingId will be set to null
     .With(x => x.Code, DeskBookingResultCode.Success)
     .With(x => x.FirstName, request.FirstName)
     .With(x => x.LastName, request.LastName)
@@ -103,45 +133,21 @@ var deskBookingResult = Container
 
 ## Creating Mock Dependencies
 
-### Registering Mocked Dependencies
+DepenMock automatically creates mocks for all unregistered dependencies using the factory you provided. Call `ResolveMock<T>()` to get a reference to a mock, then unwrap it with the extension method for your chosen framework (`AsMoq()` or `AsNSubstitute()`) to access stub and spy APIs.
 
-DepenMock's testing framework automatically creates mock dependencies, but you can obtain a reference to a mock dependency to set up methods to return predefined data (stub) or to verify interactions with the dependency (spy).
-
-**Creating a stub**
-
-```c#
-Container
-    .ResolveMock<IDeskRepository>()
-    .Setup(x => x.GetAvailableDesks(It.IsAny<DateTime>()))
-    .Returns(Container.CreateMany<Desk>());
-```
-
-**Creating a spy**
-
-```c#
-var mockRepo = Container.ResolveMock<IDeskBookingRepository>();
-
-mockRepo.Verify(x => x.Save(It.IsAny<DeskBooking>()), Times.Once);
-```
+See [DepenMock.Moq](https://github.com/xenobiasoft/depenmock/tree/main/DepenMock.Moq) or [DepenMock.NSubstitute](https://github.com/xenobiasoft/depenmock/tree/main/DepenMock.NSubstitute) for framework-specific stub and spy examples.
 
 ## Testing Logging
 
-DepenMock provides a logger object and automatically injects it as a dependency for your tests.
+DepenMock provides a `ListLogger` and automatically injects it as a dependency for your tests.
 
 ```c#
-Assert.That(Logger.Logs[LogLevel.Error].TrueForAll(x => x.Contains($"Correlation Id: {correlationId}")));
+Logger.ErrorLogs().AssertContains($"Correlation Id: {correlationId}");
 
-// Checking different levels of error logs
-// Error
+// Accessing logs by level directly
 Logger.Logs[LogLevel.Error]
-
-// Critical
 Logger.Logs[LogLevel.Critical]
-
-// Warning
 Logger.Logs[LogLevel.Warning]
-
-// Information
 Logger.Logs[LogLevel.Information]
 ```
 
@@ -152,7 +158,7 @@ xUnit v3 supports automatically outputting log messages to the test runner's out
 **Method-level LogOutput**
 
 ```c#
-using DepenMock.XUnit.V3.Attributes;
+using DepenMock.Attributes;
 
 [Fact]
 [LogOutput(LogOutputTiming.Always)]
@@ -166,11 +172,13 @@ public void TestWithLogOutput_ShouldOutputLogs()
 **Class-level LogOutput**
 
 ```c#
-using DepenMock.XUnit.V3.Attributes;
+using DepenMock.Attributes;
 
 [LogOutput(LogOutputTiming.Always)]
 public class MyTestClass : BaseTestByType<MyService>
 {
+    public MyTestClass() : base(new MoqMockFactory()) { }
+
     [Fact]
     public void MyTest()
     {
@@ -187,6 +195,28 @@ public class MyTestClass : BaseTestByType<MyService>
 
 > **Note**: The `LogOutputAttribute` only works with xUnit v3. xUnit v2 does not support automatic log output due to framework limitations. For xUnit v2 tests, inspect logs directly in your test assertions using `Logger.Logs[LogLevel.Information]` etc.
 
+## Extending Fixture Customization
+
+Override `AddContainerCustomizations` to register custom `ISpecimenBuilder` instances or otherwise control how objects are created.
+
+```c#
+public class MyTests : BaseTestByType<MyType>
+{
+    public MyTests() : base(new MoqMockFactory()) { }
+
+    protected override void AddContainerCustomizations(Container container)
+    {
+        container.AddCustomizations(new MyCustomSpecimenBuilder());
+    }
+}
+```
+
+You can add as many custom builders as you need:
+
+```c#
+container.AddCustomizations(new MyBuilder1(), new MyBuilder2());
+```
+
 ## Sample Project
 
-Explore the sample project, DeskBooker.Core, which includes example unit tests for both NUnit and XUnit to help you get started with DepenMock.
+Explore the sample project, DeskBooker.Core, which includes example unit tests for NUnit, XUnit, and MSTest to help you get started with DepenMock.

@@ -3,6 +3,7 @@ using System.Reflection;
 using DepenMock.Attributes;
 using DepenMock.Helpers;
 using DepenMock.Loggers;
+using DepenMock.Mocks;
 using Microsoft.Extensions.Logging;
 using Xunit;
 using Xunit.Abstractions;
@@ -28,15 +29,16 @@ public abstract class BaseTestByType<TTestType> : BaseTest, IDisposable where TT
     /// <remarks>This constructor ensures that a logger of type <see cref="ILogger{TTestType}"/> is registered
     /// in the container for the test type. Derived classes can rely on this registration for logging
     /// purposes.</remarks>
-    protected BaseTestByType() : this(null)
+    protected BaseTestByType(IMockFactory mockFactory) : this(mockFactory, null)
     {
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseTestByType"/> class with test output helper support.
     /// </summary>
+    /// <param name="mockFactory">The mock factory used to create mocks for dependencies.</param>
     /// <param name="outputHelper">The XUnit test output helper for writing test output.</param>
-    protected BaseTestByType(ITestOutputHelper? outputHelper)
+    protected BaseTestByType(IMockFactory mockFactory, ITestOutputHelper? outputHelper) : base(mockFactory)
     {
         _outputHelper = outputHelper;
         Logger.Clear(); // Clear any previous logs (defensive programming)

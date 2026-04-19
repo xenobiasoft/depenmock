@@ -1,19 +1,19 @@
-# DepenMock.NUnit
+# DepenMock.NSubstitute
 
-NUnit integration for [DepenMock](https://github.com/xenobiasoft/depenmock) — a C# testing library that automates mock creation for your System Under Test (SUT) dependencies.
+NSubstitute integration for [DepenMock](https://github.com/xenobiasoft/depenmock) — a C# testing library that automates mock creation for your System Under Test (SUT) dependencies.
+
+Install this package alongside one of the DepenMock test-framework packages (`DepenMock.XUnit`, `DepenMock.NUnit`, or `DepenMock.MSTest`) to use NSubstitute as your mocking framework.
 
 ## Installation
 
-Install this package alongside a DepenMock mock-framework package:
-
 ```
-dotnet add package DepenMock.NUnit
-dotnet add package DepenMock.Moq          # or DepenMock.NSubstitute
+dotnet add package DepenMock.NSubstitute
+dotnet add package DepenMock.XUnit   # or DepenMock.NUnit / DepenMock.MSTest
 ```
 
 ## Setting Up the Test Container
 
-The base classes require an `IMockFactory` to be passed through the constructor. The recommended approach is to define a project-level base class once that wires up your chosen mock factory, so individual test classes need no constructor boilerplate.
+The base classes require an `IMockFactory` to be passed through the constructor. The recommended approach is to define a project-level base class once that wires up `NSubstituteMockFactory`, so individual test classes need no constructor boilerplate.
 
 **Recommended: project-level base class**
 
@@ -21,11 +21,11 @@ Define these once in your test project and inherit from them everywhere:
 
 ```c#
 public abstract class TestByAbstraction<TType, TInterface>
-    : BaseTestByAbstraction<TType, TInterface>(new MoqMockFactory())
+    : BaseTestByAbstraction<TType, TInterface>(new NSubstituteMockFactory())
     where TType : class, TInterface;
 
 public abstract class TestByType<TType>
-    : BaseTestByType<TType>(new MoqMockFactory())
+    : BaseTestByType<TType>(new NSubstituteMockFactory())
     where TType : class;
 ```
 
@@ -48,17 +48,15 @@ public class DeskBookingRequestProcessorTests
     : BaseTestByAbstraction<DeskBookingRequestProcessor, IDeskBookingRequestProcessor>
 {
     public DeskBookingRequestProcessorTests()
-        : base(new MoqMockFactory()) { }
+        : base(new NSubstituteMockFactory()) { }
 }
 
 public class AccountControllerTests : BaseTestByType<AccountController>
 {
     public AccountControllerTests()
-        : base(new MoqMockFactory()) { }
+        : base(new NSubstituteMockFactory()) { }
 }
 ```
-
-Swap `MoqMockFactory` for `NSubstituteMockFactory` to use NSubstitute instead.
 
 ## Creating the System Under Test (SUT)
 
@@ -133,9 +131,27 @@ var deskBookingResult = Container
 
 ## Creating Mock Dependencies
 
-DepenMock automatically creates mocks for all unregistered dependencies using the factory you provided. Call `ResolveMock<T>()` to get a reference to a mock, then unwrap it with the extension method for your chosen framework (`AsMoq()` or `AsNSubstitute()`) to access stub and spy APIs.
+DepenMock automatically creates NSubstitute substitutes for all unregistered dependencies. Call `ResolveMock<T>()` to get a reference to a substitute, then use `AsNSubstitute()` to access NSubstitute's `Returns` and `Received` APIs.
 
-See [DepenMock.Moq](https://github.com/xenobiasoft/depenmock/tree/main/DepenMock.Moq) or [DepenMock.NSubstitute](https://github.com/xenobiasoft/depenmock/tree/main/DepenMock.NSubstitute) for framework-specific stub and spy examples.
+**Creating a stub**
+
+```c#
+Container
+    .ResolveMock<IDeskRepository>()
+    .AsNSubstitute()
+    .GetAvailableDesks(Arg.Any<DateTime>())
+    .Returns(Container.CreateMany<Desk>());
+```
+
+**Creating a spy**
+
+```c#
+var mockRepo = Container.ResolveMock<IDeskBookingRepository>().AsNSubstitute();
+
+// ... act ...
+
+mockRepo.Received(1).Save(Arg.Any<DeskBooking>());
+```
 
 ## Testing Logging
 
@@ -158,7 +174,7 @@ Override `AddContainerCustomizations` to register custom `ISpecimenBuilder` inst
 ```c#
 public class MyTests : BaseTestByType<MyType>
 {
-    public MyTests() : base(new MoqMockFactory()) { }
+    public MyTests() : base(new NSubstituteMockFactory()) { }
 
     protected override void AddContainerCustomizations(Container container)
     {

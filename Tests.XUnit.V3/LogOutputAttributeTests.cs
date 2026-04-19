@@ -3,11 +3,13 @@ using DepenMock.Attributes;
 using DepenMock.XUnit.V3;
 using Microsoft.Extensions.Logging;
 using Xunit;
+using DepenMock.Moq;
 
 namespace Tests.XUnit.V3;
 
 public class LogOutputAttributeTests : BaseTestByType<TestService>
 {
+    public LogOutputAttributeTests() : base(new MoqMockFactory()) { }
     [Fact]
     [DepenMock.XUnit.V3.Attributes.LogOutput(LogOutputTiming.Always)]
     public void TestWithLogOutput_Always_ShouldOutputLogs()
@@ -72,7 +74,7 @@ public class LogOutputAttributeTests : BaseTestByType<TestService>
 }
 
 [DepenMock.XUnit.V3.Attributes.LogOutput(LogOutputTiming.Always)]
-public class LogOutputAttributeClassLevelTests : BaseTestByType<TestService>
+public class LogOutputAttributeClassLevelTests() : BaseTestByType<TestService>(new MoqMockFactory())
 {
     [Fact]
     public void TestWithClassLevelLogOutput_ShouldOutputLogs()

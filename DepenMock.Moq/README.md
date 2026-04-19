@@ -1,19 +1,19 @@
-# DepenMock.NUnit
+# DepenMock.Moq
 
-NUnit integration for [DepenMock](https://github.com/xenobiasoft/depenmock) — a C# testing library that automates mock creation for your System Under Test (SUT) dependencies.
+Moq integration for [DepenMock](https://github.com/xenobiasoft/depenmock) — a C# testing library that automates mock creation for your System Under Test (SUT) dependencies.
+
+Install this package alongside one of the DepenMock test-framework packages (`DepenMock.XUnit`, `DepenMock.NUnit`, or `DepenMock.MSTest`) to use Moq as your mocking framework.
 
 ## Installation
 
-Install this package alongside a DepenMock mock-framework package:
-
 ```
-dotnet add package DepenMock.NUnit
-dotnet add package DepenMock.Moq          # or DepenMock.NSubstitute
+dotnet add package DepenMock.Moq
+dotnet add package DepenMock.XUnit   # or DepenMock.NUnit / DepenMock.MSTest
 ```
 
 ## Setting Up the Test Container
 
-The base classes require an `IMockFactory` to be passed through the constructor. The recommended approach is to define a project-level base class once that wires up your chosen mock factory, so individual test classes need no constructor boilerplate.
+The base classes require an `IMockFactory` to be passed through the constructor. The recommended approach is to define a project-level base class once that wires up `MoqMockFactory`, so individual test classes need no constructor boilerplate.
 
 **Recommended: project-level base class**
 
@@ -57,8 +57,6 @@ public class AccountControllerTests : BaseTestByType<AccountController>
         : base(new MoqMockFactory()) { }
 }
 ```
-
-Swap `MoqMockFactory` for `NSubstituteMockFactory` to use NSubstitute instead.
 
 ## Creating the System Under Test (SUT)
 
@@ -133,9 +131,27 @@ var deskBookingResult = Container
 
 ## Creating Mock Dependencies
 
-DepenMock automatically creates mocks for all unregistered dependencies using the factory you provided. Call `ResolveMock<T>()` to get a reference to a mock, then unwrap it with the extension method for your chosen framework (`AsMoq()` or `AsNSubstitute()`) to access stub and spy APIs.
+DepenMock automatically creates Moq mocks for all unregistered dependencies. Call `ResolveMock<T>()` to get a reference to a mock, then use `AsMoq()` to access Moq's `Setup` and `Verify` APIs.
 
-See [DepenMock.Moq](https://github.com/xenobiasoft/depenmock/tree/main/DepenMock.Moq) or [DepenMock.NSubstitute](https://github.com/xenobiasoft/depenmock/tree/main/DepenMock.NSubstitute) for framework-specific stub and spy examples.
+**Creating a stub**
+
+```c#
+Container
+    .ResolveMock<IDeskRepository>()
+    .AsMoq()
+    .Setup(x => x.GetAvailableDesks(It.IsAny<DateTime>()))
+    .Returns(Container.CreateMany<Desk>());
+```
+
+**Creating a spy**
+
+```c#
+var mockRepo = Container.ResolveMock<IDeskBookingRepository>().AsMoq();
+
+// ... act ...
+
+mockRepo.Verify(x => x.Save(It.IsAny<DeskBooking>()), Times.Once);
+```
 
 ## Testing Logging
 

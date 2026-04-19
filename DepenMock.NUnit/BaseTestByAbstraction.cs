@@ -2,6 +2,7 @@
 using DepenMock.Attributes;
 using DepenMock.Helpers;
 using DepenMock.Loggers;
+using DepenMock.Mocks;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
@@ -25,7 +26,7 @@ public abstract class BaseTestByAbstraction<TTestType, TInterfaceType> : BaseTes
     /// </summary>
     /// <remarks>This constructor ensures that logger implementations are available for dependency injection 
     /// during the test execution.</remarks>
-    protected BaseTestByAbstraction()
+    protected BaseTestByAbstraction(IMockFactory mockFactory) : base(mockFactory)
     {
         PerformSetup();
     }

@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DepenMock.XUnit.V3\DepenMock.XUnit.V3.csproj" />
+        <ProjectReference Include="..\DepenMock.Moq\DepenMock.Moq.csproj" />
     <ProjectReference Include="..\DepenMock\DepenMock.csproj" />
     <ProjectReference Include="..\DeskBooker.Core\DeskBooker.Core.csproj" />
   </ItemGroup>
