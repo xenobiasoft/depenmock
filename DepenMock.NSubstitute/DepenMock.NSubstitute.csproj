@@ -10,7 +10,7 @@
     <Company>Xenobiasoft</Company>
     <PackageProjectUrl>https://github.com/xenobiasoft/depenmock</PackageProjectUrl>
     <Copyright>2026 Xenobiasoft</Copyright>
-    <Description>NSubstitute integration for DepenMock. Provides NSubstituteMockFactory and the AsNSubstitute() extension for accessing NSubstitute Setup and Verify APIs via the IMock&lt;T&gt; abstraction.</Description>
+    <Description>NSubstitute integration for DepenMock. Provides NSubstituteMockFactory and the AsNSubstitute() extension for accessing NSubstitute Returns and Received APIs via the IMock&lt;T&gt; abstraction.</Description>
     <PackageIcon>x-logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/xenobiasoft/depenmock</RepositoryUrl>
