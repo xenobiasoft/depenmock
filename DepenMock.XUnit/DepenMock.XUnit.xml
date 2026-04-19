@@ -14,13 +14,14 @@
             injection or other purposes. Derived classes can access the <see cref="P:DepenMock.XUnit.BaseTest.Container"/> property to manage dependencies
             within the test context.</remarks>
         </member>
-        <member name="M:DepenMock.XUnit.BaseTest.#ctor">
+        <member name="M:DepenMock.XUnit.BaseTest.#ctor(DepenMock.Mocks.IMockFactory)">
             <summary>
-            Initializes a new instance of the <see cref="T:DepenMock.XUnit.BaseTest"/> class.
+            Initializes a new instance of the <see cref="T:DepenMock.XUnit.BaseTest"/> class using the specified mock factory.
             </summary>
-            <remarks>This constructor sets up the <see cref="P:DepenMock.XUnit.BaseTest.Container"/> property with a new instance of the <see
-            cref="P:DepenMock.XUnit.BaseTest.Container"/> class backed by <see cref="T:DepenMock.Moq.MoqMockFactory"/>. Derived classes can use this container
-            for dependency injection or other purposes.</remarks>
+            <param name="mockFactory">
+            The mock factory that integrates a mocking framework with AutoFixture. Pass <c>new MoqMockFactory()</c>
+            from <c>DepenMock.Moq</c> or <c>new NSubstituteMockFactory()</c> from <c>DepenMock.NSubstitute</c>.
+            </param>
         </member>
         <member name="P:DepenMock.XUnit.BaseTest.Container">
             <summary>
@@ -39,7 +40,7 @@
             <typeparam name="TTestType">The concrete type of the system under test, which must implement <typeparamref name="TInterfaceType"/>.</typeparam>
             <typeparam name="TInterfaceType">The interface type that the system under test implements.</typeparam>
         </member>
-        <member name="M:DepenMock.XUnit.BaseTestByAbstraction`2.#ctor">
+        <member name="M:DepenMock.XUnit.BaseTestByAbstraction`2.#ctor(DepenMock.Mocks.IMockFactory)">
             <summary>
             Initializes a new instance of the <see cref="!:BaseTestByAbstraction"/> class.
             </summary>
@@ -47,10 +48,11 @@
             dependency injection container. The logger is registered as a <see cref="T:DepenMock.Loggers.ListLogger`1"/> instance
             associated with the provided <see cref="T:Microsoft.Extensions.Logging.ILogger`1"/>.</remarks>
         </member>
-        <member name="M:DepenMock.XUnit.BaseTestByAbstraction`2.#ctor(Xunit.Abstractions.ITestOutputHelper)">
+        <member name="M:DepenMock.XUnit.BaseTestByAbstraction`2.#ctor(DepenMock.Mocks.IMockFactory,Xunit.Abstractions.ITestOutputHelper)">
             <summary>
             Initializes a new instance of the <see cref="!:BaseTestByAbstraction"/> class with test output helper support.
             </summary>
+            <param name="mockFactory">The mock factory used to create mocks for dependencies.</param>
             <param name="outputHelper">The XUnit test output helper for writing test output.</param>
         </member>
         <member name="M:DepenMock.XUnit.BaseTestByAbstraction`2.AddContainerCustomizations(DepenMock.Container)">
@@ -116,7 +118,7 @@
             type.</remarks>
             <typeparam name="TTestType">The type associated with the test. This type must be a reference type.</typeparam>
         </member>
-        <member name="M:DepenMock.XUnit.BaseTestByType`1.#ctor">
+        <member name="M:DepenMock.XUnit.BaseTestByType`1.#ctor(DepenMock.Mocks.IMockFactory)">
             <summary>
             Initializes a new instance of the <see cref="!:BaseTestByType"/> class and registers a logger for the specified
             test type.
@@ -125,10 +127,11 @@
             in the container for the test type. Derived classes can rely on this registration for logging
             purposes.</remarks>
         </member>
-        <member name="M:DepenMock.XUnit.BaseTestByType`1.#ctor(Xunit.Abstractions.ITestOutputHelper)">
+        <member name="M:DepenMock.XUnit.BaseTestByType`1.#ctor(DepenMock.Mocks.IMockFactory,Xunit.Abstractions.ITestOutputHelper)">
             <summary>
             Initializes a new instance of the <see cref="!:BaseTestByType"/> class with test output helper support.
             </summary>
+            <param name="mockFactory">The mock factory used to create mocks for dependencies.</param>
             <param name="outputHelper">The XUnit test output helper for writing test output.</param>
         </member>
         <member name="M:DepenMock.XUnit.BaseTestByType`1.AddContainerCustomizations(DepenMock.Container)">

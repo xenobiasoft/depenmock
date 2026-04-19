@@ -17,6 +17,7 @@ namespace Tests.NUnit;
 [LogOutput(LogOutputTiming.Always)]
 public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookingRequestProcessor, IDeskBookingRequestProcessor>
 {
+    public DeskBookingRequestProcessorTests() : base(new MoqMockFactory()) { }
 	[Test]
 	public void BookDesk_WhenDeskAvailable_ReturnsBookedDeskResult()
 	{

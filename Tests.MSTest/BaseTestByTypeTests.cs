@@ -1,6 +1,7 @@
 using DepenMock.MSTest;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using DepenMock.Moq;
 
 namespace Tests.MSTest;
 
@@ -80,11 +81,13 @@ public class BaseTestByTypeTests
 
     private class TestableBaseTestByType : BaseTestByType<TestClass>
     {
+        public TestableBaseTestByType() : base(new MoqMockFactory()) { }
         public new TestClass ResolveSut() => base.ResolveSut();
     }
 
     private class TestableBaseTestByTypeWithCustomizations : BaseTestByType<TestClass>
     {
+        public TestableBaseTestByTypeWithCustomizations() : base(new MoqMockFactory()) { }
         public bool CustomizationsAdded { get; private set; }
 
         protected override void AddContainerCustomizations(DepenMock.Container container)

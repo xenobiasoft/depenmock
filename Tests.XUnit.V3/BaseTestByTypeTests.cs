@@ -1,6 +1,7 @@
 using DepenMock.XUnit.V3;
 using Microsoft.Extensions.Logging;
 using Xunit;
+using DepenMock.Moq;
 
 namespace Tests.XUnit.V3;
 
@@ -79,11 +80,13 @@ public class BaseTestByTypeTests
 
     private class TestableBaseTestByType : BaseTestByType<TestClass>
     {
+        public TestableBaseTestByType() : base(new MoqMockFactory()) { }
         public new TestClass ResolveSut() => base.ResolveSut();
     }
 
     private class TestableBaseTestByTypeWithCustomizations : BaseTestByType<TestClass>
     {
+        public TestableBaseTestByTypeWithCustomizations() : base(new MoqMockFactory()) { }
         public bool CustomizationsAdded { get; private set; }
 
         protected override void AddContainerCustomizations(DepenMock.Container container)

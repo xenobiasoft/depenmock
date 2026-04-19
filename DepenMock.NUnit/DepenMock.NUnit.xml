@@ -37,12 +37,14 @@
             for each test fixture. Derived classes can use the <see cref="P:DepenMock.NUnit.BaseTest.Container"/> property to register and resolve
             dependencies.</remarks>
         </member>
-        <member name="M:DepenMock.NUnit.BaseTest.#ctor">
+        <member name="M:DepenMock.NUnit.BaseTest.#ctor(DepenMock.Mocks.IMockFactory)">
             <summary>
-            Initializes a new instance of the <see cref="T:DepenMock.NUnit.BaseTest"/> class.
+            Initializes a new instance of the <see cref="T:DepenMock.NUnit.BaseTest"/> class using the specified mock factory.
             </summary>
-            <remarks>This constructor initializes the <see cref="P:DepenMock.NUnit.BaseTest.Container"/> property and performs initial setup.
-            The setup is also performed in the SetUp method to maintain NUnit lifecycle compatibility.</remarks>
+            <param name="mockFactory">
+            The mock factory that integrates a mocking framework with AutoFixture. Pass <c>new MoqMockFactory()</c>
+            from <c>DepenMock.Moq</c> or <c>new NSubstituteMockFactory()</c> from <c>DepenMock.NSubstitute</c>.
+            </param>
         </member>
         <member name="M:DepenMock.NUnit.BaseTest.BaseSetup">
             <summary>
@@ -80,7 +82,7 @@
             <typeparam name="TTestType">The concrete type of the system under test. Must be a class that implements <typeparamref name="TInterfaceType"/>.</typeparam>
             <typeparam name="TInterfaceType">The interface or base type that <typeparamref name="TTestType"/> implements or inherits.</typeparam>
         </member>
-        <member name="M:DepenMock.NUnit.BaseTestByAbstraction`2.#ctor">
+        <member name="M:DepenMock.NUnit.BaseTestByAbstraction`2.#ctor(DepenMock.Mocks.IMockFactory)">
             <summary>
             Initializes a new instance of the <see cref="!:BaseTestByAbstraction"/> class and registers logger implementations 
             in the dependency container.
@@ -136,7 +138,7 @@
             container. Derived classes can use this functionality to access the SUT.</remarks>
             <typeparam name="TTestType">The type of the subject under test (SUT). Must be a reference type.</typeparam>
         </member>
-        <member name="M:DepenMock.NUnit.BaseTestByType`1.#ctor">
+        <member name="M:DepenMock.NUnit.BaseTestByType`1.#ctor(DepenMock.Mocks.IMockFactory)">
             <summary>
             Initializes a new instance of the <see cref="!:BaseTestByType"/> class and registers a logger for the specified
             test type.

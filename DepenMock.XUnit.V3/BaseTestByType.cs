@@ -3,6 +3,7 @@ using System.Reflection;
 using DepenMock.Attributes;
 using DepenMock.Helpers;
 using DepenMock.Loggers;
+using DepenMock.Mocks;
 using Microsoft.Extensions.Logging;
 
 namespace DepenMock.XUnit.V3;
@@ -25,7 +26,7 @@ public abstract class BaseTestByType<TTestType> : BaseTest, IDisposable where TT
     /// <remarks>This constructor ensures that a logger of type <see cref="ILogger{TTestType}"/> is registered
     /// in the container for the test type. Derived classes can rely on this registration for logging
     /// purposes.</remarks>
-    protected BaseTestByType()
+    protected BaseTestByType(IMockFactory mockFactory) : base(mockFactory)
     {
         Logger.Clear(); // Clear any previous logs (defensive programming)
         Container.Register<ILogger<TTestType>>(Logger);

@@ -13,11 +13,35 @@ dotnet add package DepenMock.XUnit   # or DepenMock.NUnit / DepenMock.MSTest
 
 ## Setting Up the Test Container
 
-Pass `NSubstituteMockFactory` to the base class constructor to configure DepenMock to use NSubstitute for all auto-created mocks.
+The base classes require an `IMockFactory` to be passed through the constructor. The recommended approach is to define a project-level base class once that wires up `NSubstituteMockFactory`, so individual test classes need no constructor boilerplate.
 
-**BaseTestByAbstraction**
+**Recommended: project-level base class**
 
-Use this base class when your SUT implements an interface. Testing through interfaces helps ensure adherence to the Liskov Substitution Principle (LSP).
+Define these once in your test project and inherit from them everywhere:
+
+```c#
+public abstract class TestByAbstraction<TType, TInterface>
+    : BaseTestByAbstraction<TType, TInterface>(new NSubstituteMockFactory())
+    where TType : class, TInterface;
+
+public abstract class TestByType<TType>
+    : BaseTestByType<TType>(new NSubstituteMockFactory())
+    where TType : class;
+```
+
+Then each test class simply inherits with no constructor required:
+
+```c#
+public class DeskBookingRequestProcessorTests
+    : TestByAbstraction<DeskBookingRequestProcessor, IDeskBookingRequestProcessor>
+{
+    // Your test methods here
+}
+```
+
+**Alternative: pass the factory directly**
+
+If you prefer not to define a shared base class, pass the factory explicitly per test class:
 
 ```c#
 public class DeskBookingRequestProcessorTests
@@ -25,22 +49,12 @@ public class DeskBookingRequestProcessorTests
 {
     public DeskBookingRequestProcessorTests()
         : base(new NSubstituteMockFactory()) { }
-
-    // Your test methods here
 }
-```
 
-**BaseTestByType**
-
-Use this base class when your SUT does not implement an interface, such as when testing an API controller.
-
-```c#
 public class AccountControllerTests : BaseTestByType<AccountController>
 {
     public AccountControllerTests()
         : base(new NSubstituteMockFactory()) { }
-
-    // Your test methods here
 }
 ```
 
@@ -132,11 +146,11 @@ Container
 **Creating a spy**
 
 ```c#
-Container
-    .ResolveMock<IDeskBookingRepository>()
-    .AsNSubstitute()
-    .Received(1)
-    .Save(Arg.Any<DeskBooking>());
+var mockRepo = Container.ResolveMock<IDeskBookingRepository>().AsNSubstitute();
+
+// ... act ...
+
+mockRepo.Received(1).Save(Arg.Any<DeskBooking>());
 ```
 
 ## Testing Logging
@@ -144,9 +158,9 @@ Container
 DepenMock provides a `ListLogger` and automatically injects it as a dependency for your tests.
 
 ```c#
-Assert.That(Logger.Logs[LogLevel.Error].TrueForAll(x => x.Contains($"Correlation Id: {correlationId}")));
+Logger.ErrorLogs().AssertContains($"Correlation Id: {correlationId}");
 
-// Checking different log levels
+// Accessing logs by level directly
 Logger.Logs[LogLevel.Error]
 Logger.Logs[LogLevel.Critical]
 Logger.Logs[LogLevel.Warning]

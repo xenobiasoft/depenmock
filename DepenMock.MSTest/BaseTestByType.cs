@@ -2,6 +2,7 @@ using System;
 using DepenMock.Attributes;
 using DepenMock.Helpers;
 using DepenMock.Loggers;
+using DepenMock.Mocks;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -22,7 +23,7 @@ public abstract class BaseTestByType<TTestType> : BaseTest where TTestType : cla
     /// <remarks>This constructor ensures that a logger of type <see cref="ILogger{TTestType}"/> is registered
     /// in the container for the test type. Derived classes can rely on this registration for logging
     /// purposes.</remarks>
-    protected BaseTestByType()
+    protected BaseTestByType(IMockFactory mockFactory) : base(mockFactory)
     {
         Container.Register<ILogger<TTestType>>(Logger);
         AddContainerCustomizations(Container);

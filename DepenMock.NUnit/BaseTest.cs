@@ -1,4 +1,4 @@
-﻿using DepenMock.Moq;
+﻿using DepenMock.Mocks;
 using NUnit.Framework;
 
 namespace DepenMock.NUnit;
@@ -11,15 +11,19 @@ namespace DepenMock.NUnit;
 /// dependencies.</remarks>
 public abstract class BaseTest
 {
+    private readonly IMockFactory _mockFactory;
     private bool _isInitialized;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="BaseTest"/> class.
+    /// Initializes a new instance of the <see cref="BaseTest"/> class using the specified mock factory.
     /// </summary>
-    /// <remarks>This constructor initializes the <see cref="Container"/> property and performs initial setup.
-    /// The setup is also performed in the SetUp method to maintain NUnit lifecycle compatibility.</remarks>
-    protected BaseTest()
+    /// <param name="mockFactory">
+    /// The mock factory that integrates a mocking framework with AutoFixture. Pass <c>new MoqMockFactory()</c>
+    /// from <c>DepenMock.Moq</c> or <c>new NSubstituteMockFactory()</c> from <c>DepenMock.NSubstitute</c>.
+    /// </param>
+    protected BaseTest(IMockFactory mockFactory)
     {
+        _mockFactory = mockFactory;
         InitializeContainer();
     }
 
@@ -54,7 +58,7 @@ public abstract class BaseTest
     {
         if (!_isInitialized)
         {
-            Container = new Container(new MoqMockFactory());
+            Container = new Container(_mockFactory);
             _isInitialized = true;
         }
     }

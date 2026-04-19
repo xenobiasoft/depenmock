@@ -2,6 +2,7 @@ using System;
 using DepenMock.Attributes;
 using DepenMock.Helpers;
 using DepenMock.Loggers;
+using DepenMock.Mocks;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -24,7 +25,7 @@ public abstract class BaseTestByAbstraction<TTestType, TInterfaceType> : BaseTes
     /// <remarks>This constructor registers a logger implementation for the specified interface type in the
     /// dependency injection container. The logger is configured using the provided <see cref="Logger"/>
     /// instance.</remarks>
-    protected BaseTestByAbstraction()
+    protected BaseTestByAbstraction(IMockFactory mockFactory) : base(mockFactory)
     {
         Container.Register<ILogger<TTestType>, ListLogger<TTestType>>(Logger);
         Container.Register<ILogger, ListLogger<TTestType>>(Logger);

@@ -3,11 +3,12 @@ using DepenMock.Attributes;
 using DepenMock.NUnit;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
+using DepenMock.Moq;
 
 namespace Tests.NUnit;
 
 [TestFixture]
-public class LogOutputAttributeTests : BaseTestByType<TestService>
+public class LogOutputAttributeTests() : BaseTestByType<TestService>(new MoqMockFactory())
 {
     [Test]
     [LogOutput(LogOutputTiming.Always)]
@@ -73,7 +74,7 @@ public class LogOutputAttributeTests : BaseTestByType<TestService>
 
 [TestFixture]
 [LogOutput(LogOutputTiming.Always)]
-public class LogOutputAttributeClassLevelTests : BaseTestByType<TestService>
+public class LogOutputAttributeClassLevelTests() : BaseTestByType<TestService>(new MoqMockFactory())
 {
     [Test]
     public void TestWithClassLevelLogOutput_ShouldOutputLogs()
@@ -91,17 +92,10 @@ public class LogOutputAttributeClassLevelTests : BaseTestByType<TestService>
     }
 }
 
-public class TestService
+public class TestService(ILogger<TestService> logger)
 {
-    private readonly ILogger<TestService> _logger;
-
-    public TestService(ILogger<TestService> logger)
-    {
-        _logger = logger;
-    }
-
     public void DoWork(string message)
     {
-        _logger.LogInformation("Processing: {Message}", message);
+        logger.LogInformation("Processing: {Message}", message);
     }
 }

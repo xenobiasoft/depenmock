@@ -1,5 +1,6 @@
 using DepenMock.XUnit.V3;
 using Xunit;
+using DepenMock.Moq;
 
 namespace Tests.XUnit.V3;
 
@@ -30,6 +31,6 @@ public class BaseTestTests
 
     private class TestableBaseTest : BaseTest
     {
-        // This class allows us to test the abstract BaseTest class
+        public TestableBaseTest() : base(new MoqMockFactory()) { }
     }
 }

@@ -1,11 +1,11 @@
-﻿using System;
-using AutoFixture;
+﻿using AutoFixture;
 using AutoFixture.Dsl;
 using AutoFixture.Kernel;
-using System.Collections.Generic;
-using System.Linq;
 using DepenMock.Customizations;
 using DepenMock.Mocks;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DepenMock;
 

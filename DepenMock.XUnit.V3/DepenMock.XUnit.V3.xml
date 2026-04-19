@@ -79,7 +79,7 @@
             injection or other purposes. Derived classes can access the <see cref="P:DepenMock.XUnit.V3.BaseTest.Container"/> property to manage dependencies
             within the test context.</remarks>
         </member>
-        <member name="M:DepenMock.XUnit.V3.BaseTest.#ctor">
+        <member name="M:DepenMock.XUnit.V3.BaseTest.#ctor(DepenMock.Mocks.IMockFactory)">
             <summary>
             Initializes a new instance of the <see cref="T:DepenMock.XUnit.V3.BaseTest"/> class.
             </summary>
@@ -104,7 +104,7 @@
             <typeparam name="TTestType">The concrete type of the system under test, which must implement <typeparamref name="TInterfaceType"/>.</typeparam>
             <typeparam name="TInterfaceType">The interface type that the system under test implements.</typeparam>
         </member>
-        <member name="M:DepenMock.XUnit.V3.BaseTestByAbstraction`2.#ctor">
+        <member name="M:DepenMock.XUnit.V3.BaseTestByAbstraction`2.#ctor(DepenMock.Mocks.IMockFactory)">
             <summary>
             Initializes a new instance of the <see cref="!:BaseTestByAbstraction"/> class.
             </summary>
@@ -155,7 +155,7 @@
             type.</remarks>
             <typeparam name="TTestType">The type associated with the test. This type must be a reference type.</typeparam>
         </member>
-        <member name="M:DepenMock.XUnit.V3.BaseTestByType`1.#ctor">
+        <member name="M:DepenMock.XUnit.V3.BaseTestByType`1.#ctor(DepenMock.Mocks.IMockFactory)">
             <summary>
             Initializes a new instance of the <see cref="!:BaseTestByType"/> class and registers a logger for the specified
             test type.

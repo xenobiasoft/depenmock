@@ -12,7 +12,8 @@ namespace Tests.MSTest;
 
 [TestClass]
 [LogOutput(LogOutputTiming.Always)]
-public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookingRequestProcessor, IDeskBookingRequestProcessor>
+public class DeskBookingRequestProcessorTests()
+    : BaseTestByAbstraction<DeskBookingRequestProcessor, IDeskBookingRequestProcessor>(new MoqMockFactory())
 {
     [TestMethod]
     public void BookDesk_WhenDeskAvailable_ReturnsBookedDeskResult()

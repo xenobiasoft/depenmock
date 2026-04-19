@@ -1,6 +1,7 @@
 using DepenMock.NUnit;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
+using DepenMock.Moq;
 
 namespace Tests.NUnit;
 
@@ -32,6 +33,6 @@ public class BaseTestTests
 
     private class TestableBaseTest : BaseTest
     {
-        // This class allows us to test the abstract BaseTest class
+        public TestableBaseTest() : base(new MoqMockFactory()) { }
     }
 }

@@ -12,7 +12,7 @@
             initializes  a <see cref="P:DepenMock.MSTest.BaseTest.Container"/> instance to manage core services and dependencies, which can be used  by
             derived classes to set up and execute testing scenarios.</remarks>
         </member>
-        <member name="M:DepenMock.MSTest.BaseTest.#ctor">
+        <member name="M:DepenMock.MSTest.BaseTest.#ctor(DepenMock.Mocks.IMockFactory)">
             <summary>
             Initializes a new instance of the <see cref="T:DepenMock.MSTest.BaseTest"/> class.
             </summary>
@@ -36,7 +36,7 @@
             <typeparam name="TTestType">The concrete type of the system under test (SUT).</typeparam>
             <typeparam name="TInterfaceType">The interface type implemented by <typeparamref name="TTestType"/>.</typeparam>
         </member>
-        <member name="M:DepenMock.MSTest.BaseTestByAbstraction`2.#ctor">
+        <member name="M:DepenMock.MSTest.BaseTestByAbstraction`2.#ctor(DepenMock.Mocks.IMockFactory)">
             <summary>
             Initializes a new instance of the <see cref="!:BaseTestByAbstraction"/> class.
             </summary>
@@ -92,7 +92,7 @@
             container. Derived classes can use this functionality to access the SUT.</remarks>
             <typeparam name="TTestType">The type of the subject under test (SUT). Must be a reference type.</typeparam>
         </member>
-        <member name="M:DepenMock.MSTest.BaseTestByType`1.#ctor">
+        <member name="M:DepenMock.MSTest.BaseTestByType`1.#ctor(DepenMock.Mocks.IMockFactory)">
             <summary>
             Initializes a new instance of the <see cref="!:BaseTestByType"/> class and registers a logger for the specified
             test type.
