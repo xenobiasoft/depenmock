@@ -1,4 +1,4 @@
-﻿name: Create GitHub Release
+name: Create GitHub Release
 
 on:
   push:
@@ -21,25 +21,43 @@ jobs:
           echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
           echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
+      - name: Generate changelog
+        run: |
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          if [ -z "$PREV_TAG" ]; then
+            CHANGELOG=$(git log --oneline --no-decorate)
+          else
+            CHANGELOG=$(git log ${PREV_TAG}..HEAD --oneline --no-decorate)
+          fi
+          {
+            echo "CHANGELOG<<CHANGELOG_DELIMITER"
+            echo "$CHANGELOG"
+            echo "CHANGELOG_DELIMITER"
+          } >> $GITHUB_ENV
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref }}
           name: "Release v${{ env.VERSION }}"
-          generate_release_notes: true
           body: |
             ## 🚀 DepenMock v${{ env.VERSION }} – ${{ env.DATE }}
+
+            ### 📝 Changes
+
+            ${{ env.CHANGELOG }}
 
             ### 📦 NuGet Packages Published
 
             The following packages are available on NuGet.org:
-            
+
             - **DepenMock** - Core testing library
             - **DepenMock.NUnit** - NUnit integration
             - **DepenMock.XUnit** - XUnit integration
             - **DepenMock.XUnit.V3** - XUnit v3 integration
             - **DepenMock.MSTest** - MSTest integration
             - **DepenMock.Moq** - Moq integration
+            - **DepenMock.NSubstitute** - NSubstitute integration
 
             Install via Package Manager:
             ```
@@ -50,7 +68,3 @@ jobs:
             ```
             dotnet add package DepenMock --version ${{ env.VERSION }}
             ```
-
-            ### 📝 Release Notes
-
-            _Automatically generated release notes appear below._
