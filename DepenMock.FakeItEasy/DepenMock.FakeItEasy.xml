@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DepenMock.FakeItEasy</name>
+    </assembly>
+    <members>
+        <member name="T:DepenMock.FakeItEasy.FakeItEasyExtensions">
+            <summary>
+            Extension methods for working with FakeItEasy-backed <see cref="T:DepenMock.Mocks.IMock`1"/> instances.
+            </summary>
+        </member>
+        <member name="M:DepenMock.FakeItEasy.FakeItEasyExtensions.AsFake``1(DepenMock.Mocks.IMock{``0})">
+             <summary>
+             Unwraps the underlying FakeItEasy fake from an <see cref="T:DepenMock.Mocks.IMock`1"/>, giving
+             access to FakeItEasy's <c>A.CallTo()</c> API for setup and assertion.
+             </summary>
+             <typeparam name="T">The mocked type.</typeparam>
+             <param name="mock">The <see cref="T:DepenMock.Mocks.IMock`1"/> returned by <c>Container.ResolveMock&lt;T&gt;()</c>.</param>
+             <returns>The underlying FakeItEasy fake instance.</returns>
+             <example>
+             <code>
+             // Stub
+             var fakeRepo = Container.ResolveMock&lt;IDeskRepository&gt;().AsFake();
+             A.CallTo(() => fakeRepo.GetAvailableDesks(A&lt;DateTime&gt;._))
+                 .Returns(Container.CreateMany&lt;Desk&gt;());
+            
+             // Spy
+             var fakeBookingRepo = Container.ResolveMock&lt;IDeskBookingRepository&gt;().AsFake();
+             A.CallTo(() => fakeBookingRepo.Save(A&lt;DeskBooking&gt;._)).MustHaveHappenedOnceExactly();
+             </code>
+             </example>
+        </member>
+        <member name="T:DepenMock.FakeItEasy.FakeItEasyMock`1">
+            <summary>
+            An <see cref="T:DepenMock.Mocks.IMock`1"/> implementation backed by a FakeItEasy fake. Access the
+            underlying <see cref="P:DepenMock.FakeItEasy.FakeItEasyMock`1.Fake"/> property (or call <see cref="M:DepenMock.FakeItEasy.FakeItEasyExtensions.AsFake``1(DepenMock.Mocks.IMock{``0})"/>)
+            to use FakeItEasy's <c>A.CallTo()</c> API.
+            </summary>
+            <typeparam name="T">The type being faked. Must be a reference type.</typeparam>
+        </member>
+        <member name="M:DepenMock.FakeItEasy.FakeItEasyMock`1.#ctor(`0)">
+            <summary>
+            Initializes a new instance of <see cref="T:DepenMock.FakeItEasy.FakeItEasyMock`1"/> wrapping the given fake.
+            </summary>
+            <param name="fake">The underlying FakeItEasy fake instance.</param>
+        </member>
+        <member name="P:DepenMock.FakeItEasy.FakeItEasyMock`1.Object">
+            <inheritdoc />
+        </member>
+        <member name="P:DepenMock.FakeItEasy.FakeItEasyMock`1.Fake">
+            <summary>
+            Gets the underlying FakeItEasy fake instance, providing access to
+            <c>A.CallTo()</c> for setup and assertion.
+            </summary>
+        </member>
+        <member name="T:DepenMock.FakeItEasy.FakeItEasyMockFactory">
+            <summary>
+            An <see cref="T:DepenMock.Mocks.IMockFactory"/> implementation that uses FakeItEasy and AutoFixture.AutoFakeItEasy to
+            automatically create and register fakes for unregistered dependencies.
+            </summary>
+        </member>
+        <member name="M:DepenMock.FakeItEasy.FakeItEasyMockFactory.GetCustomization">
+            <inheritdoc />
+            <remarks>
+            Returns an <see cref="T:AutoFixture.AutoFakeItEasy.AutoFakeItEasyCustomization"/> with <c>ConfigureMembers = true</c>, which
+            instructs AutoFixture to automatically configure all members of auto-created fakes.
+            </remarks>
+        </member>
+        <member name="M:DepenMock.FakeItEasy.FakeItEasyMockFactory.GetMock``1(AutoFixture.IFixture)">
+            <inheritdoc />
+            <remarks>
+            Freezes <typeparamref name="T"/> in the fixture so the same fake instance is reused whenever
+            <typeparamref name="T"/> is resolved, then wraps it in a <see cref="T:DepenMock.FakeItEasy.FakeItEasyMock`1"/>.
+            </remarks>
+        </member>
+    </members>
+</doc>
