@@ -2,6 +2,27 @@
 
 ---
 
+## v3.1.0
+
+### What's Changed
+
+**FakeItEasy support added (`DepenMock.FakeItEasy`)**
+
+A new `DepenMock.FakeItEasy` package is now available, giving teams the option to use FakeItEasy as their mocking framework alongside the existing Moq and NSubstitute adapters. It includes `FakeItEasyMockFactory`, `FakeItEasyMock<T>`, and an `AsFake()` extension method for unwrapping fakes from the `IMock<T>` abstraction.
+
+```csharp
+// Stub using FakeItEasy
+var fakeRepo = Container.ResolveMock<IDeskRepository>().AsFake();
+A.CallTo(() => fakeRepo.GetAvailableDesks(A<DateTime>._))
+    .Returns(Container.CreateMany<Desk>());
+
+// Spy using FakeItEasy
+var fakeBookingRepo = Container.ResolveMock<IDeskBookingRepository>().AsFake();
+A.CallTo(() => fakeBookingRepo.Save(A<DeskBooking>._)).MustHaveHappenedOnceExactly();
+```
+
+---
+
 ## v3.0.0
 
 ### What's Changed
