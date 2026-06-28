@@ -177,7 +177,7 @@ namespace Tests.MSTest
         public void AddCustomizations_WithNullBuilders_ShouldThrowArgumentNullException()
         {
             // Act & Assert
-            Assert.ThrowsException<ArgumentNullException>(() => _container.AddCustomizations(null));
+            Assert.Throws<ArgumentNullException>(() => _container.AddCustomizations(null));
         }
 
         [TestMethod]
@@ -187,7 +187,7 @@ namespace Tests.MSTest
             var validBuilder = new Mock<ISpecimenBuilder>();
 
             // Act & Assert
-            Assert.ThrowsException<ArgumentNullException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
                 _container.AddCustomizations(validBuilder.Object, null));
         }
 

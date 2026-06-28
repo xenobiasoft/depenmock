@@ -123,7 +123,7 @@ public class ListLoggerAssertionExtensionsTests
         var searchFragment = "Second";
 
         // Act & Assert - Should not throw
-        Assert.DoesNotThrow(() => messages.ContainsMessage(searchFragment));
+        Assert.DoesNotThrow((TestDelegate)(() => messages.ContainsMessage(searchFragment)));
     }
 
     [Test]
@@ -134,7 +134,7 @@ public class ListLoggerAssertionExtensionsTests
         var searchFragment = "second";
 
         // Act & Assert - Should not throw
-        Assert.DoesNotThrow(() => messages.ContainsMessage(searchFragment));
+        Assert.DoesNotThrow((TestDelegate)(() => messages.ContainsMessage(searchFragment)));
     }
 
     [Test]
@@ -145,7 +145,7 @@ public class ListLoggerAssertionExtensionsTests
         var searchFragment = "Fourth";
 
         // Act & Assert
-        var exception = Assert.Throws<Exception>(() => messages.ContainsMessage(searchFragment));
+        var exception = Assert.Throws<Exception>((TestDelegate)(() => messages.ContainsMessage(searchFragment)));
         Assert.That(exception.Message, Does.Contain(searchFragment));
     }
 
@@ -157,7 +157,7 @@ public class ListLoggerAssertionExtensionsTests
         var searchFragment = "Any message";
 
         // Act & Assert
-        Assert.Throws<Exception>(() => messages.ContainsMessage(searchFragment));
+        Assert.Throws<Exception>((TestDelegate)(() => messages.ContainsMessage(searchFragment)));
     }
 
     [Test]
@@ -168,7 +168,7 @@ public class ListLoggerAssertionExtensionsTests
         var searchFragment = "complete";
 
         // Act & Assert - Should not throw
-        Assert.DoesNotThrow(() => messages.ContainsMessage(searchFragment));
+        Assert.DoesNotThrow((TestDelegate)(() => messages.ContainsMessage(searchFragment)));
     }
 
     [Test]
@@ -179,7 +179,7 @@ public class ListLoggerAssertionExtensionsTests
         var searchFragment = "Second";
 
         // Act & Assert - Should not throw
-        Assert.DoesNotThrow(() => messages.AssertContains(searchFragment));
+        Assert.DoesNotThrow((TestDelegate)(() => messages.AssertContains(searchFragment)));
     }
 
     [Test]
@@ -190,7 +190,7 @@ public class ListLoggerAssertionExtensionsTests
         var searchFragment = "second";
 
         // Act & Assert - Should not throw
-        Assert.DoesNotThrow(() => messages.AssertContains(searchFragment));
+        Assert.DoesNotThrow((TestDelegate)(() => messages.AssertContains(searchFragment)));
     }
 
     [Test]
@@ -201,7 +201,7 @@ public class ListLoggerAssertionExtensionsTests
         var searchFragment = "Fourth";
 
         // Act & Assert
-        var exception = Assert.Throws<Exception>(() => messages.AssertContains(searchFragment));
+        var exception = Assert.Throws<Exception>((TestDelegate)(() => messages.AssertContains(searchFragment)));
         Assert.That(exception.Message, Does.Contain(searchFragment));
     }
 
@@ -213,7 +213,7 @@ public class ListLoggerAssertionExtensionsTests
         var searchFragment = "Any message";
 
         // Act & Assert
-        Assert.Throws<Exception>(() => messages.AssertContains(searchFragment));
+        Assert.Throws<Exception>((TestDelegate)(() => messages.AssertContains(searchFragment)));
     }
 
     [Test]
@@ -224,7 +224,7 @@ public class ListLoggerAssertionExtensionsTests
         var searchFragment = "complete";
 
         // Act & Assert - Should not throw
-        Assert.DoesNotThrow(() => messages.AssertContains(searchFragment));
+        Assert.DoesNotThrow((TestDelegate)(() => messages.AssertContains(searchFragment)));
     }
 
     private class TestClass { }

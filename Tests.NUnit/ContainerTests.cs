@@ -172,14 +172,14 @@ public class ContainerTests
         var builder = new Mock<ISpecimenBuilder>();
 
         // Act & Assert - Should not throw
-        Assert.DoesNotThrow(() => _container.AddCustomizations(builder.Object));
+        Assert.DoesNotThrow((TestDelegate)(() => _container.AddCustomizations(builder.Object)));
     }
 
     [Test]
     public void AddCustomizations_WithNullBuilders_ShouldThrowArgumentNullException()
     {
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => _container.AddCustomizations(null));
+        Assert.Throws<ArgumentNullException>((TestDelegate)(() => _container.AddCustomizations(null)));
     }
 
     [Test]
@@ -189,8 +189,8 @@ public class ContainerTests
         var validBuilder = new Mock<ISpecimenBuilder>();
 
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => 
-            _container.AddCustomizations(validBuilder.Object, null));
+        Assert.Throws<ArgumentNullException>((TestDelegate)(() =>
+            _container.AddCustomizations(validBuilder.Object, null)));
     }
 
     public class TestModel

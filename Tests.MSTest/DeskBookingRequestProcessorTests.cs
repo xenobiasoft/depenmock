@@ -40,15 +40,14 @@ public class DeskBookingRequestProcessorTests()
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentNullException))]
     public void BookDesk_WhenDeskIsNull_ThrowsException()
     {
         // Assemble
         var correlationId = Container.Create<string>();
         var sut = ResolveSut();
 
-        // Act
-        sut.BookDesk(null, correlationId);
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() => sut.BookDesk(null, correlationId));
     }
 
     [TestMethod]
