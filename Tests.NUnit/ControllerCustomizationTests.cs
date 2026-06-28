@@ -17,7 +17,7 @@ public class ControllerCustomizationTests
         var customization = new ControllerCustomization();
 
         // Act & Assert - Should not throw
-        Assert.DoesNotThrow(() => customization.Customize(fixture));
+        Assert.DoesNotThrow((TestDelegate)(() => customization.Customize(fixture)));
         Assert.That(customization, Is.Not.Null);
     }
 

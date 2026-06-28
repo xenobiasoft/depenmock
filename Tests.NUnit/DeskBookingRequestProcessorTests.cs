@@ -53,7 +53,7 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
 		void BookDesk() => sut.BookDesk(null, correlationId);
 
 		// Assert
-		Assert.Throws<ArgumentNullException>(BookDesk);
+		Assert.Throws<ArgumentNullException>((TestDelegate)BookDesk);
     }
 
     [Test]
@@ -163,7 +163,7 @@ public class DeskBookingRequestProcessorTests : BaseTestByAbstraction<DeskBookin
 		var result = sut.BookDesk(Container.Create<DeskBookingRequest>(), correlationId);
 
 		// Assert
-		Assert.That(null, Is.EqualTo(result.DeskBookingId));
+		Assert.That((object)null, Is.EqualTo(result.DeskBookingId));
 	}
 
 	[Test]

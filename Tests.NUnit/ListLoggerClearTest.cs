@@ -39,7 +39,7 @@ public class ListLoggerClearTest
     public void Clear_WithEmptyLogs_ShouldNotThrow()
     {
         // Act & Assert
-        Assert.DoesNotThrow(() => _logger.Clear());
+        Assert.DoesNotThrow((TestDelegate)(() => _logger.Clear()));
     }
 
     private class TestClass { }

@@ -142,7 +142,7 @@ public class ListLoggerAssertionExtensionsTests
         var searchFragment = "Fourth";
 
         // Act & Assert
-        var exception = Assert.ThrowsException<Exception>(() => messages.ContainsMessage(searchFragment));
+        var exception = Assert.Throws<Exception>(() => messages.ContainsMessage(searchFragment));
         Assert.IsTrue(exception.Message.Contains(searchFragment));
     }
 
@@ -154,7 +154,7 @@ public class ListLoggerAssertionExtensionsTests
         var searchFragment = "Any message";
 
         // Act & Assert
-        Assert.ThrowsException<Exception>(() => messages.ContainsMessage(searchFragment));
+        Assert.Throws<Exception>(() => messages.ContainsMessage(searchFragment));
     }
 
     [TestMethod]
@@ -198,7 +198,7 @@ public class ListLoggerAssertionExtensionsTests
         var searchFragment = "Fourth";
 
         // Act & Assert
-        var exception = Assert.ThrowsException<Exception>(() => messages.AssertContains(searchFragment));
+        var exception = Assert.Throws<Exception>(() => messages.AssertContains(searchFragment));
         Assert.IsTrue(exception.Message.Contains(searchFragment));
     }
 
@@ -210,7 +210,7 @@ public class ListLoggerAssertionExtensionsTests
         var searchFragment = "Any message";
 
         // Act & Assert
-        Assert.ThrowsException<Exception>(() => messages.AssertContains(searchFragment));
+        Assert.Throws<Exception>(() => messages.AssertContains(searchFragment));
     }
 
     [TestMethod]
