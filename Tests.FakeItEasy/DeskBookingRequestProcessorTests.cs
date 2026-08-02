@@ -112,9 +112,9 @@ public class DeskBookingRequestProcessorTests : FakeItEasyBaseTestByAbstraction<
 	{
         // Assemble
         var correlationId = Container.Create<string>();
-        var fakeDeskRepo = Container.ResolveMock<IDeskRepository>().AsFake();
-        A.CallTo(() => fakeDeskRepo.GetAvailableDesks(A<DateTime>._))
-            .Returns(new List<Desk>());
+        Container.SetupMock<IDeskRepository>(f => A
+            .CallTo(() => f.GetAvailableDesks(A<DateTime>._))
+            .Returns(new List<Desk>()));
 
 		var sut = ResolveSut();
 

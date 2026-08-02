@@ -132,6 +132,51 @@ public class ContainerTests
     }
 
     [Fact]
+    public void SetupMock_ShouldApplyConfigurationToResolvedMock()
+    {
+        // Arrange
+        var expectedValue = _container.Create<string>();
+
+        // Act
+        _container.SetupMock<ITestService>(m => m.Setup(x => x.GetValue()).Returns(expectedValue));
+
+        // Assert
+        Assert.Equal(expectedValue, _container.ResolveMock<ITestService>().Object.GetValue());
+    }
+
+    [Fact]
+    public void SetupMock_ShouldReturnSameContainerForChaining()
+    {
+        // Act
+        var result = _container.SetupMock<ITestService>(m => m.Setup(x => x.GetValue()).Returns("value"));
+
+        // Assert
+        Assert.Same(_container, result);
+    }
+
+    [Fact]
+    public void SetupMock_ShouldConfigureThePreviouslyResolvedMock()
+    {
+        // Arrange
+        var expectedValue = _container.Create<string>();
+        var mock = _container.ResolveMock<ITestService>();
+
+        // Act
+        _container.SetupMock<ITestService>(m => m.Setup(x => x.GetValue()).Returns(expectedValue));
+
+        // Assert
+        Assert.Same(mock, _container.ResolveMock<ITestService>());
+        Assert.Equal(expectedValue, mock.Object.GetValue());
+    }
+
+    [Fact]
+    public void SetupMock_WithNullSetup_ShouldThrowArgumentNullException()
+    {
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() => _container.SetupMock<ITestService>(null));
+    }
+
+    [Fact]
     public void Register_WithInstance_ShouldReturnRegisteredInstance()
     {
         // Arrange
@@ -201,6 +246,8 @@ public class ContainerTests
     public interface ITestService
     {
         void DoSomething();
+
+        string GetValue();
     }
 
     public class TestService : ITestService
@@ -209,5 +256,7 @@ public class ContainerTests
         {
             // Implementation
         }
+
+        public string GetValue() => string.Empty;
     }
 }

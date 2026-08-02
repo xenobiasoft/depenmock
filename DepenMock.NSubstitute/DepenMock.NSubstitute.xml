@@ -30,6 +30,29 @@
              </code>
              </example>
         </member>
+        <member name="M:DepenMock.NSubstitute.NSubstituteExtensions.SetupMock``1(DepenMock.Container,System.Action{``0})">
+            <summary>
+            Resolves the mock for <typeparamref name="T"/> and applies <paramref name="setup"/> to the
+            underlying NSubstitute substitute inline, without needing an intermediate variable. The
+            substitute is the same cached instance returned by <c>Container.ResolveMock&lt;T&gt;()</c>,
+            so any configuration applied here is visible to the system under test.
+            </summary>
+            <typeparam name="T">The mocked type.</typeparam>
+            <param name="container">The container that owns the mock.</param>
+            <param name="setup">The configuration to apply to the underlying substitute.</param>
+            <returns>The same <see cref="T:DepenMock.Container"/>, so that calls can be chained.</returns>
+            <example>
+            <code>
+            Container
+                .SetupMock&lt;IDeskRepository&gt;(s => s
+                    .GetAvailableDesks(Arg.Any&lt;DateTime&gt;())
+                    .Returns(Container.CreateMany&lt;Desk&gt;()))
+                .SetupMock&lt;IDeskBookingRepository&gt;(s => s
+                    .When(x => x.Save(Arg.Any&lt;DeskBooking&gt;()))
+                    .Do(_ => throw new InvalidOperationException()));
+            </code>
+            </example>
+        </member>
         <member name="T:DepenMock.NSubstitute.NSubstituteMock`1">
             <summary>
             An <see cref="T:DepenMock.Mocks.IMock`1"/> implementation backed by an NSubstitute substitute. Access the

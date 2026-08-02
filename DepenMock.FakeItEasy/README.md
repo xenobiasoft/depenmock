@@ -141,6 +141,22 @@ A.CallTo(() => fakeRepo.GetAvailableDesks(A<DateTime>._))
     .Returns(Container.CreateMany<Desk>());
 ```
 
+**Creating a stub with `SetupMock`**
+
+For stubs that don't need to be asserted on later, `SetupMock<T>()` applies the configuration inline and returns the `Container`, so several dependencies can be stubbed in a single chain without intermediate variables.
+
+```c#
+Container
+    .SetupMock<IDeskRepository>(f => A
+        .CallTo(() => f.GetAvailableDesks(A<DateTime>._))
+        .Returns(Container.CreateMany<Desk>()))
+    .SetupMock<IDeskBookingRepository>(f => A
+        .CallTo(() => f.Save(A<DeskBooking>._))
+        .DoesNothing());
+```
+
+`SetupMock<T>()` configures the same cached fake that `ResolveMock<T>()` returns, so the two can be mixed freely.
+
 **Creating a spy**
 
 ```c#
