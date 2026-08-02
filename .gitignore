@@ -350,3 +350,7 @@ MigrationBackup/
 .ionide/
 
 push.txt
+
+# Claude Code per-developer local settings (the shared .claude/settings.json
+# and .mcp.json stay tracked)
+.claude/settings.local.json
