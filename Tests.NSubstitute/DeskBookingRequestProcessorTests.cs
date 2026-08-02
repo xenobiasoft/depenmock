@@ -115,9 +115,9 @@ public class DeskBookingRequestProcessorTests : NSubstituteBaseTestByAbstraction
         // Assemble
         var correlationId = Container.Create<string>();
         Container
-			.ResolveMock<IDeskRepository>().AsNSubstitute()
-			.GetAvailableDesks(Arg.Any<DateTime>())
-			.Returns(new List<Desk>());
+			.SetupMock<IDeskRepository>(s => s
+				.GetAvailableDesks(Arg.Any<DateTime>())
+				.Returns(new List<Desk>()));
 
 		var sut = ResolveSut();
 

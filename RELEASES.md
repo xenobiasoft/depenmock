@@ -2,6 +2,42 @@
 
 ---
 
+## v3.2.0
+
+### What's Changed
+
+**`SetupMock<T>()` convenience method added to all mocking adapters**
+
+Stubbing a dependency previously required two operations — resolving the mock and then chaining a setup call — along with an intermediate variable when more than one dependency needed configuring. Each mocking adapter (`DepenMock.Moq`, `DepenMock.NSubstitute`, `DepenMock.FakeItEasy`) now provides a `SetupMock<T>()` extension method on `Container` that applies the configuration inline and returns the `Container`, so setups can be chained.
+
+`SetupMock<T>()` takes the mock type native to its adapter, and configures the same cached mock instance that `ResolveMock<T>()` returns — the two can be mixed freely. Continue to use `ResolveMock<T>()` when you need to hold a reference for verification.
+
+```csharp
+// Moq
+Container
+    .SetupMock<IDeskRepository>(m => m
+        .Setup(x => x.GetAvailableDesks(It.IsAny<DateTime>()))
+        .Returns(Container.CreateMany<Desk>()))
+    .SetupMock<IDeskBookingRepository>(m => m
+        .Setup(x => x.Save(It.IsAny<DeskBooking>())));
+
+// NSubstitute
+Container.SetupMock<IDeskRepository>(s => s
+    .GetAvailableDesks(Arg.Any<DateTime>())
+    .Returns(Container.CreateMany<Desk>()));
+
+// FakeItEasy
+Container.SetupMock<IDeskRepository>(f => A
+    .CallTo(() => f.GetAvailableDesks(A<DateTime>._))
+    .Returns(Container.CreateMany<Desk>()));
+```
+
+This is an additive, non-breaking change; no existing code needs to be updated.
+
+**Note:** because each adapter defines its own `SetupMock<T>()`, a single file that imports two adapter namespaces (for example `using DepenMock.Moq;` together with `using DepenMock.NSubstitute;`) can produce an ambiguous-overload error. Drop the unused `using`, or call the method in static form (`MoqExtensions.SetupMock(Container, ...)`), to disambiguate.
+
+---
+
 ## v3.1.0
 
 ### What's Changed

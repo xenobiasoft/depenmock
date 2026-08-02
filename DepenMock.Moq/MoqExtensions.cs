@@ -29,4 +29,33 @@ public static class MoqExtensions
     /// </example>
     public static Mock<T> AsMoq<T>(this Mocks.IMock<T> mock) where T : class =>
         ((MoqMock<T>)mock).Mock;
+
+    /// <summary>
+    /// Resolves the mock for <typeparamref name="T"/> and applies <paramref name="setup"/> to the
+    /// underlying Moq <see cref="Mock{T}"/> inline, without needing an intermediate variable. The
+    /// mock is the same cached instance returned by <c>Container.ResolveMock&lt;T&gt;()</c>, so any
+    /// configuration applied here is visible to the system under test.
+    /// </summary>
+    /// <typeparam name="T">The mocked type.</typeparam>
+    /// <param name="container">The container that owns the mock.</param>
+    /// <param name="setup">The configuration to apply to the underlying <see cref="Mock{T}"/>.</param>
+    /// <returns>The same <see cref="Container"/>, so that calls can be chained.</returns>
+    /// <example>
+    /// <code>
+    /// Container
+    ///     .SetupMock&lt;IDeskRepository&gt;(m => m
+    ///         .Setup(x => x.GetAvailableDesks(It.IsAny&lt;DateTime&gt;()))
+    ///         .Returns(Container.CreateMany&lt;Desk&gt;()))
+    ///     .SetupMock&lt;IDeskBookingRepository&gt;(m => m
+    ///         .Setup(x => x.Save(It.IsAny&lt;DeskBooking&gt;())));
+    /// </code>
+    /// </example>
+    public static Container SetupMock<T>(this Container container, Action<Mock<T>> setup) where T : class
+    {
+        ArgumentNullException.ThrowIfNull(setup);
+
+        setup(container.ResolveMock<T>().AsMoq());
+
+        return container;
+    }
 }

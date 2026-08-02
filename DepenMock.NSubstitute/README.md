@@ -143,6 +143,22 @@ Container
     .Returns(Container.CreateMany<Desk>());
 ```
 
+**Creating a stub with `SetupMock`**
+
+For stubs that don't need to be verified later, `SetupMock<T>()` applies the configuration inline and returns the `Container`, so several dependencies can be stubbed in a single chain without intermediate variables.
+
+```c#
+Container
+    .SetupMock<IDeskRepository>(s => s
+        .GetAvailableDesks(Arg.Any<DateTime>())
+        .Returns(Container.CreateMany<Desk>()))
+    .SetupMock<IDeskBookingRepository>(s => s
+        .When(x => x.Save(Arg.Any<DeskBooking>()))
+        .Do(_ => throw new InvalidOperationException()));
+```
+
+`SetupMock<T>()` configures the same cached substitute that `ResolveMock<T>()` returns, so the two can be mixed freely.
+
 **Creating a spy**
 
 ```c#

@@ -107,19 +107,35 @@ var deskBookingResult = Container
 
 DepenMock's testing framework automatically creates mock dependencies, but you can obtain a reference to a mock dependency to set up methods to return predefined data (stub) or to verify interactions with the dependency (spy).
 
+`ResolveMock<T>()` returns a framework-agnostic `IMock<T>`. Unwrap it with the extension method from your mocking adapter — `AsMoq()`, `AsNSubstitute()`, or `AsFake()` — to reach that framework's own APIs. The examples below use Moq.
+
 **Creating a stub**
 
 ```c#
 Container
     .ResolveMock<IDeskRepository>()
+    .AsMoq()
     .Setup(x => x.GetAvailableDesks(It.IsAny<DateTime>()))
     .Returns(Container.CreateMany<Desk>());
+```
+
+**Creating a stub with `SetupMock`**
+
+For stubs that don't need to be verified later, `SetupMock<T>()` applies the configuration inline and returns the `Container`, so several dependencies can be stubbed in a single chain without intermediate variables.
+
+```c#
+Container
+    .SetupMock<IDeskRepository>(m => m
+        .Setup(x => x.GetAvailableDesks(It.IsAny<DateTime>()))
+        .Returns(Container.CreateMany<Desk>()))
+    .SetupMock<IDeskBookingRepository>(m => m
+        .Setup(x => x.Save(It.IsAny<DeskBooking>())));
 ```
 
 **Creating a spy**
 
 ```c#
-var mockRepo = Container.ResolveMock<IDeskBookingRepository>();
+var mockRepo = Container.ResolveMock<IDeskBookingRepository>().AsMoq();
 
 mockRepo.Verify(x => x.Save(It.IsAny<DeskBooking>()), Times.Once);
 ```
