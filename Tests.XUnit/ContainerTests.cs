@@ -177,6 +177,69 @@ public class ContainerTests
     }
 
     [Fact]
+    public void ResolveMock_BeforeResolvingConsumer_ShouldInjectSameMock()
+    {
+        // Arrange
+        var mock = _container.ResolveMock<ITestService>();
+
+        // Act
+        var consumer = _container.Resolve<TestConsumer>();
+
+        // Assert
+        Assert.Same(mock.Object, consumer.Service);
+    }
+
+    [Fact]
+    public void ResolveMock_AfterResolvingConsumer_ShouldThrowInvalidOperationException()
+    {
+        // Arrange
+        _container.Resolve<TestConsumer>();
+
+        // Act & Assert
+        var exception = Assert.Throws<InvalidOperationException>(() => _container.ResolveMock<ITestService>());
+        Assert.Contains(nameof(ITestService), exception.Message);
+        Assert.Contains(nameof(TestConsumer), exception.Message);
+    }
+
+    [Fact]
+    public void SetupMock_AfterResolvingConsumer_ShouldThrowInvalidOperationException()
+    {
+        // Arrange
+        _container.Resolve<TestConsumer>();
+
+        // Act & Assert
+        Assert.Throws<InvalidOperationException>(() =>
+            _container.SetupMock<ITestService>(m => m.Setup(x => x.GetValue()).Returns("value")));
+    }
+
+    [Fact]
+    public void ResolveMock_AfterResolvingConsumer_WhenMockAlreadyResolved_ShouldReturnCachedMock()
+    {
+        // Arrange
+        var mock = _container.ResolveMock<ITestService>();
+        _container.Resolve<TestConsumer>();
+
+        // Act
+        var result = _container.ResolveMock<ITestService>();
+
+        // Assert
+        Assert.Same(mock, result);
+    }
+
+    [Fact]
+    public void ResolveMock_AfterResolvingConsumer_ForUnrelatedType_ShouldNotThrow()
+    {
+        // Arrange
+        _container.Resolve<TestConsumer>();
+
+        // Act
+        var exception = Record.Exception(() => _container.ResolveMock<IUnrelatedService>());
+
+        // Assert
+        Assert.Null(exception);
+    }
+
+    [Fact]
     public void Register_WithInstance_ShouldReturnRegisteredInstance()
     {
         // Arrange
@@ -258,5 +321,12 @@ public class ContainerTests
         }
 
         public string GetValue() => string.Empty;
+    }
+
+    public interface IUnrelatedService;
+
+    public class TestConsumer(ITestService service)
+    {
+        public ITestService Service { get; } = service;
     }
 }

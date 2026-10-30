@@ -17,6 +17,7 @@ public class Container
     private readonly IFixture _fixture;
     private readonly IMockFactory _mockFactory;
     private readonly Dictionary<Type, object> _mockCache = new();
+    private readonly Dictionary<Type, Type> _resolvedDependencies = new();
 
     /// <summary>
     /// Initializes a new instance of <see cref="Container"/> using the provided mock factory.
@@ -86,7 +87,9 @@ public class Container
     /// <returns>A new instance of the requested type.</returns>
     public TType Resolve<TType>() where TType : class
     {
-        return _fixture.Freeze<TType>();
+        var instance = _fixture.Freeze<TType>();
+        TrackConstructorDependencies(typeof(TType));
+        return instance;
     }
 
     /// <summary>
@@ -103,11 +106,26 @@ public class Container
     /// The same <see cref="IMock{TType}"/> wrapper on every call for a given
     /// <typeparamref name="TType"/> within this container instance.
     /// </returns>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when <typeparamref name="TType"/> is a constructor dependency of a type that was already
+    /// created with <see cref="Resolve{TType}"/> (for example via <c>ResolveSut()</c>) before this mock
+    /// existed. That instance holds a different mock, so setups and verifications on the returned
+    /// mock would silently have no effect on it.
+    /// </exception>
     public IMock<TType> ResolveMock<TType>() where TType : class
     {
         var key = typeof(TType);
         if (!_mockCache.TryGetValue(key, out var cached))
         {
+            if (_resolvedDependencies.TryGetValue(key, out var consumer))
+            {
+                throw new InvalidOperationException(
+                    $"ResolveMock<{key.Name}>() was called after {consumer.Name} was already resolved. " +
+                    $"{consumer.Name} was constructed with a different {key.Name} mock, so setups and verifications " +
+                    $"on this mock will not affect it. Call ResolveMock<{key.Name}>() or SetupMock<{key.Name}>() " +
+                    $"before ResolveSut() / Resolve<{consumer.Name}>().");
+            }
+
             cached = _mockFactory.GetMock<TType>(_fixture);
             _mockCache[key] = cached;
         }
@@ -157,6 +175,29 @@ public class Container
         foreach (var builder in builders)
         {
             _fixture.Customizations.Add(builder);
+        }
+    }
+
+    private void TrackConstructorDependencies(Type type)
+    {
+        if (type.IsAbstract || type.IsInterface)
+        {
+            return;
+        }
+
+        // AutoFixture builds concrete types with the constructor that has the fewest parameters.
+        var constructor = new ModestConstructorQuery().SelectMethods(type).FirstOrDefault();
+        if (constructor == null)
+        {
+            return;
+        }
+
+        foreach (var parameter in constructor.Parameters)
+        {
+            if (!_resolvedDependencies.ContainsKey(parameter.ParameterType))
+            {
+                _resolvedDependencies[parameter.ParameterType] = type;
+            }
         }
     }
 }
