@@ -32,7 +32,7 @@ public class AccountControllerTests : BaseTestByType<AccountController>
 
 ## Creating the System Under Test (SUT)
 
-To create an instance of your SUT, use the `ResolveSut` method. It is essential to set up any dependencies that need to be mocked before creating the SUT. Place the ResolveSut call as the final step before executing your test action.
+To create an instance of your SUT, use the `ResolveSut` method. It is essential to set up any dependencies that need to be mocked before creating the SUT. Place the ResolveSut call as the final step before executing your test action. If you call `ResolveMock<T>()` or `SetupMock<T>()` for one of the SUT's constructor dependencies after `ResolveSut()`, DepenMock throws an `InvalidOperationException`, because the SUT was already built with a different mock.
 
 ```c#
 var sut = ResolveSut();

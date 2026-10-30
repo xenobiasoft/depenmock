@@ -2,6 +2,20 @@
 
 ---
 
+## Unreleased
+
+### What's Changed
+
+**`ResolveMock<T>()` now throws when called after the SUT has been resolved**
+
+Calling `ResolveSut()` before `ResolveMock<T>()` / `SetupMock<T>()` was a silent bug: the SUT was constructed with an auto-generated mock, and the later call created a *different* mock, so its setups and verifications had no effect on the SUT. `ResolveMock<T>()` (and therefore `SetupMock<T>()`) now throws an `InvalidOperationException` when `T` is a constructor dependency of a type that was already created with `Resolve<T>()` / `ResolveSut()` and no mock for `T` existed at that point. The message names both types and tells you to move the mock setup before `ResolveSut()`.
+
+Mocks resolved before the SUT can still be retrieved afterwards (for verification), and resolving mocks for types the SUT does not depend on is unaffected. Only the SUT's direct constructor dependencies are checked.
+
+**Potentially breaking:** tests that previously passed while configuring a mock after `ResolveSut()` will now fail. Those setups were never reaching the SUT; move them above the `ResolveSut()` call.
+
+---
+
 ## v3.2.0
 
 ### What's Changed

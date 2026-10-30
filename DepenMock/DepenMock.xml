@@ -121,6 +121,12 @@
             The same <see cref="T:DepenMock.Mocks.IMock`1"/> wrapper on every call for a given
             <typeparamref name="TType"/> within this container instance.
             </returns>
+            <exception cref="T:System.InvalidOperationException">
+            Thrown when <typeparamref name="TType"/> is a constructor dependency of a type that was already
+            created with <see cref="M:DepenMock.Container.Resolve``1"/> (for example via <c>ResolveSut()</c>) before this mock
+            existed. That instance holds a different mock, so setups and verifications on the returned
+            mock would silently have no effect on it.
+            </exception>
         </member>
         <member name="M:DepenMock.Container.Register``1(``0)">
             <summary>
